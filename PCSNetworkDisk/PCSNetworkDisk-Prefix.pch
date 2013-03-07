@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'PCSNetworkDisk' target in the 'PCSNetworkDisk' project
+// Prefix header for all source files of the 'PCSNetDisk' target in the 'PCSNetDisk' project
 //
 
 #import <Availability.h>
@@ -11,4 +11,5 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
+    #import "PCSMacroDefine.h"
 #endif

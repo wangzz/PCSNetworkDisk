@@ -1,6 +1,6 @@
 //
 //  AppDelegate.m
-//  PCSNetworkDisk
+//  PCSNetDisk
 //
 //  Created by wangzz on 13-3-7.
 //  Copyright (c) 2013年 hisunsray. All rights reserved.
@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 
-#import "ViewController.h"
+#import "PCSRootViewController.h"
 
 @implementation AppDelegate
 
@@ -22,8 +22,29 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-    // Override point for customization after application launch.
-    self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController" bundle:nil] autorelease];
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:PCS_STRING_EVER_LAUNCHED]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES
+                                                forKey:PCS_STRING_EVER_LAUNCHED];
+        //firstLaunch实现判断是否首次登陆（该字段暂时没用）
+        [[NSUserDefaults standardUserDefaults] setBool:YES
+                                                forKey:PCS_STRING_FIRST_LAUNCH];
+    }
+    else{
+        [[NSUserDefaults standardUserDefaults] setBool:NO
+                                                forKey:PCS_STRING_FIRST_LAUNCH];
+    }
+    
+    self.viewController = [PCSRootViewController shareInstance];
+    PCSControllerState   controllerState;
+    BOOL    isFirstLaunch = NO;
+    isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:PCS_STRING_IS_LOGIN];
+    if (isFirstLaunch) {
+        controllerState = PCSControllerStateMain;
+    } else {
+        controllerState = PCSControllerStateLogin;
+    }
+    [self.viewController showViewControllerWith:controllerState];
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     return YES;

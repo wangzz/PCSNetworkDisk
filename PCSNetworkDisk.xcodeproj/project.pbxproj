@@ -16,8 +16,18 @@
 		822F7B3216E8CE5B00898CA4 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 822F7B3116E8CE5B00898CA4 /* Default.png */; };
 		822F7B3416E8CE5B00898CA4 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 822F7B3316E8CE5B00898CA4 /* Default@2x.png */; };
 		822F7B3616E8CE5B00898CA4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 822F7B3516E8CE5B00898CA4 /* Default-568h@2x.png */; };
-		822F7B3916E8CE5B00898CA4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7B3816E8CE5B00898CA4 /* ViewController.m */; };
-		822F7B3C16E8CE5B00898CA4 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822F7B3A16E8CE5B00898CA4 /* ViewController.xib */; };
+		822F7B8716E8D8A700898CA4 /* PCSRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7B8616E8D8A700898CA4 /* PCSRootViewController.m */; };
+		822F7B8E16E8DD7000898CA4 /* PCSMainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7B8D16E8DD7000898CA4 /* PCSMainTabBarController.m */; };
+		822F7B9716E8E45F00898CA4 /* PCSLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7B9516E8E45F00898CA4 /* PCSLoginViewController.m */; };
+		822F7B9816E8E45F00898CA4 /* PCSLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822F7B9616E8E45F00898CA4 /* PCSLoginViewController.xib */; };
+		822F7BA616E8E74F00898CA4 /* PCSNetDiskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7BA416E8E74F00898CA4 /* PCSNetDiskViewController.m */; };
+		822F7BA716E8E74F00898CA4 /* PCSNetDiskViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822F7BA516E8E74F00898CA4 /* PCSNetDiskViewController.xib */; };
+		822F7BAB16E8E77000898CA4 /* PCSUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7BA916E8E77000898CA4 /* PCSUploadViewController.m */; };
+		822F7BAC16E8E77000898CA4 /* PCSUploadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822F7BAA16E8E77000898CA4 /* PCSUploadViewController.xib */; };
+		822F7BB016E8E78800898CA4 /* PCSMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7BAE16E8E78800898CA4 /* PCSMoreViewController.m */; };
+		822F7BB116E8E78800898CA4 /* PCSMoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822F7BAF16E8E78800898CA4 /* PCSMoreViewController.xib */; };
+		822F7BB516E8EE0700898CA4 /* PCSOfflineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7BB316E8EE0700898CA4 /* PCSOfflineViewController.m */; };
+		822F7BB616E8EE0700898CA4 /* PCSOfflineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822F7BB416E8EE0700898CA4 /* PCSOfflineViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,16 +37,33 @@
 		822F7B2316E8CE5B00898CA4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		822F7B2716E8CE5B00898CA4 /* PCSNetworkDisk-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PCSNetworkDisk-Info.plist"; sourceTree = "<group>"; };
 		822F7B2916E8CE5B00898CA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		822F7B2B16E8CE5B00898CA4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		822F7B2B16E8CE5B00898CA4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = main.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		822F7B2D16E8CE5B00898CA4 /* PCSNetworkDisk-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PCSNetworkDisk-Prefix.pch"; sourceTree = "<group>"; };
-		822F7B2E16E8CE5B00898CA4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		822F7B2F16E8CE5B00898CA4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		822F7B2E16E8CE5B00898CA4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		822F7B2F16E8CE5B00898CA4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		822F7B3116E8CE5B00898CA4 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		822F7B3316E8CE5B00898CA4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		822F7B3516E8CE5B00898CA4 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		822F7B3716E8CE5B00898CA4 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		822F7B3816E8CE5B00898CA4 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		822F7B3B16E8CE5B00898CA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+		822F7B8516E8D8A700898CA4 /* PCSRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSRootViewController.h; sourceTree = "<group>"; };
+		822F7B8616E8D8A700898CA4 /* PCSRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSRootViewController.m; sourceTree = "<group>"; };
+		822F7B8C16E8DD7000898CA4 /* PCSMainTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSMainTabBarController.h; sourceTree = "<group>"; };
+		822F7B8D16E8DD7000898CA4 /* PCSMainTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSMainTabBarController.m; sourceTree = "<group>"; };
+		822F7B8F16E8DEF500898CA4 /* PCSMacroDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PCSMacroDefine.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		822F7B9416E8E45F00898CA4 /* PCSLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PCSLoginViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		822F7B9516E8E45F00898CA4 /* PCSLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PCSLoginViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		822F7B9616E8E45F00898CA4 /* PCSLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSLoginViewController.xib; sourceTree = "<group>"; };
+		822F7BA316E8E74F00898CA4 /* PCSNetDiskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSNetDiskViewController.h; sourceTree = "<group>"; };
+		822F7BA416E8E74F00898CA4 /* PCSNetDiskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSNetDiskViewController.m; sourceTree = "<group>"; };
+		822F7BA516E8E74F00898CA4 /* PCSNetDiskViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSNetDiskViewController.xib; sourceTree = "<group>"; };
+		822F7BA816E8E77000898CA4 /* PCSUploadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSUploadViewController.h; sourceTree = "<group>"; };
+		822F7BA916E8E77000898CA4 /* PCSUploadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSUploadViewController.m; sourceTree = "<group>"; };
+		822F7BAA16E8E77000898CA4 /* PCSUploadViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSUploadViewController.xib; sourceTree = "<group>"; };
+		822F7BAD16E8E78800898CA4 /* PCSMoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSMoreViewController.h; sourceTree = "<group>"; };
+		822F7BAE16E8E78800898CA4 /* PCSMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSMoreViewController.m; sourceTree = "<group>"; };
+		822F7BAF16E8E78800898CA4 /* PCSMoreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSMoreViewController.xib; sourceTree = "<group>"; };
+		822F7BB216E8EE0700898CA4 /* PCSOfflineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSOfflineViewController.h; sourceTree = "<group>"; };
+		822F7BB316E8EE0700898CA4 /* PCSOfflineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSOfflineViewController.m; sourceTree = "<group>"; };
+		822F7BB416E8EE0700898CA4 /* PCSOfflineViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSOfflineViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,11 +110,11 @@
 		822F7B2516E8CE5B00898CA4 /* PCSNetworkDisk */ = {
 			isa = PBXGroup;
 			children = (
-				822F7B2E16E8CE5B00898CA4 /* AppDelegate.h */,
-				822F7B2F16E8CE5B00898CA4 /* AppDelegate.m */,
-				822F7B3716E8CE5B00898CA4 /* ViewController.h */,
-				822F7B3816E8CE5B00898CA4 /* ViewController.m */,
-				822F7B3A16E8CE5B00898CA4 /* ViewController.xib */,
+				822F7B8416E8D81000898CA4 /* Resources */,
+				822F7B7D16E8D73600898CA4 /* Utilities */,
+				822F7B7E16E8D74B00898CA4 /* Model */,
+				822F7B8016E8D79B00898CA4 /* AppDelegate */,
+				822F7B7F16E8D76B00898CA4 /* View */,
 				822F7B2616E8CE5B00898CA4 /* Supporting Files */,
 			);
 			path = PCSNetworkDisk;
@@ -105,6 +132,87 @@
 				822F7B3516E8CE5B00898CA4 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		822F7B7D16E8D73600898CA4 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				822F7B8F16E8DEF500898CA4 /* PCSMacroDefine.h */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		822F7B7E16E8D74B00898CA4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		822F7B7F16E8D76B00898CA4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				822F7B8316E8D7C600898CA4 /* CustomView */,
+				822F7B8116E8D7AD00898CA4 /* SubViewController */,
+				822F7B8216E8D7BB00898CA4 /* MainViewController */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		822F7B8016E8D79B00898CA4 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				822F7B2E16E8CE5B00898CA4 /* AppDelegate.h */,
+				822F7B2F16E8CE5B00898CA4 /* AppDelegate.m */,
+			);
+			name = AppDelegate;
+			sourceTree = "<group>";
+		};
+		822F7B8116E8D7AD00898CA4 /* SubViewController */ = {
+			isa = PBXGroup;
+			children = (
+				822F7B9416E8E45F00898CA4 /* PCSLoginViewController.h */,
+				822F7B9516E8E45F00898CA4 /* PCSLoginViewController.m */,
+				822F7B9616E8E45F00898CA4 /* PCSLoginViewController.xib */,
+			);
+			name = SubViewController;
+			sourceTree = "<group>";
+		};
+		822F7B8216E8D7BB00898CA4 /* MainViewController */ = {
+			isa = PBXGroup;
+			children = (
+				822F7B8516E8D8A700898CA4 /* PCSRootViewController.h */,
+				822F7B8616E8D8A700898CA4 /* PCSRootViewController.m */,
+				822F7B8C16E8DD7000898CA4 /* PCSMainTabBarController.h */,
+				822F7B8D16E8DD7000898CA4 /* PCSMainTabBarController.m */,
+				822F7BA316E8E74F00898CA4 /* PCSNetDiskViewController.h */,
+				822F7BA416E8E74F00898CA4 /* PCSNetDiskViewController.m */,
+				822F7BA516E8E74F00898CA4 /* PCSNetDiskViewController.xib */,
+				822F7BA816E8E77000898CA4 /* PCSUploadViewController.h */,
+				822F7BA916E8E77000898CA4 /* PCSUploadViewController.m */,
+				822F7BAA16E8E77000898CA4 /* PCSUploadViewController.xib */,
+				822F7BB216E8EE0700898CA4 /* PCSOfflineViewController.h */,
+				822F7BB316E8EE0700898CA4 /* PCSOfflineViewController.m */,
+				822F7BB416E8EE0700898CA4 /* PCSOfflineViewController.xib */,
+				822F7BAD16E8E78800898CA4 /* PCSMoreViewController.h */,
+				822F7BAE16E8E78800898CA4 /* PCSMoreViewController.m */,
+				822F7BAF16E8E78800898CA4 /* PCSMoreViewController.xib */,
+			);
+			name = MainViewController;
+			sourceTree = "<group>";
+		};
+		822F7B8316E8D7C600898CA4 /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = CustomView;
+			sourceTree = "<group>";
+		};
+		822F7B8416E8D81000898CA4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,7 +270,11 @@
 				822F7B3216E8CE5B00898CA4 /* Default.png in Resources */,
 				822F7B3416E8CE5B00898CA4 /* Default@2x.png in Resources */,
 				822F7B3616E8CE5B00898CA4 /* Default-568h@2x.png in Resources */,
-				822F7B3C16E8CE5B00898CA4 /* ViewController.xib in Resources */,
+				822F7B9816E8E45F00898CA4 /* PCSLoginViewController.xib in Resources */,
+				822F7BA716E8E74F00898CA4 /* PCSNetDiskViewController.xib in Resources */,
+				822F7BAC16E8E77000898CA4 /* PCSUploadViewController.xib in Resources */,
+				822F7BB116E8E78800898CA4 /* PCSMoreViewController.xib in Resources */,
+				822F7BB616E8EE0700898CA4 /* PCSOfflineViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,7 +287,13 @@
 			files = (
 				822F7B2C16E8CE5B00898CA4 /* main.m in Sources */,
 				822F7B3016E8CE5B00898CA4 /* AppDelegate.m in Sources */,
-				822F7B3916E8CE5B00898CA4 /* ViewController.m in Sources */,
+				822F7B8716E8D8A700898CA4 /* PCSRootViewController.m in Sources */,
+				822F7B8E16E8DD7000898CA4 /* PCSMainTabBarController.m in Sources */,
+				822F7B9716E8E45F00898CA4 /* PCSLoginViewController.m in Sources */,
+				822F7BA616E8E74F00898CA4 /* PCSNetDiskViewController.m in Sources */,
+				822F7BAB16E8E77000898CA4 /* PCSUploadViewController.m in Sources */,
+				822F7BB016E8E78800898CA4 /* PCSMoreViewController.m in Sources */,
+				822F7BB516E8EE0700898CA4 /* PCSOfflineViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,14 +306,6 @@
 				822F7B2916E8CE5B00898CA4 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		822F7B3A16E8CE5B00898CA4 /* ViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				822F7B3B16E8CE5B00898CA4 /* en */,
-			);
-			name = ViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -290,6 +400,7 @@
 				822F7B4116E8CE5B00898CA4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
