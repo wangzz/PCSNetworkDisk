@@ -28,6 +28,7 @@
 		822F7BB116E8E78800898CA4 /* PCSMoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822F7BAF16E8E78800898CA4 /* PCSMoreViewController.xib */; };
 		822F7BB516E8EE0700898CA4 /* PCSOfflineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7BB316E8EE0700898CA4 /* PCSOfflineViewController.m */; };
 		822F7BB616E8EE0700898CA4 /* PCSOfflineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822F7BB416E8EE0700898CA4 /* PCSOfflineViewController.xib */; };
+		822F7BC216E8F7B300898CA4 /* baidu_pcs_ios-1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 822F7BC116E8F7B300898CA4 /* baidu_pcs_ios-1.0.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +65,12 @@
 		822F7BB216E8EE0700898CA4 /* PCSOfflineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSOfflineViewController.h; sourceTree = "<group>"; };
 		822F7BB316E8EE0700898CA4 /* PCSOfflineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSOfflineViewController.m; sourceTree = "<group>"; };
 		822F7BB416E8EE0700898CA4 /* PCSOfflineViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSOfflineViewController.xib; sourceTree = "<group>"; };
+		822F7BBC16E8F7A300898CA4 /* BaiduOAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaiduOAuth.h; sourceTree = "<group>"; };
+		822F7BBD16E8F7A300898CA4 /* BaiduPCSActionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaiduPCSActionInfo.h; sourceTree = "<group>"; };
+		822F7BBE16E8F7A300898CA4 /* BaiduPCSClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaiduPCSClient.h; sourceTree = "<group>"; };
+		822F7BBF16E8F7A300898CA4 /* BaiduPCSErrorCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaiduPCSErrorCode.h; sourceTree = "<group>"; };
+		822F7BC016E8F7A300898CA4 /* BaiduPCSStatusListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaiduPCSStatusListener.h; sourceTree = "<group>"; };
+		822F7BC116E8F7B300898CA4 /* baidu_pcs_ios-1.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "baidu_pcs_ios-1.0.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +81,7 @@
 				822F7B2016E8CE5B00898CA4 /* UIKit.framework in Frameworks */,
 				822F7B2216E8CE5B00898CA4 /* Foundation.framework in Frameworks */,
 				822F7B2416E8CE5B00898CA4 /* CoreGraphics.framework in Frameworks */,
+				822F7BC216E8F7B300898CA4 /* baidu_pcs_ios-1.0.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,6 +145,7 @@
 		822F7B7D16E8D73600898CA4 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				822F7BBB16E8F77900898CA4 /* BaiduPCSSDK */,
 				822F7B8F16E8DEF500898CA4 /* PCSMacroDefine.h */,
 			);
 			name = Utilities;
@@ -213,6 +222,19 @@
 			children = (
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		822F7BBB16E8F77900898CA4 /* BaiduPCSSDK */ = {
+			isa = PBXGroup;
+			children = (
+				822F7BC116E8F7B300898CA4 /* baidu_pcs_ios-1.0.a */,
+				822F7BBC16E8F7A300898CA4 /* BaiduOAuth.h */,
+				822F7BBD16E8F7A300898CA4 /* BaiduPCSActionInfo.h */,
+				822F7BBE16E8F7A300898CA4 /* BaiduPCSClient.h */,
+				822F7BBF16E8F7A300898CA4 /* BaiduPCSErrorCode.h */,
+				822F7BC016E8F7A300898CA4 /* BaiduPCSStatusListener.h */,
+			);
+			name = BaiduPCSSDK;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -365,6 +387,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PCSNetworkDisk/PCSNetworkDisk-Prefix.pch";
 				INFOPLIST_FILE = "PCSNetworkDisk/PCSNetworkDisk-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/PCSNetworkDisk\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -376,6 +402,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PCSNetworkDisk/PCSNetworkDisk-Prefix.pch";
 				INFOPLIST_FILE = "PCSNetworkDisk/PCSNetworkDisk-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/PCSNetworkDisk\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
