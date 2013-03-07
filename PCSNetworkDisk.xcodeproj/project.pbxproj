@@ -29,6 +29,8 @@
 		822F7BB516E8EE0700898CA4 /* PCSOfflineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7BB316E8EE0700898CA4 /* PCSOfflineViewController.m */; };
 		822F7BB616E8EE0700898CA4 /* PCSOfflineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822F7BB416E8EE0700898CA4 /* PCSOfflineViewController.xib */; };
 		822F7BC216E8F7B300898CA4 /* baidu_pcs_ios-1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 822F7BC116E8F7B300898CA4 /* baidu_pcs_ios-1.0.a */; };
+		822F7BCC16E8F94900898CA4 /* LBSSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822F7BC816E8F94900898CA4 /* LBSSDK.framework */; };
+		822F7BCD16E8F94A00898CA4 /* MobWin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 822F7BC916E8F94900898CA4 /* MobWin.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +73,10 @@
 		822F7BBF16E8F7A300898CA4 /* BaiduPCSErrorCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaiduPCSErrorCode.h; sourceTree = "<group>"; };
 		822F7BC016E8F7A300898CA4 /* BaiduPCSStatusListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaiduPCSStatusListener.h; sourceTree = "<group>"; };
 		822F7BC116E8F7B300898CA4 /* baidu_pcs_ios-1.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "baidu_pcs_ios-1.0.a"; sourceTree = "<group>"; };
+		822F7BC816E8F94900898CA4 /* LBSSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LBSSDK.framework; sourceTree = "<group>"; };
+		822F7BC916E8F94900898CA4 /* MobWin.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = MobWin.a; sourceTree = "<group>"; };
+		822F7BCA16E8F94900898CA4 /* MobWinBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobWinBannerView.h; sourceTree = "<group>"; };
+		822F7BCB16E8F94900898CA4 /* MobWinBannerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobWinBannerViewDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +88,8 @@
 				822F7B2216E8CE5B00898CA4 /* Foundation.framework in Frameworks */,
 				822F7B2416E8CE5B00898CA4 /* CoreGraphics.framework in Frameworks */,
 				822F7BC216E8F7B300898CA4 /* baidu_pcs_ios-1.0.a in Frameworks */,
+				822F7BCC16E8F94900898CA4 /* LBSSDK.framework in Frameworks */,
+				822F7BCD16E8F94A00898CA4 /* MobWin.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +153,7 @@
 		822F7B7D16E8D73600898CA4 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				822F7BC316E8F8B100898CA4 /* MobWINSDK */,
 				822F7BBB16E8F77900898CA4 /* BaiduPCSSDK */,
 				822F7B8F16E8DEF500898CA4 /* PCSMacroDefine.h */,
 			);
@@ -235,6 +244,17 @@
 				822F7BC016E8F7A300898CA4 /* BaiduPCSStatusListener.h */,
 			);
 			name = BaiduPCSSDK;
+			sourceTree = "<group>";
+		};
+		822F7BC316E8F8B100898CA4 /* MobWINSDK */ = {
+			isa = PBXGroup;
+			children = (
+				822F7BC816E8F94900898CA4 /* LBSSDK.framework */,
+				822F7BC916E8F94900898CA4 /* MobWin.a */,
+				822F7BCA16E8F94900898CA4 /* MobWinBannerView.h */,
+				822F7BCB16E8F94900898CA4 /* MobWinBannerViewDelegate.h */,
+			);
+			name = MobWINSDK;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -384,6 +404,10 @@
 		822F7B4016E8CE5B00898CA4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/PCSNetworkDisk\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PCSNetworkDisk/PCSNetworkDisk-Prefix.pch";
 				INFOPLIST_FILE = "PCSNetworkDisk/PCSNetworkDisk-Info.plist";
@@ -399,6 +423,10 @@
 		822F7B4116E8CE5B00898CA4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/PCSNetworkDisk\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PCSNetworkDisk/PCSNetworkDisk-Prefix.pch";
 				INFOPLIST_FILE = "PCSNetworkDisk/PCSNetworkDisk-Info.plist";
