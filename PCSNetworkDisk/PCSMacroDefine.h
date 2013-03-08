@@ -13,9 +13,10 @@
 
 
 //字符串
+#define PCS_STRING_UNIT_ID                  @"A495798C12C030F28E7711F3613DFC1B"
 #define PCS_STRING_EVER_LAUNCHED            @"everLaunched"
 #define PCS_STRING_FIRST_LAUNCH             @"firstLaunch"
-#define PCS_STRING_IS_LOGIN                @"isLogin"
+#define PCS_STRING_IS_LOGIN                 @"isLogin"
 //方法
 
 //判断字符串是否为nil

@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PCSNetDiskViewController : UIViewController
+@interface PCSNetDiskViewController : UIViewController<MobWinBannerViewDelegate>
+{
+    MobWinBannerView *adBanner;
+}
 
 @end

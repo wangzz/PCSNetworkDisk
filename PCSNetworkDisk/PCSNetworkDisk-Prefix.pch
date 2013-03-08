@@ -11,5 +11,7 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
+    #import "MobWinBannerView.h"
+    #import "MobWinBannerViewDelegate.h"
     #import "PCSMacroDefine.h"
 #endif

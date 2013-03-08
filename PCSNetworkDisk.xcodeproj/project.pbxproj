@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		822C911516EA2D0100F80D00 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 822C911416EA2D0100F80D00 /* MBProgressHUD.m */; };
+		822C911B16EA383700F80D00 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822C911A16EA383700F80D00 /* CFNetwork.framework */; };
+		822C911D16EA384000F80D00 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822C911C16EA384000F80D00 /* SystemConfiguration.framework */; };
+		822C911F16EA384E00F80D00 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822C911E16EA384E00F80D00 /* MobileCoreServices.framework */; };
+		822C912116EA385700F80D00 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822C912016EA385700F80D00 /* CoreLocation.framework */; };
+		822C912316EA386200F80D00 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822C912216EA386200F80D00 /* QuartzCore.framework */; };
+		822C912516EA386A00F80D00 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822C912416EA386A00F80D00 /* MessageUI.framework */; };
+		822C912716EA387500F80D00 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 822C912616EA387500F80D00 /* libz.dylib */; };
 		822F7B2016E8CE5B00898CA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822F7B1F16E8CE5B00898CA4 /* UIKit.framework */; };
 		822F7B2216E8CE5B00898CA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822F7B2116E8CE5B00898CA4 /* Foundation.framework */; };
 		822F7B2416E8CE5B00898CA4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822F7B2316E8CE5B00898CA4 /* CoreGraphics.framework */; };
@@ -34,6 +42,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		822C911316EA2D0100F80D00 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		822C911416EA2D0100F80D00 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		822C911A16EA383700F80D00 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		822C911C16EA384000F80D00 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		822C911E16EA384E00F80D00 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		822C912016EA385700F80D00 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		822C912216EA386200F80D00 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		822C912416EA386A00F80D00 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		822C912616EA387500F80D00 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		822F7B1B16E8CE5B00898CA4 /* PCSNetworkDisk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PCSNetworkDisk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		822F7B1F16E8CE5B00898CA4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		822F7B2116E8CE5B00898CA4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -84,6 +101,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				822C912716EA387500F80D00 /* libz.dylib in Frameworks */,
+				822C912516EA386A00F80D00 /* MessageUI.framework in Frameworks */,
+				822C912316EA386200F80D00 /* QuartzCore.framework in Frameworks */,
+				822C912116EA385700F80D00 /* CoreLocation.framework in Frameworks */,
+				822C911F16EA384E00F80D00 /* MobileCoreServices.framework in Frameworks */,
+				822C911D16EA384000F80D00 /* SystemConfiguration.framework in Frameworks */,
+				822C911B16EA383700F80D00 /* CFNetwork.framework in Frameworks */,
 				822F7B2016E8CE5B00898CA4 /* UIKit.framework in Frameworks */,
 				822F7B2216E8CE5B00898CA4 /* Foundation.framework in Frameworks */,
 				822F7B2416E8CE5B00898CA4 /* CoreGraphics.framework in Frameworks */,
@@ -96,6 +120,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		822C911116EA2CDE00F80D00 /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				822C911316EA2D0100F80D00 /* MBProgressHUD.h */,
+				822C911416EA2D0100F80D00 /* MBProgressHUD.m */,
+			);
+			name = MBProgressHUD;
+			sourceTree = "<group>";
+		};
 		822F7B1016E8CE5B00898CA4 = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +149,13 @@
 		822F7B1E16E8CE5B00898CA4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				822C912616EA387500F80D00 /* libz.dylib */,
+				822C912416EA386A00F80D00 /* MessageUI.framework */,
+				822C912216EA386200F80D00 /* QuartzCore.framework */,
+				822C912016EA385700F80D00 /* CoreLocation.framework */,
+				822C911E16EA384E00F80D00 /* MobileCoreServices.framework */,
+				822C911C16EA384000F80D00 /* SystemConfiguration.framework */,
+				822C911A16EA383700F80D00 /* CFNetwork.framework */,
 				822F7B1F16E8CE5B00898CA4 /* UIKit.framework */,
 				822F7B2116E8CE5B00898CA4 /* Foundation.framework */,
 				822F7B2316E8CE5B00898CA4 /* CoreGraphics.framework */,
@@ -153,6 +193,7 @@
 		822F7B7D16E8D73600898CA4 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				822C911116EA2CDE00F80D00 /* MBProgressHUD */,
 				822F7BC316E8F8B100898CA4 /* MobWINSDK */,
 				822F7BBB16E8F77900898CA4 /* BaiduPCSSDK */,
 				822F7B8F16E8DEF500898CA4 /* PCSMacroDefine.h */,
@@ -336,6 +377,7 @@
 				822F7BAB16E8E77000898CA4 /* PCSUploadViewController.m in Sources */,
 				822F7BB016E8E78800898CA4 /* PCSMoreViewController.m in Sources */,
 				822F7BB516E8EE0700898CA4 /* PCSOfflineViewController.m in Sources */,
+				822C911516EA2D0100F80D00 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,6 +457,11 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/PCSNetworkDisk\"",
 				);
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+					"-lstdc++",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -433,6 +480,11 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/PCSNetworkDisk\"",
+				);
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
