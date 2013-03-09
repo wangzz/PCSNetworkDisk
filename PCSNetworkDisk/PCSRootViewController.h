@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 typedef enum
 {
     PCSControllerStateNil,
@@ -16,6 +17,7 @@ typedef enum
     PCSControllerStateHelp,
     PCSControllerStateResetPwd
 }PCSControllerState;
+
 
 @interface PCSRootViewController : UINavigationController
 

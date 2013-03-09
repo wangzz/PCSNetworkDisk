@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @class PCSRootViewController;
+@class BaiduPCSClient;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
 @property (strong, nonatomic) PCSRootViewController *viewController;
+@property (nonatomic,retain) BaiduPCSClient   *pcsClient;
 
 @end

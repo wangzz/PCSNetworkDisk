@@ -38,7 +38,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [self addADBanner];
+//    [self addADBanner];
 }
 
 - (void)didReceiveMemoryWarning
@@ -52,7 +52,7 @@
     adBanner = [[MobWinBannerView alloc] initMobWinBannerSizeIdentifier:MobWINBannerSizeIdentifier320x50];
 	adBanner.rootViewController = self;
     adBanner.frame = CGRectMake(0, 317, 320, 10);
-	[adBanner setAdUnitID:PCS_STRING_UNIT_ID];
+	[adBanner setAdUnitID:PCS_STRING_MOBWIN_UNIT_ID];
 	[self.view addSubview:adBanner];
     
     //

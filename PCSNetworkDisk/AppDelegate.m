@@ -7,13 +7,15 @@
 //
 
 #import "AppDelegate.h"
-
+#import "BaiduPCSClient.h"
 #import "PCSRootViewController.h"
 
 @implementation AppDelegate
+@synthesize pcsClient;
 
 - (void)dealloc
 {
+    [pcsClient release];
     [_window release];
     [_viewController release];
     [super dealloc];
@@ -35,12 +37,18 @@
                                                 forKey:PCS_STRING_FIRST_LAUNCH];
     }
     
+    pcsClient = [[BaiduPCSClient alloc] init];
+    
     self.viewController = [PCSRootViewController shareInstance];
     PCSControllerState   controllerState;
     BOOL    isFirstLaunch = NO;
-    isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:PCS_STRING_IS_LOGIN];
+    isFirstLaunch = [[NSUserDefaults standardUserDefaults]
+                     boolForKey:PCS_STRING_IS_LOGIN];
     if (isFirstLaunch) {
         controllerState = PCSControllerStateMain;
+        NSString    *mpToken = [[NSUserDefaults standardUserDefaults]
+                                    stringForKey:PCS_STRING_ACCESS_TOKEN];
+        pcsClient.accessToken = mpToken;
     } else {
         controllerState = PCSControllerStateLogin;
     }

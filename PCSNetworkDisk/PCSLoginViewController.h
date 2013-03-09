@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaiduOAuth.h"
 
-@interface PCSLoginViewController : UIViewController
+@interface PCSLoginViewController : UIViewController<BaiduOAuthDelegate>
 
 @end
