@@ -8,9 +8,27 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PCSNetDiskViewController : UIViewController<MobWinBannerViewDelegate>
+typedef enum
+{   
+    PCSFileTypeUnknown = 0,
+    PCSFileTypeTxt,
+    PCSFileTypeDoc,
+    PCSFileTypeJpg,
+    PCSFileTypeVideo
+}PCSFileType;
+
+@interface PCSCommonFileInfo(PCSCommonFileInfo)
+
+- (NSString *)description;
+
+@end
+
+
+@interface PCSNetDiskViewController : UIViewController<MobWinBannerViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     MobWinBannerView *adBanner;
 }
+
+@property (nonatomic, copy) NSString    *path;
 
 @end

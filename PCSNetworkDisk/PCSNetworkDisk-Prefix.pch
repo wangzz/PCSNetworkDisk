@@ -13,5 +13,9 @@
     #import <Foundation/Foundation.h>
     #import "MobWinBannerView.h"
     #import "MobWinBannerViewDelegate.h"
+    #import "BaiduPCSErrorCode.h"
+    #import "BaiduPCSActionInfo.h"
+    #import "BaiduPCSClient.h"
     #import "PCSMacroDefine.h"
+    #import "AppDelegate.h"
 #endif

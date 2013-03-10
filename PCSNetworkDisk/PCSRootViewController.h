@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "BaiduOAuth.h"
 
 typedef enum
 {
@@ -19,7 +19,7 @@ typedef enum
 }PCSControllerState;
 
 
-@interface PCSRootViewController : UINavigationController
+@interface PCSRootViewController : UINavigationController<BaiduOAuthDelegate>
 
 @property (nonatomic,assign) PCSControllerState  currentControllerState;
 

@@ -7,9 +7,7 @@
 //
 
 #import "PCSLoginViewController.h"
-#import "AppDelegate.h"
 #import "PCSRootViewController.h"
-#import "BaiduPCSClient.h"
 
 @interface PCSLoginViewController ()
 
@@ -54,8 +52,10 @@
 -(void)onSuccess:(BaiduOAuthResponse*)response
 {
     [PCS_APP_DELEGATE.viewController showViewControllerWith:PCSControllerStateMain];
-    
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:PCS_STRING_IS_LOGIN];
+    [[NSUserDefaults standardUserDefaults] setBool:YES
+                                            forKey:PCS_STRING_IS_LOGIN];
+    [[NSUserDefaults standardUserDefaults] setValue:response.accessToken
+                                             forKey:PCS_STRING_ACCESS_TOKEN];
     PCS_APP_DELEGATE.pcsClient.accessToken = response.accessToken;
     PCSLog(@"%@",[NSString stringWithFormat:@"Access Token:%@  User Name:%@  Expres In %@", response.accessToken, response.userName, response.expiresIn]);
 }

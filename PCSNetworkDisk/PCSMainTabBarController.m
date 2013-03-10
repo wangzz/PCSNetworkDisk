@@ -58,24 +58,29 @@
 
 - (void)createTabBarControllers
 {
-    UIViewController *netDiskViewController = [[PCSNetDiskViewController alloc] init];
+    PCSNetDiskViewController *netDiskViewController = [[PCSNetDiskViewController alloc] init];
+    netDiskViewController.path = PCS_STRING_DEFAULT_PATH;
     netDiskNavController = [[UINavigationController alloc]initWithRootViewController:netDiskViewController];
     netDiskNavController.tabBarItem.title = @"云盘";
+    netDiskViewController.tabBarItem.image = [UIImage imageNamed:@"tab_vdisk"];
     PCS_FUNC_SAFELY_RELEASE(netDiskViewController);
     
     UIViewController *uploadViewController = [[PCSUploadViewController alloc] init];
     uploadNavController = [[UINavigationController alloc] initWithRootViewController:uploadViewController];
     uploadNavController.tabBarItem.title = @"上传";
+    uploadNavController.tabBarItem.image = [UIImage imageNamed:@"tab_upload"];
     PCS_FUNC_SAFELY_RELEASE(uploadViewController);
     
     UIViewController *offlineViewController = [[PCSOfflineViewController alloc] init] ;
     offlineNavController = [[UINavigationController alloc] initWithRootViewController:offlineViewController];
     offlineNavController.tabBarItem.title = @"离线";
+    offlineNavController.tabBarItem.image = [UIImage imageNamed:@"tab_shares"];
     PCS_FUNC_SAFELY_RELEASE(offlineViewController);
     
     UIViewController *moreViewController = [[PCSMoreViewController alloc] init];
     moreNavController = [[UINavigationController alloc] initWithRootViewController:moreViewController];
     moreNavController.tabBarItem.title = @"更多";
+    moreNavController.tabBarItem.image = [UIImage imageNamed:@"tab_more"];
     PCS_FUNC_SAFELY_RELEASE(moreViewController);
     
     NSArray   *controllers = [NSArray arrayWithObjects:

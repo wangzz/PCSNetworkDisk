@@ -41,10 +41,10 @@
     
     self.viewController = [PCSRootViewController shareInstance];
     PCSControllerState   controllerState;
-    BOOL    isFirstLaunch = NO;
-    isFirstLaunch = [[NSUserDefaults standardUserDefaults]
+    BOOL    hasLogin = NO;
+    hasLogin = [[NSUserDefaults standardUserDefaults]
                      boolForKey:PCS_STRING_IS_LOGIN];
-    if (isFirstLaunch) {
+    if (hasLogin) {
         controllerState = PCSControllerStateMain;
         NSString    *mpToken = [[NSUserDefaults standardUserDefaults]
                                     stringForKey:PCS_STRING_ACCESS_TOKEN];

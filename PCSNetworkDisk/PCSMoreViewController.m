@@ -7,7 +7,6 @@
 //
 
 #import "PCSMoreViewController.h"
-#import "AppDelegate.h"
 #import "PCSRootViewController.h"
 
 @interface PCSMoreViewController ()
