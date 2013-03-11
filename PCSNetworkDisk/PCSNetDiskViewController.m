@@ -162,7 +162,7 @@
             if(nil == tmp){
                 continue;
             }
-            
+             
             NSArray *array = [tmp.path componentsSeparatedByString:@"/"];
             if (array != nil) {
                 NSString    *fileName = [array objectAtIndex:(array.count - 1)];

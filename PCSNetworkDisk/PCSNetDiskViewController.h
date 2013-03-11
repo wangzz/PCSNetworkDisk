@@ -18,7 +18,7 @@ typedef enum
 }PCSFileType;
 
 @interface PCSFileInfoItem : NSObject
-
+ 
 @property (nonatomic, retain) NSString  *name;
 @property (nonatomic, retain) NSString  *path;
 @property (nonatomic, assign) NSInteger size;
