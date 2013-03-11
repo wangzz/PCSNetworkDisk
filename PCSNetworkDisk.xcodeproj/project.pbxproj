@@ -322,7 +322,8 @@
 				823D87E516EC84B300353D65 /* 320×480 */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
+			path = /Users/wangzz/Desktop/PCSNetworkDisk/PCSNetworkDisk/Resources;
+			sourceTree = "<absolute>";
 		};
 		822F7BBB16E8F77900898CA4 /* BaiduPCSSDK */ = {
 			isa = PBXGroup;
