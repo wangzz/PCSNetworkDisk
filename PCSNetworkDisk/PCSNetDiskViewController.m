@@ -332,7 +332,7 @@
     UILabel *nameLable = (UILabel *)[cell.contentView viewWithTag:PCS_TAG_FILE_NAME_LABLE];
     nameLable.text = item.name;
     UILabel *sizeLable = (UILabel *)[cell.contentView viewWithTag:PCS_TAG_FILE_SIZE_LABLE];
-    sizeLable.text = [NSString stringWithFormat:@"%fKB",((float)item.size/1024)];
+    sizeLable.text = [NSString stringWithFormat:@"%.3fKB",((float)item.size/1024)];
     UIImageView *fileTypeImageView = (UIImageView *)[cell.contentView viewWithTag:PCS_TAG_FILE_TYPE_IMAGEVIEW];
     fileTypeImageView.image = [self getThumbnailImageWith:item.type];
     if (item.type == PCSFileTypeFolder) {
@@ -358,7 +358,7 @@
 {
     PCSFileInfoItem *item = [self.files objectAtIndex:[indexPath row]];
     PCSNetDiskViewController *detailViewController = [[PCSNetDiskViewController alloc] init];
-    detailViewController.path = item.path;
+    detailViewController.path = [item.path stringByAppendingString:@"/"];
     [[self navigationController] pushViewController:detailViewController animated:YES];
     [detailViewController release];
 }
