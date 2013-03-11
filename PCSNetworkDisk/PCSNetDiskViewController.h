@@ -13,8 +13,13 @@ typedef enum
     PCSFileTypeUnknown = 0,
     PCSFileTypeTxt,
     PCSFileTypeDoc,
+    PCSFileTypePdf,
     PCSFileTypeJpg,
-    PCSFileTypeVideo
+    PCSFileTypeZip,
+    PCSFileTypeVideo,
+    PCSFileTypeFolder,
+    PCSFileTypeMusic,
+    
 }PCSFileType;
 
 @interface PCSFileInfoItem : NSObject
@@ -23,7 +28,6 @@ typedef enum
 @property (nonatomic, retain) NSString  *path;
 @property (nonatomic, assign) NSInteger size;
 @property (nonatomic, assign) PCSFileType  type;
-@property (nonatomic, assign) BOOL  isDir;
 @property (nonatomic, assign) BOOL  hasSubFolder;
 
 @end
