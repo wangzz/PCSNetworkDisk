@@ -9,12 +9,19 @@
 #import "PCSNetDiskViewController.h"
 #import <objc/runtime.h>
 
-@implementation PCSCommonFileInfo(PCSCommonFileInfo)
+@implementation PCSFileInfoItem
+
+@synthesize name;
+@synthesize path;
+@synthesize size;
+@synthesize type;
+@synthesize isDir;
+@synthesize hasSubFolder;
 
 - (NSString *)description
 {
-    NSString *des = [NSString stringWithFormat:@"path:%@,size:%d,isDir:%d,hasSubFolder:%d",
-                     self.path,self.size,self.isDir,self.hasSubFolder];
+    NSString *des = [NSString stringWithFormat:@"path:%@,type:%d,size:%d,isDir:%d,hasSubFolder:%d,path:%@",
+                     self.path,self.type,self.size,self.isDir,self.hasSubFolder,self.path];
     return des;
 }
 
@@ -152,10 +159,26 @@
         for(int i = 0; i < [response.list count]; ++i){
             PCSCommonFileInfo *tmp = [response.list objectAtIndex:i];
             PCSLog(@"tmp:%@",tmp);
-            if(tmp){
-                [visibleFiles addObject:tmp];
+            if(nil == tmp){
+                continue;
+            }
+            
+            NSArray *array = [tmp.path componentsSeparatedByString:@"/"];
+            if (array != nil) {
+                NSString    *fileName = [array objectAtIndex:(array.count - 1)];
+                PCSFileInfoItem *item = [[PCSFileInfoItem alloc] init];
+                item.name = fileName;
+                item.type = [self getFileTypeWith:fileName];
+                item.size = tmp.size;
+                item.isDir = tmp.isDir;
+                item.hasSubFolder = tmp.hasSubFolder;
+                item.path = tmp.path;
+                
+                [visibleFiles addObject:item];
+                PCS_FUNC_SAFELY_RELEASE(item);
             }
         }
+        
         self.files = visibleFiles;
         PCS_FUNC_SAFELY_RELEASE(visibleFiles);
         PCSLog(@"message list:%@",response.list);
@@ -209,7 +232,7 @@
         PCS_FUNC_SAFELY_RELEASE(fileTypeImageView);
     }
     
-    PCSCommonFileInfo *item = [self.files objectAtIndex:[indexPath row]];
+    PCSFileInfoItem *item = [self.files objectAtIndex:[indexPath row]];
     NSArray *array = [item.path componentsSeparatedByString:@"/"];
     if (array != nil) {
         NSString    *fileName = [array objectAtIndex:(array.count - 1)];
@@ -231,7 +254,7 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PCSCommonFileInfo *item = [self.files objectAtIndex:[indexPath row]];
+    PCSFileInfoItem *item = [self.files objectAtIndex:[indexPath row]];
     if (item.isDir)
         return indexPath;
     else
@@ -240,7 +263,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PCSCommonFileInfo *item = [self.files objectAtIndex:[indexPath row]];
+    PCSFileInfoItem *item = [self.files objectAtIndex:[indexPath row]];
     PCSNetDiskViewController *detailViewController = [[PCSNetDiskViewController alloc] init];
     detailViewController.path = item.path;
     [[self navigationController] pushViewController:detailViewController animated:YES];

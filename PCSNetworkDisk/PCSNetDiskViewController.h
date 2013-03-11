@@ -17,9 +17,14 @@ typedef enum
     PCSFileTypeVideo
 }PCSFileType;
 
-@interface PCSCommonFileInfo(PCSCommonFileInfo)
+@interface PCSFileInfoItem : NSObject
 
-- (NSString *)description;
+@property (nonatomic, retain) NSString  *name;
+@property (nonatomic, retain) NSString  *path;
+@property (nonatomic, assign) NSInteger size;
+@property (nonatomic, assign) PCSFileType  type;
+@property (nonatomic, assign) BOOL  isDir;
+@property (nonatomic, assign) BOOL  hasSubFolder;
 
 @end
 
