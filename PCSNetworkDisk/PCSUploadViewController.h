@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PCSUploadViewController : UIViewController
+@interface PCSUploadViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 
 @end
