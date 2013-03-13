@@ -10,7 +10,19 @@
 #define PCSNetDisk_PCSMacroDefine_h
 
 //数据类型
-
+typedef enum
+{
+    PCSFileTypeUnknown = 0,
+    PCSFileTypeTxt,
+    PCSFileTypeDoc,
+    PCSFileTypePdf,
+    PCSFileTypeJpg,
+    PCSFileTypeZip,
+    PCSFileTypeVideo,
+    PCSFileTypeFolder,
+    PCSFileTypeMusic,
+    
+}PCSFileType;
 
 //字符串
 #define PCS_STRING_MOBWIN_UNIT_ID           @"A495798C12C030F28E7711F3613DFC1B"

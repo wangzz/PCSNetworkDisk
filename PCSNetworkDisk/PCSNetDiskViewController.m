@@ -7,25 +7,7 @@
 //
 
 #import "PCSNetDiskViewController.h"
-#import <objc/runtime.h>
-
-@implementation PCSFileInfoItem
-
-@synthesize name;
-@synthesize path;
-@synthesize size;
-@synthesize type;
-@synthesize hasSubFolder;
-
-- (NSString *)description
-{
-    NSString *des = [NSString stringWithFormat:@"path:%@,type:%d,size:%d,hasSubFolder:%d,path:%@",
-                     self.path,self.type,self.size,self.hasSubFolder,self.path];
-    return des;
-}
-
-@end
-
+#import "PCSFileInfoItem.h"
 
 @interface PCSNetDiskViewController ()
 @property (nonatomic, retain) NSArray *files;
@@ -227,12 +209,35 @@
              
             NSArray *array = [tmp.path componentsSeparatedByString:@"/"];
             if (array != nil) {
+                /*
+                 @synthesize sid;
+                 @synthesize name;
+                 @synthesize serverPath;
+                 @synthesize localPath;
+                 @synthesize size;
+                 @synthesize type;
+                 @synthesize hasSubFolder;
+                 @synthesize deleted;
+                 @synthesize ctime;
+                 @synthesize mtime;
+                 @synthesize hasCache;
+                 */
+                
+                /*
+                @property(strong, nonatomic) NSString *path;
+                @property(assign, nonatomic) long mTime;
+                @property(assign, nonatomic) long cTime;
+                @property(strong, nonatomic)NSString *blockList;
+                @property(assign, nonatomic) int size;
+                @property(assign, nonatomic) BOOL isDir;
+                @property(assign, nonatomic) BOOL hasSubFolder;
+                */
                 NSString    *fileName = [array objectAtIndex:(array.count - 1)];
                 PCSFileInfoItem *item = [[PCSFileInfoItem alloc] init];
                 item.name = fileName;
                 item.size = tmp.size;
                 item.hasSubFolder = tmp.hasSubFolder;
-                item.path = tmp.path;
+                item.serverPath = tmp.path;
                 if (tmp.isDir) {
                     item.type = PCSFileTypeFolder;
                 } else {
@@ -325,7 +330,7 @@
     }
     
     PCSFileInfoItem *item = [self.files objectAtIndex:[indexPath row]];
-    NSArray *array = [item.path componentsSeparatedByString:@"/"];
+    NSArray *array = [item.serverPath componentsSeparatedByString:@"/"];
     if (nil == array) {
         return cell;
     }
@@ -358,7 +363,7 @@
 {
     PCSFileInfoItem *item = [self.files objectAtIndex:[indexPath row]];
     PCSNetDiskViewController *detailViewController = [[PCSNetDiskViewController alloc] init];
-    detailViewController.path = [item.path stringByAppendingString:@"/"];
+    detailViewController.path = [item.serverPath stringByAppendingString:@"/"];
     [[self navigationController] pushViewController:detailViewController animated:YES];
     [detailViewController release];
 }
