@@ -221,13 +221,13 @@
                  @synthesize ctime;
                  @synthesize mtime;
                  @synthesize hasCache;
-                 */
+                */
                 
                 /*
                 @property(strong, nonatomic) NSString *path;
                 @property(assign, nonatomic) long mTime;
                 @property(assign, nonatomic) long cTime;
-                @property(strong, nonatomic)NSString *blockList;
+                @property(strong, nonatomic) NSString *blockList;
                 @property(assign, nonatomic) int size;
                 @property(assign, nonatomic) BOOL isDir;
                 @property(assign, nonatomic) BOOL hasSubFolder;
