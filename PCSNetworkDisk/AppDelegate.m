@@ -12,9 +12,10 @@
 
 @implementation AppDelegate
 @synthesize pcsClient;
-
+@synthesize gcdQueue;
 - (void)dealloc
 {
+    dispatch_release(gcdQueue);
     [pcsClient release];
     [_window release];
     [_viewController release];
@@ -32,6 +33,7 @@
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     
+    gcdQueue  = dispatch_queue_create("com.wangzz.pcsnetdisk", NULL);
     [self printDocumentsDirectory];
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:PCS_STRING_EVER_LAUNCHED]) {
