@@ -46,6 +46,7 @@ typedef enum
 #define PCS_STRING_FIRST_LAUNCH             @"firstLaunch"
 #define PCS_STRING_IS_LOGIN                 @"isLogin"
 #define PCS_STRING_ACCESS_TOKEN             @"accessToken"
+#define PCS_STRING_CURSOR                   @"cursor"
 
 
 

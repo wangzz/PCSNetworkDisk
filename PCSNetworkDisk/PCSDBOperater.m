@@ -55,9 +55,19 @@
  CREATE TABLE "filelist" ("id" integer primary key  autoincrement  not null ,"name" text COLLATE NOCASE, "serverpath" text not null COLLATE NOCASE, "localpath" text COLLATE NOCASE,"size" integer, "property" integer, "hassubfolder" bool, "format" integer,"ctime" datetime, "mtime" datetime, "hasCache" bool default 0,timestamp TimeStamp NOT NULL DEFAULT (datetime('now','localtime')));
  */
 
+
+//从本地数据库获取当前目录下面的子文件（文件夹）
+- (NSArray *)getSubFolderFileListFromDB:(NSString *)currentPath
+{
+    NSMutableArray  *listArray = [NSMutableArray array];
+    
+    return listArray;
+}
+
+//保存从服务端下载的文件信息
 - (BOOL)saveFileInfoItemToDB:(PCSFileInfoItem *)item
 {
-    NSString    *sql = [NSString stringWithFormat:@"insert into filelist(name,serverpath,localpath,size,property,format,hassubfolder,ctime,mtime) values(\"%@\",\"%@\",\"%@\",%d,%d,%d,%d,%d,%d)",PCS_FUNC_SENTENCED_EMPTY(item.name),PCS_FUNC_SENTENCED_EMPTY(item.serverPath),PCS_FUNC_SENTENCED_EMPTY(item.localPath),item.size,item.property,item.format,item.hasSubFolder,item.ctime,item.mtime];
+    NSString    *sql = [NSString stringWithFormat:@"replace into filelist(name,serverpath,localpath,size,property,format,hassubfolder,ctime,mtime) values(\"%@\",\"%@\",\"%@\",%d,%d,%d,%d,%d,%d)",PCS_FUNC_SENTENCED_EMPTY(item.name),PCS_FUNC_SENTENCED_EMPTY(item.serverPath),PCS_FUNC_SENTENCED_EMPTY(item.localPath),item.size,item.property,item.format,item.hasSubFolder,item.ctime,item.mtime];
     PCSLog(@"sql:%@",sql);
     BOOL result = NO;
     result = [self.PCSDB executeUpdate:sql];
