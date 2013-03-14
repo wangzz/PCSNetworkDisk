@@ -11,7 +11,7 @@
 
 /*!
  数据库创建脚本：
- CREATE TABLE "filelist" ("id" integer primary key  autoincrement  not null ,"name" text COLLATE NOCASE, "serverpath" text not null COLLATE NOCASE, "localpath" text COLLATE NOCASE,"size" integer, "property" integer, "hassubfolder" bool, "format" integer,"ctime" datetime, "mtime" datetime, "hascache" bool default 0,timestamp TimeStamp NOT NULL DEFAULT (datetime('now','localtime')));
+ CREATE TABLE "filelist" ("id" integer primary key  autoincrement  not null ,"name" text COLLATE NOCASE UNIQUE, "serverpath" text not null COLLATE NOCASE, "localpath" text COLLATE NOCASE,"size" integer, "property" integer, "hassubfolder" bool, "format" integer,"ctime" datetime, "mtime" datetime, "hascache" bool default 0,timestamp TimeStamp NOT NULL DEFAULT (datetime('now','localtime')));
  */
 
 @class PCSFileInfoItem;
@@ -21,4 +21,5 @@
 
 +(PCSDBOperater *) shareInstance;
 - (BOOL)saveFileInfoItemToDB:(PCSFileInfoItem *)item;
+- (NSArray *)getSubFolderFileListFromDB:(NSString *)currentPath;
 @end
