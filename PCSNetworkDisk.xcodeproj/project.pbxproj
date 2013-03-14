@@ -47,6 +47,7 @@
 		822F7BC216E8F7B300898CA4 /* baidu_pcs_ios-1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 822F7BC116E8F7B300898CA4 /* baidu_pcs_ios-1.0.a */; };
 		822F7BCC16E8F94900898CA4 /* LBSSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822F7BC816E8F94900898CA4 /* LBSSDK.framework */; };
 		822F7BCD16E8F94A00898CA4 /* MobWin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 822F7BC916E8F94900898CA4 /* MobWin.a */; };
+		825E417F16F20F16003604A2 /* PcsNetDisk.db in Resources */ = {isa = PBXBuildFile; fileRef = 825E417E16F20F16003604A2 /* PcsNetDisk.db */; };
 		82DAA47C16F2079D003FEAF1 /* tab_shares.png in Resources */ = {isa = PBXBuildFile; fileRef = 82DAA47916F2079D003FEAF1 /* tab_shares.png */; };
 		82DAA47D16F2079D003FEAF1 /* tab_upload.png in Resources */ = {isa = PBXBuildFile; fileRef = 82DAA47A16F2079D003FEAF1 /* tab_upload.png */; };
 		82DAA47E16F2079D003FEAF1 /* tab_vdisk.png in Resources */ = {isa = PBXBuildFile; fileRef = 82DAA47B16F2079D003FEAF1 /* tab_vdisk.png */; };
@@ -142,6 +143,7 @@
 		822F7BC916E8F94900898CA4 /* MobWin.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = MobWin.a; sourceTree = "<group>"; };
 		822F7BCA16E8F94900898CA4 /* MobWinBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobWinBannerView.h; sourceTree = "<group>"; };
 		822F7BCB16E8F94900898CA4 /* MobWinBannerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobWinBannerViewDelegate.h; sourceTree = "<group>"; };
+		825E417E16F20F16003604A2 /* PcsNetDisk.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = PcsNetDisk.db; sourceTree = "<group>"; };
 		82DAA47916F2079D003FEAF1 /* tab_shares.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_shares.png; sourceTree = "<group>"; };
 		82DAA47A16F2079D003FEAF1 /* tab_upload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_upload.png; sourceTree = "<group>"; };
 		82DAA47B16F2079D003FEAF1 /* tab_vdisk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_vdisk.png; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 		822F7B2616E8CE5B00898CA4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				825E417E16F20F16003604A2 /* PcsNetDisk.db */,
 				822F7B2716E8CE5B00898CA4 /* PCSNetworkDisk-Info.plist */,
 				822F7B2816E8CE5B00898CA4 /* InfoPlist.strings */,
 				822F7B2B16E8CE5B00898CA4 /* main.m */,
@@ -553,6 +556,7 @@
 				82DAA4A716F207F1003FEAF1 /* netdisk_type_word.png in Resources */,
 				82DAA4A816F207F1003FEAF1 /* netdisk_type_zip.png in Resources */,
 				82DAA4AA16F2085F003FEAF1 /* tab_shares@2x.png in Resources */,
+				825E417F16F20F16003604A2 /* PcsNetDisk.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

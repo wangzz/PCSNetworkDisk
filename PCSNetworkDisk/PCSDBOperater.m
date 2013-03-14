@@ -18,7 +18,7 @@
     static dispatch_once_t once;
     static PCSDBOperater *instance = nil;
     dispatch_once(&once, ^{
-        instance = [[[PCSDBOperater class] alloc] init];
+        instance = [[PCSDBOperater alloc] init];
     });
     return instance;
 }
@@ -51,9 +51,13 @@
     return destPath;
 }
 
+/*
+ CREATE TABLE "filelist" ("id" integer primary key  autoincrement  not null ,"name" text COLLATE NOCASE, "serverpath" text not null COLLATE NOCASE, "localpath" text COLLATE NOCASE,"size" integer, "property" integer, "hassubfolder" bool, "format" integer,"ctime" datetime, "mtime" datetime, "hasCache" bool default 0,timestamp TimeStamp NOT NULL DEFAULT (datetime('now','localtime')));
+ */
+
 - (BOOL)saveFileInfoItemToDB:(PCSFileInfoItem *)item
 {
-    NSString    *sql = [NSString stringWithFormat:@"replace into filelist(sid,name,serverpath,localpath,size,type,hassubfolder,deleted,ctime,mtime,hasCache) values(%d,\"%@\",\"%@\",\"%@\",%d,%d,%d,%d,%d,%d,%d)",item.sid,item.name,item.serverPath,item.localPath,item.size,item.type,item.hasSubFolder,item.deleted,item.ctime,item.mtime,item.hasCache];
+    NSString    *sql = [NSString stringWithFormat:@"insert into filelist(name,serverpath,localpath,size,property,format,hassubfolder,ctime,mtime) values(\"%@\",\"%@\",\"%@\",%d,%d,%d,%d,%d,%d)",PCS_FUNC_SENTENCED_EMPTY(item.name),PCS_FUNC_SENTENCED_EMPTY(item.serverPath),PCS_FUNC_SENTENCED_EMPTY(item.localPath),item.size,item.property,item.format,item.hasSubFolder,item.ctime,item.mtime];
     PCSLog(@"sql:%@",sql);
     BOOL result = NO;
     result = [self.PCSDB executeUpdate:sql];

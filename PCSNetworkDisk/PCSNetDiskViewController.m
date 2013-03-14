@@ -115,35 +115,35 @@
     return YES;
 }
 
-- (PCSFileType)getFileTypeWith:(NSString *)name
+- (PCSFileFormat)getFileTypeWith:(NSString *)name
 {
-    PCSFileType fileType = PCSFileTypeUnknown;
+    PCSFileFormat fileType = PCSFileFormatUnknown;
     NSString    *pathExtension = [name pathExtension];
     if ([pathExtension isEqualToString:@"txt"]) {
-        fileType = PCSFileTypeTxt;
+        fileType = PCSFileFormatTxt;
     } else if ([pathExtension isEqualToString:@"jpg"] ||
                [pathExtension isEqualToString:@"jpeg"] ||
                [pathExtension isEqualToString:@"png"] ||
                [pathExtension isEqualToString:@"gif"] ||
                [pathExtension isEqualToString:@"bmp"]) {
-        fileType = PCSFileTypeJpg;
+        fileType = PCSFileFormatJpg;
     } else if ([pathExtension isEqualToString:@"doc"] ||
                [pathExtension isEqualToString:@"docx"]) {
-        fileType = PCSFileTypeDoc;
+        fileType = PCSFileFormatDoc;
     } else if ([pathExtension isEqualToString:@"pdf"]) {
-        fileType = PCSFileTypePdf;
+        fileType = PCSFileFormatPdf;
     } else if ([pathExtension isEqualToString:@"rar"] ||
                [pathExtension isEqualToString:@"zip"] ||
                [pathExtension isEqualToString:@"7z"] ||
                [pathExtension isEqualToString:@"tar"] ||
                [pathExtension isEqualToString:@"tgz"]) {
-        fileType = PCSFileTypeZip;
+        fileType = PCSFileFormatZip;
     } else if ([pathExtension isEqualToString:@"mp3"] ||
                [pathExtension isEqualToString:@"pcm"] ||
                [pathExtension isEqualToString:@"wav"] ||
                [pathExtension isEqualToString:@"wma"] ||
                [pathExtension isEqualToString:@"aac"]) {
-        fileType = PCSFileTypeMusic;
+        fileType = PCSFileFormatAudio;
     } else if ([pathExtension isEqualToString:@"avi"] ||
                [pathExtension isEqualToString:@"wmv"] ||
                [pathExtension isEqualToString:@"mpeg"] ||
@@ -152,40 +152,40 @@
                [pathExtension isEqualToString:@"mp4"] ||
                [pathExtension isEqualToString:@"3gp"] ||
                [pathExtension isEqualToString:@"mov"]) {
-        fileType = PCSFileTypeVideo;
+        fileType = PCSFileFormatVideo;
     } 
     return fileType;
 }
 
-- (UIImage *)getThumbnailImageWith:(PCSFileType)type
+- (UIImage *)getThumbnailImageWith:(PCSFileFormat)type
 {
     UIImage *image = nil;
     switch (type) {
-        case PCSFileTypeDoc:
+        case PCSFileFormatDoc:
             image = [UIImage imageNamed:@"netdisk_type_word"];
             break;
-        case PCSFileTypeJpg:
+        case PCSFileFormatJpg:
             image = [UIImage imageNamed:@"netdisk_type_picture"];
             break;
-        case PCSFileTypeTxt:
+        case PCSFileFormatTxt:
             image = [UIImage imageNamed:@"netdisk_type_text"];
             break;
-        case PCSFileTypePdf:
+        case PCSFileFormatPdf:
             image = [UIImage imageNamed:@"netdisk_type_pdf"];
             break;
-        case PCSFileTypeZip:
+        case PCSFileFormatZip:
             image = [UIImage imageNamed:@"netdisk_type_zip"];
             break;
-        case PCSFileTypeMusic:
+        case PCSFileFormatAudio:
             image = [UIImage imageNamed:@"netdisk_type_music"];
             break;
-        case PCSFileTypeVideo:
+        case PCSFileFormatVideo:
             image = [UIImage imageNamed:@"netdisk_type_video"];
             break;
-        case PCSFileTypeFolder:
+        case PCSFileFormatFolder:
             image = [UIImage imageNamed:@"netdisk_type_folder"];
             break;
-        case PCSFileTypeUnknown:
+        case PCSFileFormatUnknown:
         default:
             image = [UIImage imageNamed:@"netdisk_type_default"];
             break;
@@ -210,19 +210,17 @@
             NSArray *array = [tmp.path componentsSeparatedByString:@"/"];
             if (array != nil) {
                 /*
-                 @synthesize sid;
+                 @synthesize fid;
                  @synthesize name;
                  @synthesize serverPath;
                  @synthesize localPath;
                  @synthesize size;
-                 @synthesize type;
+                 @synthesize format;
                  @synthesize hasSubFolder;
-                 @synthesize deleted;
+                 @synthesize property;
                  @synthesize ctime;
                  @synthesize mtime;
-                 @synthesize hasCache;
                 */
-                
                 /*
                 @property(strong, nonatomic) NSString *path;
                 @property(assign, nonatomic) long mTime;
@@ -239,12 +237,16 @@
                 item.hasSubFolder = tmp.hasSubFolder;
                 item.serverPath = tmp.path;
                 if (tmp.isDir) {
-                    item.type = PCSFileTypeFolder;
+                    item.format = PCSFileFormatFolder;
                 } else {
-                    item.type = [self getFileTypeWith:fileName];
+                    item.format = [self getFileTypeWith:fileName];
                 }
-                
+                item.property = PCSFilePropertyDownLoad;
+                item.ctime = tmp.cTime;
+                item.mtime = tmp.mTime;
                 [visibleFiles addObject:item];
+                //文件数据入库
+                [[PCSDBOperater shareInstance] saveFileInfoItemToDB:item];
                 PCS_FUNC_SAFELY_RELEASE(item);
             }
         }
@@ -339,8 +341,8 @@
     UILabel *sizeLable = (UILabel *)[cell.contentView viewWithTag:PCS_TAG_FILE_SIZE_LABLE];
     sizeLable.text = [NSString stringWithFormat:@"%.3fKB",((float)item.size/1024)];
     UIImageView *fileTypeImageView = (UIImageView *)[cell.contentView viewWithTag:PCS_TAG_FILE_TYPE_IMAGEVIEW];
-    fileTypeImageView.image = [self getThumbnailImageWith:item.type];
-    if (item.type == PCSFileTypeFolder) {
+    fileTypeImageView.image = [self getThumbnailImageWith:item.format];
+    if (item.format == PCSFileFormatFolder) {
         sizeLable.text = nil;//文件夹不显示大小
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     }
@@ -353,7 +355,7 @@
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PCSFileInfoItem *item = [self.files objectAtIndex:[indexPath row]];
-    if (item.type == PCSFileTypeFolder)
+    if (item.format == PCSFileFormatFolder)
         return indexPath;
     else
         return nil;

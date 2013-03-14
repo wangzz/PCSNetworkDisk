@@ -18,4 +18,5 @@
     #import "BaiduPCSClient.h"
     #import "PCSMacroDefine.h"
     #import "AppDelegate.h"
+    #import "PCSDBOperater.h"
 #endif

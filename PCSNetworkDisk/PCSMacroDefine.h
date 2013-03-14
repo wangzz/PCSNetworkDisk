@@ -10,19 +10,32 @@
 #define PCSNetDisk_PCSMacroDefine_h
 
 //数据类型
+
+//文件格式
 typedef enum
 {
-    PCSFileTypeUnknown = 0,
-    PCSFileTypeTxt,
-    PCSFileTypeDoc,
-    PCSFileTypePdf,
-    PCSFileTypeJpg,
-    PCSFileTypeZip,
-    PCSFileTypeVideo,
-    PCSFileTypeFolder,
-    PCSFileTypeMusic,
+    PCSFileFormatUnknown = 0,
+    PCSFileFormatTxt,
+    PCSFileFormatDoc,
+    PCSFileFormatPdf,
+    PCSFileFormatJpg,
+    PCSFileFormatZip,
+    PCSFileFormatVideo,
+    PCSFileFormatFolder,
+    PCSFileFormatAudio,
     
-}PCSFileType;
+}PCSFileFormat;
+
+
+//文件属性
+typedef enum
+{
+    PCSFilePropertyNull,
+    PCSFilePropertyDownLoad,//从服务器下载的文件
+    PCSFilePropertyDelete,//被删除的文件
+    PCSFilePropertyOffLine,//离线的文件
+}PCSFileProperty;
+
 
 //字符串
 #define PCS_STRING_MOBWIN_UNIT_ID           @"A495798C12C030F28E7711F3613DFC1B"
