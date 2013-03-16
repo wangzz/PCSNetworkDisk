@@ -58,7 +58,7 @@
     [mTableView release];
     
     dispatch_queue_t queue = PCS_APP_DELEGATE.gcdQueue;
-    dispatch_async(queue, ^{
+    dispatch_sync(queue, ^{
         self.files = [[PCSDBOperater shareInstance] getSubFolderFileListFromDB:self.path];
     });
     
