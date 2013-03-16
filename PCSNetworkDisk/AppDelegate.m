@@ -22,19 +22,11 @@
     [super dealloc];
 }
 
-- (void)printDocumentsDirectory
-{
-    NSArray*paths =NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
-    NSString*documentsDirectory =[paths objectAtIndex:0];
-    PCSLog(@"Document Path:%@",documentsDirectory);
-}
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     
     gcdQueue  = dispatch_queue_create("com.wangzz.pcsnetdisk", NULL);
-    [self printDocumentsDirectory];
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:PCS_STRING_EVER_LAUNCHED]) {
         [[NSUserDefaults standardUserDefaults] setBool:YES
