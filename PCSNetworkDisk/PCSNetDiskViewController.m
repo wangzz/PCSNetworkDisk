@@ -24,6 +24,10 @@
     self = [super init];
     if (self) {
         self.title = @"我的云盘";
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(reloadTableViewDataSource)
+                                                     name:PCS_NOTIFICATION_RELOAD_DATA
+                                                   object:nil];
     }
     
     return self;
@@ -53,95 +57,19 @@
     [self.view addSubview:mTableView];
     [mTableView release];
     
+    self.files = [[PCSDBOperater shareInstance] getSubFolderFileListFromDB:self.path];
+    
     [self creatNavigationBar];
 //    [self addADBanner];
 //    [self loadFileListFromServer];
     
-    // Set the prompt text
-    //    [[self navigationItem] setPrompt:@"just for directory test"];
-    
-    [self updateFileInfo];
-    
+
 }
 
-- (void)updateFileInfo
+- (void)reloadTableViewDataSource
 {
-    dispatch_queue_t queue = PCS_APP_DELEGATE.gcdQueue;
-    dispatch_async(queue, ^{
-        NSString    *cursor = nil;
-        cursor = [[NSUserDefaults standardUserDefaults] stringForKey:PCS_STRING_CURSOR];
-        BOOL    needReload = NO;
-        needReload = [self getIncrementUpdateFromServer:cursor];
-        if (needReload) {
-            //重新获取界面数据源
-            self.files = [[PCSDBOperater shareInstance] getSubFolderFileListFromDB:self.path];
-            //更新界面
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.mTableView reloadData];
-            });
-        }
-    });
-}
-
-/*!
- @method
- @abstract 从服务端获取文件增量更新数据
- @param 上次从服务端获取的更新标识
- @return 是否获取到了新的数据，用于确定是否需要更新界面
- */
--(BOOL)getIncrementUpdateFromServer:(NSString *)cursor
-{
-    PCSDiffResponse *response = [PCS_APP_DELEGATE.pcsClient diff:cursor];
-    if(response){
-        PCSSimplefiedResponse   *status = response.status;
-        if (status.errorCode != 0) {
-            PCSLog(@"get diff err,%@",status.message);
-            return NO;
-        }
-
-        for(int i = 0; i < [response.entries count]; ++i){
-            PCSDifferEntryInfo *info = [response.entries objectAtIndex:i];
-            
-            PCSCommonFileInfo   *tmp = info.commonFileInfo;
-            NSArray *array = [tmp.path componentsSeparatedByString:@"/"];
-            if (array != nil) {
-                NSString    *fileName = [array objectAtIndex:(array.count - 1)];
-                PCSFileInfoItem *item = [[PCSFileInfoItem alloc] init];
-                item.name = fileName;
-                item.size = tmp.size;
-                item.hasSubFolder = tmp.hasSubFolder;
-                item.serverPath = tmp.path;
-                item.ctime = tmp.cTime;
-                item.mtime = tmp.mTime;
-                if (tmp.isDir) {
-                    item.format = PCSFileFormatFolder;
-                } else {
-                    item.format = [self getFileTypeWith:fileName];
-                }
-                
-                if (info.isDeleted) {
-                    item.property = PCSFilePropertyDelete;
-                } else {
-                    item.property = PCSFilePropertyDownLoad;
-                }
-                
-                //文件数据入库
-                [[PCSDBOperater shareInstance] saveFileInfoItemToDB:item];
-            }
-        }
-        
-        [[NSUserDefaults standardUserDefaults] setValue:response.cursor
-                                                 forKey:PCS_STRING_CURSOR];
-        if (response.hasMore) {
-            //服务端的数据未下载完全，需要再次发起请求
-            //
-            //
-        }
-        if (response.entries.count > 0) {
-            return YES;
-        }
-    }
-    return NO;
+    self.files = [[PCSDBOperater shareInstance] getSubFolderFileListFromDB:self.path];
+    [self.mTableView reloadData];
 }
 
 #pragma mark - 构建界面方法

@@ -47,6 +47,8 @@ typedef enum
 #define PCS_STRING_IS_LOGIN                 @"isLogin"
 #define PCS_STRING_ACCESS_TOKEN             @"accessToken"
 #define PCS_STRING_CURSOR                   @"cursor"
+#define PCS_INTEGER_ACCOUNT_ID              @"accountID"
+#define PCS_NOTIFICATION_RELOAD_DATA        @"reloadData"
 
 
 

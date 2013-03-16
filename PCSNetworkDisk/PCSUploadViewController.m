@@ -58,7 +58,7 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *filePath = [[paths objectAtIndex:0] stringByAppendingString:@"/file.jpg"];
     NSData  *data = [NSData dataWithContentsOfFile:filePath];
-    NSString *target = [[NSString alloc] initWithFormat:@"%@%@",PCS_STRING_DEFAULT_PATH,@"file.jpg"];
+    NSString *target = [[NSString alloc] initWithFormat:@"%@%@",PCS_STRING_DEFAULT_PATH,@"test/file.jpg"];
     PCSFileInfoResponse *response = [PCS_APP_DELEGATE.pcsClient uploadData:data
                                                                           :target];
     PCSLog(@"errCode:%d,message:%@",response.status.errorCode,response.status.message);

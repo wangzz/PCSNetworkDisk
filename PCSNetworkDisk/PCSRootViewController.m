@@ -114,13 +114,19 @@
 // success to get access token
 -(void)onSuccess:(BaiduOAuthResponse*)response
 {
+    BOOL result = NO;
+    result = [[PCSDBOperater shareInstance] saveLoginInfoToDB:response];
+    if (!result) {
+        PCSLog(@"login err,save login info to DB err.");
+        return;
+    }
     [PCS_APP_DELEGATE.viewController showViewControllerWith:PCSControllerStateMain];
     [[NSUserDefaults standardUserDefaults] setBool:YES
                                             forKey:PCS_STRING_IS_LOGIN];
     [[NSUserDefaults standardUserDefaults] setValue:response.accessToken
                                              forKey:PCS_STRING_ACCESS_TOKEN];
     PCS_APP_DELEGATE.pcsClient.accessToken = response.accessToken;
-    PCSLog(@"%@",[NSString stringWithFormat:@"Access Token:%@  User Name:%@  Expres In %@", response.accessToken, response.userName, response.expiresIn]);
+    PCSLog(@"%@",[NSString stringWithFormat:@"login success./nAccess Token:%@  User Name:%@  Expres In %@", response.accessToken, response.userName, response.expiresIn]);
 }
 
 // fail to get access token
