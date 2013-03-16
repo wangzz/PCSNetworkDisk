@@ -40,6 +40,9 @@
 	// 可在viewDidUnload调用或者在应用页面返回时调用或者在dealloc中调用
 	// 目前已在viewWillDisappear中调用
 	//
+    
+//    [[NSNotificationCenter defaultCenter] removeObserver:self
+//                                              forKeyPath:PCS_NOTIFICATION_RELOAD_DATA];
 	[adBanner stopRequest];
 	[adBanner removeFromSuperview];
     [path release];
@@ -69,10 +72,18 @@
 
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+    PCSLog(@"memory warning!");
+}
+
 - (void)reloadTableViewDataSource
 {
     self.files = [[PCSDBOperater shareInstance] getSubFolderFileListFromDB:self.path];
     dispatch_async(dispatch_get_main_queue(), ^{
+        PCSLog(@"table view data source reload success.");
         [self.mTableView reloadData];
     });
 }

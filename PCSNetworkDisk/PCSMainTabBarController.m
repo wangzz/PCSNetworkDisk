@@ -28,6 +28,10 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(updateFileInfo)
+                                                     name:PCS_NOTIFICATION_INCREMENT_UPDATE
+                                                   object:nil];
     }
     return self;
 }
@@ -38,7 +42,8 @@
     PCS_FUNC_SAFELY_RELEASE(uploadNavController);
     PCS_FUNC_SAFELY_RELEASE(offlineNavController);
     PCS_FUNC_SAFELY_RELEASE(moreNavController);
-
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                              forKeyPath:PCS_NOTIFICATION_INCREMENT_UPDATE];
     [super dealloc];
 }
 

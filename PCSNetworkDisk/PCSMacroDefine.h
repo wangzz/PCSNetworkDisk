@@ -49,6 +49,7 @@ typedef enum
 #define PCS_STRING_CURSOR                   @"cursor"
 #define PCS_INTEGER_ACCOUNT_ID              @"accountID"
 #define PCS_NOTIFICATION_RELOAD_DATA        @"reloadData"
+#define PCS_NOTIFICATION_INCREMENT_UPDATE   @"incrementUpdate"
 
 
 

@@ -53,15 +53,39 @@
 }
 
 #pragma mark - 数据处理
-- (void)uploadFile
+
+- (void)uploadTest
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingString:@"/file.jpg"];
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingString:@"/happy.mp3"];
     NSData  *data = [NSData dataWithContentsOfFile:filePath];
-    NSString *target = [[NSString alloc] initWithFormat:@"%@%@",PCS_STRING_DEFAULT_PATH,@"test/file.jpg"];
-    PCSFileInfoResponse *response = [PCS_APP_DELEGATE.pcsClient uploadData:data
-                                                                          :target];
-    PCSLog(@"errCode:%d,message:%@",response.status.errorCode,response.status.message);
+    NSString *target = [[NSString alloc] initWithFormat:@"%@%@",PCS_STRING_DEFAULT_PATH,@"qiea.mp4"];
+    [self uploadFile:data name:target];
+}
+
+- (void)uploadFile:(NSData *)data name:(NSString *)name
+{
+    if (nil == data || nil == name) {
+        PCSLog(@"upload err,the data or name is nil.");
+        return;
+    }
+    
+    dispatch_queue_t queue = PCS_APP_DELEGATE.gcdQueue;
+    dispatch_async(queue, ^{
+        PCSFileInfoResponse *response = [PCS_APP_DELEGATE.pcsClient uploadData:data
+                                                                              :name];
+        PCSSimplefiedResponse   *result = response.status;
+        if (result.errorCode != 0) {
+            PCSLog(@"upload file err,errCode:%d,message:%@",response.status.errorCode,response.status.message);
+            return;
+        } else {
+            PCSLog(@"upload file :%@ success",name);
+        }
+        //发送开始数据更新操作通知
+        [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_INCREMENT_UPDATE
+                                                            object:nil];
+    });
+    
 }
 
 #pragma mark - 按钮响应事件
@@ -73,7 +97,7 @@
     } else if (button.tag == 1002) {
         [self getMediaFromSource:UIImagePickerControllerSourceTypeCamera];
     } else if (button.tag == 1003) {
-        [self uploadFile];
+        [self uploadTest];
     }
 }
 
