@@ -101,10 +101,8 @@
         needReload = [self getIncrementUpdateFromServer:cursor];
         if (needReload) {
             //重新获取界面数据源
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_RELOAD_DATA
-                                                                    object:nil];
-            });
+            [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_RELOAD_DATA
+                                                                object:nil];
         }
     });
 }
@@ -203,9 +201,7 @@
                 }
                 
                 //文件数据入库
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [[PCSDBOperater shareInstance] saveFileInfoItemToDB:item];
-                });
+                [[PCSDBOperater shareInstance] saveFileInfoItemToDB:item];
             }
         }
         

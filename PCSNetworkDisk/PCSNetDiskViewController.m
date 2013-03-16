@@ -57,7 +57,10 @@
     [self.view addSubview:mTableView];
     [mTableView release];
     
-    self.files = [[PCSDBOperater shareInstance] getSubFolderFileListFromDB:self.path];
+    dispatch_queue_t queue = PCS_APP_DELEGATE.gcdQueue;
+    dispatch_async(queue, ^{
+        self.files = [[PCSDBOperater shareInstance] getSubFolderFileListFromDB:self.path];
+    });
     
     [self creatNavigationBar];
 //    [self addADBanner];
@@ -69,7 +72,9 @@
 - (void)reloadTableViewDataSource
 {
     self.files = [[PCSDBOperater shareInstance] getSubFolderFileListFromDB:self.path];
-    [self.mTableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.mTableView reloadData];
+    });
 }
 
 #pragma mark - 构建界面方法
