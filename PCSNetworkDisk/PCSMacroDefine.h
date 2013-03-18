@@ -30,9 +30,9 @@ typedef enum
 //文件属性
 typedef enum
 {
-    PCSFilePropertyNull,
-    PCSFilePropertyDownLoad,//从服务器下载的文件
+    PCSFilePropertyNull = 0,
     PCSFilePropertyDelete,//被删除的文件
+    PCSFilePropertyDownLoad,//从服务器下载的文件
     PCSFilePropertyOffLine,//离线的文件
 }PCSFileProperty;
 
@@ -50,6 +50,7 @@ typedef enum
 #define PCS_INTEGER_ACCOUNT_ID              @"accountID"
 #define PCS_NOTIFICATION_RELOAD_DATA        @"reloadData"
 #define PCS_NOTIFICATION_INCREMENT_UPDATE   @"incrementUpdate"
+#define PCS_NOTIFICATION_RELOAD_OFFLINE_DATA    @"reloadOfflineData"
 
 
 

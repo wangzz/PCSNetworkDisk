@@ -19,6 +19,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.title = @"上传记录";
     }
     return self;
 }
@@ -44,22 +45,26 @@
         picker.allowsEditing = YES;
         picker.videoQuality = UIImagePickerControllerQualityTypeLow;
         picker.sourceType = sourceType;
-        [self presentViewController:picker animated:YES completion:nil];        PCS_FUNC_SAFELY_RELEASE(picker);
+        [self presentViewController:picker animated:YES completion:nil];
+        PCS_FUNC_SAFELY_RELEASE(picker);
     }else{
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您的设备不支持访问多媒体文件目录" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                        message:@"您的设备不支持访问多媒体文件目录"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"确定"
+                                              otherButtonTitles:nil, nil];
         [alert show];
         [alert release];
     }
 }
 
 #pragma mark - 数据处理
-
 - (void)uploadTest
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *filePath = [[paths objectAtIndex:0] stringByAppendingString:@"/happy.mp3"];
     NSData  *data = [NSData dataWithContentsOfFile:filePath];
-    NSString *target = [[NSString alloc] initWithFormat:@"%@%@",PCS_STRING_DEFAULT_PATH,@"qiea.mp4"];
+    NSString *target = [[NSString alloc] initWithFormat:@"%@%@",PCS_STRING_DEFAULT_PATH,@"notification.ppt"];
     [self uploadFile:data name:target];
 }
 
@@ -77,13 +82,12 @@
         PCSSimplefiedResponse   *result = response.status;
         if (result.errorCode != 0) {
             PCSLog(@"upload file err,errCode:%d,message:%@",response.status.errorCode,response.status.message);
-            return;
         } else {
             PCSLog(@"upload file :%@ success",name);
+            //发送开始数据更新操作通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_INCREMENT_UPDATE
+                                                                object:nil];
         }
-        //发送开始数据更新操作通知
-        [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_INCREMENT_UPDATE
-                                                            object:nil];
     });
     
 }

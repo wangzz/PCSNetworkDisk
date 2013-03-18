@@ -114,11 +114,8 @@
 // success to get access token
 -(void)onSuccess:(BaiduOAuthResponse*)response
 {
-    __block BOOL result = NO;
-    dispatch_queue_t queue = PCS_APP_DELEGATE.gcdQueue;
-    dispatch_sync(queue, ^{
-        result = [[PCSDBOperater shareInstance] saveLoginInfoToDB:response];
-    });
+    BOOL result = NO;
+    result = [[PCSDBOperater shareInstance] saveLoginInfoToDB:response];
     if (!result) {
         PCSLog(@"login err,save login info to DB err.");
         return;

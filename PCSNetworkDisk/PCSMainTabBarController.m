@@ -206,7 +206,10 @@
                 }
                 
                 //文件数据入库
-                [[PCSDBOperater shareInstance] saveFileInfoItemToDB:item];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    [[PCSDBOperater shareInstance] saveFileInfoItemToDB:item];
+                });
+                
             }
         }
         
