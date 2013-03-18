@@ -57,12 +57,43 @@
  */
 
 
+- (BOOL)deleteFile:(NSInteger)fileId
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSString    *sql = [NSString stringWithFormat:@"delete from filelist where id=%d and accountid=%d",fileId,accountID];
+    PCSLog(@"sql:%@",sql);
+    BOOL result = NO;
+    result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
+    if (!result) {
+        PCSLog(@" delete file failed.%@",[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
+    }
+    
+    return result;
+}
+
+//更新文件属性信息
+- (BOOL)updateFile:(NSInteger)fileId property:(PCSFileProperty)newProperty
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSString    *sql = [NSString stringWithFormat:@"update filelist set property=%d where id=%d and accountid=%d",newProperty,fileId,accountID];
+    PCSLog(@"sql:%@",sql);
+    BOOL result = NO;
+    result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
+    if (!result) {
+        PCSLog(@" update file property failed.%@",[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
+    }
+    
+    return result;
+}
+
 //从本地数据库获取当前目录下面的子文件（文件夹）
+//获取属性为下载和离线两种类型的文件
+//以是否为文件夹降序排序，名字升序排序
 - (NSArray *)getSubFolderFileListFromDB:(NSString *)currentPath
 {
     NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
     NSMutableArray  *listArray = [NSMutableArray array];
-    NSString    *sql = [NSString stringWithFormat:@"select id, name, serverpath,size,property,format,hassubfolder,ctime,mtime from filelist where parentPath=\"%@\" and accountid=%d",currentPath,accountID];
+    NSString    *sql = [NSString stringWithFormat:@"select id, name, serverpath,size,property,format,hassubfolder,ctime,mtime from filelist where parentPath=\"%@\" and accountid=%d and property in (2,3) order by isdir desc,name asc",currentPath,accountID];
     FMResultSet *rs = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
     while ([rs next]){
         PCSFileInfoItem *item = [[PCSFileInfoItem alloc] init];
@@ -86,10 +117,13 @@
 - (BOOL)saveFileInfoItemToDB:(PCSFileInfoItem *)item
 {
     NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
-    NSString    *sql = [NSString stringWithFormat:@"replace into filelist(accountid,name,serverpath,parentPath,localpath,size,property,format,hassubfolder,ctime,mtime) values(%d,\"%@\",\"%@\",\"%@\",\"%@\",%d,%d,%d,%d,%d,%d)",accountID,PCS_FUNC_SENTENCED_EMPTY(item.name),PCS_FUNC_SENTENCED_EMPTY(item.serverPath),PCS_FUNC_SENTENCED_EMPTY(item.parentPath),PCS_FUNC_SENTENCED_EMPTY(item.localPath),item.size,item.property,item.format,item.hasSubFolder,item.ctime,item.mtime];
+    NSInteger   isDir = 0;
+    if (item.format == PCSFileFormatFolder) {
+        isDir = 1;
+    }
+    NSString    *sql = [NSString stringWithFormat:@"replace into filelist(accountid,name,serverpath,parentPath,localpath,size,property,format,hassubfolder,ctime,mtime,isdir) values(%d,\"%@\",\"%@\",\"%@\",\"%@\",%d,%d,%d,%d,%d,%d,%d)",accountID,PCS_FUNC_SENTENCED_EMPTY(item.name),PCS_FUNC_SENTENCED_EMPTY(item.serverPath),PCS_FUNC_SENTENCED_EMPTY(item.parentPath),PCS_FUNC_SENTENCED_EMPTY(item.localPath),item.size,item.property,item.format,item.hasSubFolder,item.ctime,item.mtime,isDir];
     PCSLog(@"sql:%@",sql);
     BOOL result = NO;
-    NSLog(@"pcsdb:%@",self.PCSDB);
     result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
     if (!result) {
         PCSLog(@" save file info to DB failed.%@",[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
