@@ -24,8 +24,11 @@
 
 + (PCSDBOperater *)shareInstance;
 
-- (BOOL)saveLoginInfoToDB:(BaiduOAuthResponse *)response;
+- (BOOL)deleteFileWith:(NSString *)name;
+- (NSData *)getFileWith:(NSString *)name;
+- (BOOL)saveFile:(NSData *)value name:(NSString *)name;
 
+- (BOOL)saveLoginInfoToDB:(BaiduOAuthResponse *)response;
 - (BOOL)saveFileInfoItemToDB:(PCSFileInfoItem *)item;
 - (NSArray *)getSubFolderFileListFromDB:(NSString *)currentPath;
 - (BOOL)updateFile:(NSInteger)fileId property:(PCSFileProperty)newProperty;

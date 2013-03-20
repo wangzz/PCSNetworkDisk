@@ -9,6 +9,7 @@
 #import "PCSDBOperater.h"
 #import "PCSFileInfoItem.h"
 #import "BaiduOAuth.h"
+#import "NSStringAdditions.h"
 
 @implementation PCSDBOperater
 @synthesize PCSDB;
@@ -50,6 +51,67 @@
         [fileManager copyItemAtPath:sourcePath toPath:destPath error:&error];
     }
     return destPath;
+}
+
+//删除本地缓存的文件
+- (BOOL)deleteFileWith:(NSString *)name
+{
+    NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+                       stringByAppendingPathComponent:PCS_STRING_OFFLINE_CACHE]
+                      stringByAppendingPathComponent:[name md5Hash]];
+    BOOL    result = NO;
+    NSError *err = nil;
+    result = [[NSFileManager defaultManager] removeItemAtPath:path error:&err];
+    if (!result) {
+        PCSLog(@"delete file :%@ failed.%@",name,err);
+    } else {
+        PCSLog(@"delete file :%@ success.",name);
+    }
+    
+    return result;
+}
+
+//根据文件名获取文件的二进制数据
+- (NSData *)getFileWith:(NSString *)name
+{
+    NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+                       stringByAppendingPathComponent:PCS_STRING_OFFLINE_CACHE]
+                      stringByAppendingPathComponent:[name md5Hash]];
+    NSData  *fileData = [NSData dataWithContentsOfFile:path];
+    
+    return fileData;
+}
+
+//将文件保存到本地
+//为防止文件重名，直接用文件路径经过MD5处理后，作为文件名。
+- (BOOL)saveFile:(NSData *)value name:(NSString *)name
+{
+    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_STRING_OFFLINE_CACHE];
+
+    BOOL    isDirectory = YES;
+    BOOL    directoryExit = [[NSFileManager defaultManager] fileExistsAtPath:path
+                                                                 isDirectory:&isDirectory];
+    if (!directoryExit) {
+        NSError *err = nil;
+        BOOL createResult = [[NSFileManager defaultManager] createDirectoryAtPath:path
+                                                      withIntermediateDirectories:YES
+                                                                       attributes:nil
+                                                                            error:&err];
+        if (!createResult) {
+            PCSLog(@"directory :%@ create failed.%@",path,err);
+            return NO;
+        }
+    }
+    
+    NSString    *picPath = [path stringByAppendingFormat:@"/%@",[name md5Hash]];
+    BOOL    result = [value writeToFile:picPath atomically:YES];
+    if (!result) {
+        PCSLog(@"write file :%@ to cache failed.",name);
+        return NO;
+    } else {
+        PCSLog(@"write file :%@ to cache success.",name);
+        return YES;
+    }
 }
 
 /*
