@@ -15,6 +15,8 @@
 		8214A2A316F0AAA000BEA785 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8214A29E16F0AAA000BEA785 /* FMResultSet.m */; };
 		8214A2A616F0C64600BEA785 /* PCSFileInfoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8214A2A516F0C64600BEA785 /* PCSFileInfoItem.m */; };
 		8214A2A816F0D2E500BEA785 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8214A2A716F0D2E500BEA785 /* libsqlite3.0.dylib */; };
+		8225CC8D16FA00C8004B3711 /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8225CC8C16FA00C8004B3711 /* NSStringAdditions.m */; };
+		8225CC9016FA0F97004B3711 /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8225CC8F16FA0F97004B3711 /* NSDataAdditions.m */; };
 		822C911516EA2D0100F80D00 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 822C911416EA2D0100F80D00 /* MBProgressHUD.m */; };
 		822C911B16EA383700F80D00 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822C911A16EA383700F80D00 /* CFNetwork.framework */; };
 		822C911D16EA384000F80D00 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822C911C16EA384000F80D00 /* SystemConfiguration.framework */; };
@@ -91,6 +93,10 @@
 		8214A2A416F0C64600BEA785 /* PCSFileInfoItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSFileInfoItem.h; sourceTree = "<group>"; };
 		8214A2A516F0C64600BEA785 /* PCSFileInfoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSFileInfoItem.m; sourceTree = "<group>"; };
 		8214A2A716F0D2E500BEA785 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		8225CC8B16FA00C8004B3711 /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
+		8225CC8C16FA00C8004B3711 /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
+		8225CC8E16FA0F97004B3711 /* NSDataAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataAdditions.h; sourceTree = "<group>"; };
+		8225CC8F16FA0F97004B3711 /* NSDataAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataAdditions.m; sourceTree = "<group>"; };
 		822C911316EA2D0100F80D00 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		822C911416EA2D0100F80D00 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		822C911A16EA383700F80D00 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -213,6 +219,17 @@
 			name = FMDB;
 			sourceTree = "<group>";
 		};
+		8225CC8916FA0087004B3711 /* NSString+Addition */ = {
+			isa = PBXGroup;
+			children = (
+				8225CC8E16FA0F97004B3711 /* NSDataAdditions.h */,
+				8225CC8F16FA0F97004B3711 /* NSDataAdditions.m */,
+				8225CC8B16FA00C8004B3711 /* NSStringAdditions.h */,
+				8225CC8C16FA00C8004B3711 /* NSStringAdditions.m */,
+			);
+			name = "NSString+Addition";
+			sourceTree = "<group>";
+		};
 		822C911116EA2CDE00F80D00 /* MBProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -288,6 +305,7 @@
 		822F7B7D16E8D73600898CA4 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				8225CC8916FA0087004B3711 /* NSString+Addition */,
 				8214A29416F0AA5E00BEA785 /* FMDB */,
 				822C911116EA2CDE00F80D00 /* MBProgressHUD */,
 				822F7BC316E8F8B100898CA4 /* MobWINSDK */,
@@ -584,6 +602,8 @@
 				8214A2A216F0AAA000BEA785 /* FMDatabaseQueue.m in Sources */,
 				8214A2A316F0AAA000BEA785 /* FMResultSet.m in Sources */,
 				8214A2A616F0C64600BEA785 /* PCSFileInfoItem.m in Sources */,
+				8225CC8D16FA00C8004B3711 /* NSStringAdditions.m in Sources */,
+				8225CC9016FA0F97004B3711 /* NSDataAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
