@@ -16,7 +16,9 @@
     #import "BaiduPCSErrorCode.h"
     #import "BaiduPCSActionInfo.h"
     #import "BaiduPCSClient.h"
+    #import "BaiduPCSStatusListener.h"
     #import "PCSMacroDefine.h"
     #import "AppDelegate.h"
     #import "PCSDBOperater.h"
+    #import "PCSFileInfoItem.h"
 #endif

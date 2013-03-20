@@ -91,7 +91,8 @@
 {    
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithTitle:@"管理"
                                                                        style:UIBarButtonItemStyleDone
-                                                                      target:self action:@selector(onRightBarButtonAction:)];
+                                                                      target:self
+                                                                      action:@selector(onRightBarButtonAction:)];
     self.navigationItem.rightBarButtonItem = rightBarButton;
     PCS_FUNC_SAFELY_RELEASE(rightBarButton);
 }
@@ -297,11 +298,11 @@
             item.property = PCSFilePropertyOffLine;
         }
     }
-    
+
     if (result) {
         //通知离线列表界面数据更新
         [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_RELOAD_OFFLINE_DATA
-                                                            object:nil];
+                                                            object:item];
         //更新当前界面数据
         [self.mTableView reloadData];
     }
