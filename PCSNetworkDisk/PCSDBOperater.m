@@ -53,6 +53,7 @@
     return destPath;
 }
 
+#pragma mark - 文件的本地缓存操作
 //删除本地缓存的文件
 - (BOOL)deleteFileWith:(NSString *)name
 {
@@ -114,11 +115,119 @@
     }
 }
 
+- (PCSFileFormat)getFileTypeWith:(NSString *)name
+{
+    PCSFileFormat fileType = PCSFileFormatUnknown;
+    NSString    *pathExtension = [name pathExtension];
+    if ([pathExtension isEqualToString:@"txt"]) {
+        fileType = PCSFileFormatTxt;
+    } else if ([pathExtension isEqualToString:@"jpg"] ||
+               [pathExtension isEqualToString:@"jpeg"] ||
+               [pathExtension isEqualToString:@"png"] ||
+               [pathExtension isEqualToString:@"gif"] ||
+               [pathExtension isEqualToString:@"bmp"]) {
+        fileType = PCSFileFormatJpg;
+    } else if ([pathExtension isEqualToString:@"doc"] ||
+               [pathExtension isEqualToString:@"docx"]) {
+        fileType = PCSFileFormatDoc;
+    } else if ([pathExtension isEqualToString:@"pdf"]) {
+        fileType = PCSFileFormatPdf;
+    } else if ([pathExtension isEqualToString:@"rar"] ||
+               [pathExtension isEqualToString:@"zip"] ||
+               [pathExtension isEqualToString:@"7z"] ||
+               [pathExtension isEqualToString:@"tar"] ||
+               [pathExtension isEqualToString:@"tgz"]) {
+        fileType = PCSFileFormatZip;
+    } else if ([pathExtension isEqualToString:@"mp3"] ||
+               [pathExtension isEqualToString:@"pcm"] ||
+               [pathExtension isEqualToString:@"wav"] ||
+               [pathExtension isEqualToString:@"wma"] ||
+               [pathExtension isEqualToString:@"aac"]) {
+        fileType = PCSFileFormatAudio;
+    } else if ([pathExtension isEqualToString:@"avi"] ||
+               [pathExtension isEqualToString:@"wmv"] ||
+               [pathExtension isEqualToString:@"mpeg"] ||
+               [pathExtension isEqualToString:@"rmvb"] ||
+               [pathExtension isEqualToString:@"rm"] ||
+               [pathExtension isEqualToString:@"mp4"] ||
+               [pathExtension isEqualToString:@"3gp"] ||
+               [pathExtension isEqualToString:@"mov"]) {
+        fileType = PCSFileFormatVideo;
+    }
+    return fileType;
+}
+
+#pragma mark - uploadfilelist表数据库操作方法
+
 /*
- CREATE TABLE "filelist" ("id" integer primary key  autoincrement  not null ,"name" text COLLATE NOCASE, "serverpath" text not null COLLATE NOCASE, "localpath" text COLLATE NOCASE,"size" integer, "property" integer, "hassubfolder" bool, "format" integer,"ctime" datetime, "mtime" datetime, "hasCache" bool default 0,timestamp TimeStamp NOT NULL DEFAULT (datetime('now','localtime')));
+ ("id" integer primary key  autoincrement  not null ,accountid integer , "name" text COLLATE NOCASE, "cachepath" text COLLATE NOCASE,"size" integer, "status" integer, "format" integer,"mtime" datetime, timestamp TimeStamp NOT NULL DEFAULT (datetime('now','localtime')));
+*/
+
+- (BOOL)updateUploadFile:(NSString *)name status:(PCSFileUploadStatus)newStatus
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSString    *sql = [NSString stringWithFormat:@"update uploadfilelist set status=%d where cachepath=\"%@\" and accountid=%d",newStatus,name,accountID];
+    PCSLog(@"sql:%@",sql);
+    BOOL result = NO;
+    result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
+    if (!result) {
+        PCSLog(@" update upload file status failed.%@",[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
+    }
+    
+    return result;
+}
+
+/*
+ cachepath由serverPath来保存
+ status由property来保存
  */
+- (BOOL)saveUploadFileToDB:(PCSFileInfoItem *)item
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSString    *sql = [NSString stringWithFormat:@"replace into uploadfilelist(accountid,name,cachepath,size,status,format,mtime) values(%d,\"%@\",\"%@\",%d,%d,%d,%d)",accountID,PCS_FUNC_SENTENCED_EMPTY(item.name),PCS_FUNC_SENTENCED_EMPTY(item.serverPath),item.size,item.property,item.format,item.mtime];
+    PCSLog(@"sql:%@",sql);
+    BOOL result = NO;
+    result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
+    if (!result) {
+        PCSLog(@" save upload file info to DB failed.%@",[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
+    }
+    
+    return result;
+}
 
+- (NSDictionary *)getUploadFileFromDB
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSMutableDictionary  *fileDictionary = [NSMutableDictionary dictionary];
+    NSMutableArray  *uploadingArray = [NSMutableArray array];
+    NSMutableArray  *uploadSuccessArray = [NSMutableArray array];
+    NSString    *sql = [NSString stringWithFormat:@"select id, name, cachepath,size,status,format,mtime from uploadfilelist where accountid=%d order by status desc,mtime desc",accountID];
+    FMResultSet *rs = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
+    while ([rs next]){
+        PCSFileInfoItem *item = [[PCSFileInfoItem alloc] init];
+        item.fid = [rs intForColumn:@"id"];
+        item.name = [rs stringForColumn:@"name"];
+        item.serverPath = [rs stringForColumn:@"cachepath"];
+        item.size = [rs intForColumn:@"size"];
+        item.format = [rs intForColumn:@"format"];
+        item.property = [rs intForColumn:@"status"];
+        item.mtime = [rs intForColumn:@"mtime"];
+        if (item.property == PCSFileUploadStatusFailed || item.property == PCSFileUploadStatusUploading) {
+            [uploadingArray addObject:item];
+        } else if (item.property == PCSFileUploadStatusSuccess) {
+            [uploadSuccessArray addObject:item];
+        }
+        PCS_FUNC_SAFELY_RELEASE(item);
+    }
+    
+    NSString    *uploading = [NSString stringWithFormat:@"%d",PCSFileUploadStatusUploading];
+    NSString    *uploadSuccess = [NSString stringWithFormat:@"%d",PCSFileUploadStatusSuccess];
+    [fileDictionary setValue:uploadingArray forKey:uploading];
+    [fileDictionary setValue:uploadSuccessArray forKey:uploadSuccess];
+    return fileDictionary;
+}
 
+#pragma mark - filelist表数据库操作方法
 - (BOOL)deleteFile:(NSInteger)fileId
 {
     NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
@@ -148,7 +257,7 @@
     return result;
 }
 
-//从本地数据库获取当前目录下面的子文件（文件夹）
+//从本地数据库获取当前目录下面的子文件（文件夹）用于我的文档界面展示
 //获取属性为下载和离线两种类型的文件
 //以是否为文件夹降序排序，名字升序排序
 - (NSArray *)getSubFolderFileListFromDB:(NSString *)currentPath
@@ -183,7 +292,7 @@
     if (item.format == PCSFileFormatFolder) {
         isDir = 1;
     }
-    NSString    *sql = [NSString stringWithFormat:@"replace into filelist(accountid,name,serverpath,parentPath,localpath,size,property,format,hassubfolder,ctime,mtime,isdir) values(%d,\"%@\",\"%@\",\"%@\",\"%@\",%d,%d,%d,%d,%d,%d,%d)",accountID,PCS_FUNC_SENTENCED_EMPTY(item.name),PCS_FUNC_SENTENCED_EMPTY(item.serverPath),PCS_FUNC_SENTENCED_EMPTY(item.parentPath),PCS_FUNC_SENTENCED_EMPTY(item.localPath),item.size,item.property,item.format,item.hasSubFolder,item.ctime,item.mtime,isDir];
+    NSString    *sql = [NSString stringWithFormat:@"replace into filelist(accountid,name,serverpath,parentPath,thumbnailPath,size,property,format,hassubfolder,ctime,mtime,isdir) values(%d,\"%@\",\"%@\",\"%@\",\"%@\",%d,%d,%d,%d,%d,%d,%d)",accountID,PCS_FUNC_SENTENCED_EMPTY(item.name),PCS_FUNC_SENTENCED_EMPTY(item.serverPath),PCS_FUNC_SENTENCED_EMPTY(item.parentPath),PCS_FUNC_SENTENCED_EMPTY(item.thumbnailPath),item.size,item.property,item.format,item.hasSubFolder,item.ctime,item.mtime,isDir];
     PCSLog(@"sql:%@",sql);
     BOOL result = NO;
     result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
@@ -195,7 +304,7 @@
 }
 
                                                                                                                  
-#pragma mark -  登陆数据库操作方法
+#pragma mark -  accountlist表数据库操作方法
 - (BOOL)isAccountAleadyLogin:(NSString *)account
 {
     NSString    *sql = [NSString stringWithFormat:@"select * from accountlist where account=\"%@\"",account];
