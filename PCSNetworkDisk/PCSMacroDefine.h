@@ -36,6 +36,14 @@ typedef enum
     PCSFilePropertyOffLine,//离线的文件
 }PCSFileProperty;
 
+typedef enum
+{
+    PCSFileUploadStatusNull = 0,
+    PCSFileUploadStatusFailed,//上传失败的文件
+    PCSFileUploadStatusUploading,//正在上传的文件
+    PCSFileUploadStatusSuccess,//成功上传的文件
+}PCSFileUploadStatus;
+
 
 //字符串
 #define PCS_STRING_MOBWIN_UNIT_ID           @"A495798C12C030F28E7711F3613DFC1B"

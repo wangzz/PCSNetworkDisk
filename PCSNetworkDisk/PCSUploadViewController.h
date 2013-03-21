@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PCSUploadViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
-
+@interface PCSUploadViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITableViewDataSource,UITableViewDelegate,BaiduPCSStatusListener>
+{
+    UIProgressView  *progressView;
+}
 @end

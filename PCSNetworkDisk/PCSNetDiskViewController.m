@@ -42,7 +42,8 @@
 	//
     
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                              forKeyPath:PCS_NOTIFICATION_RELOAD_DATA];
+                                                    name:PCS_NOTIFICATION_RELOAD_DATA
+                                                  object:nil];
 	[adBanner stopRequest];
 	[adBanner removeFromSuperview];
     [path release];
@@ -339,7 +340,6 @@
     });
 }
 
-#pragma mark - Table view data source
 
 #define TABLEVIEW_NORMAL_CELL   @"NormalCell"
 #define TABLEVIEW_EXPAND_CELL   @"ExpandCell"
@@ -353,6 +353,8 @@
 #define PCS_TAG_EXPAND_MOVE_BUTTON      10005
 #define PCS_TAG_EXPAND_DELETE_BUTTON    10006
 
+
+#pragma mark - Table view data source
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
     if ([selectCellIndexPath isEqual:indexPath]) {
