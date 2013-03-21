@@ -14,7 +14,7 @@
 @synthesize name;
 @synthesize serverPath;
 @synthesize parentPath;
-@synthesize localPath;
+@synthesize thumbnailPath;
 @synthesize size;
 @synthesize format;
 @synthesize hasSubFolder;
@@ -26,7 +26,7 @@
 
 - (NSString *)description
 {
-    NSString *des = [NSString stringWithFormat:@"fid:%d,name:%@,serverPath:%@,parentPath:%@,localPath:%@,size:%d,format:%d,hasSubFolder:%d,hasCache:%d,property:%d,ctime:%d,mtime:%d,",self.fid,PCS_FUNC_SENTENCED_EMPTY(self.name),PCS_FUNC_SENTENCED_EMPTY(self.serverPath),PCS_FUNC_SENTENCED_EMPTY(self.parentPath),PCS_FUNC_SENTENCED_EMPTY(self.localPath),self.size,self.format,self.hasSubFolder,self.hasCache,self.property,self.ctime,self.mtime];
+    NSString *des = [NSString stringWithFormat:@"fid:%d,name:%@,serverPath:%@,parentPath:%@,thumbnailPath:%@,size:%d,format:%d,hasSubFolder:%d,hasCache:%d,property:%d,ctime:%d,mtime:%d,",self.fid,PCS_FUNC_SENTENCED_EMPTY(self.name),PCS_FUNC_SENTENCED_EMPTY(self.serverPath),PCS_FUNC_SENTENCED_EMPTY(self.parentPath),PCS_FUNC_SENTENCED_EMPTY(self.thumbnailPath),self.size,self.format,self.hasSubFolder,self.hasCache,self.property,self.ctime,self.mtime];
     return des;
 }
 
