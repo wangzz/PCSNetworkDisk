@@ -40,6 +40,7 @@ typedef enum
 {
     PCSFileUploadStatusNull = 0,
     PCSFileUploadStatusFailed,//上传失败的文件
+    PCSFileUploadStatusWaiting,//等待上传的文件
     PCSFileUploadStatusUploading,//正在上传的文件
     PCSFileUploadStatusSuccess,//成功上传的文件
 }PCSFileUploadStatus;
@@ -57,7 +58,6 @@ typedef enum
 #define PCS_STRING_ACCESS_TOKEN             @"accessToken"
 #define PCS_STRING_CURSOR                   @"cursor"
 #define PCS_INTEGER_ACCOUNT_ID              @"accountID"
-#define PCS_NOTIFICATION_RELOAD_DATA        @"reloadData"
 #define PCS_NOTIFICATION_INCREMENT_UPDATE   @"incrementUpdate"
 #define PCS_NOTIFICATION_RELOAD_OFFLINE_DATA    @"reloadOfflineData"
 
