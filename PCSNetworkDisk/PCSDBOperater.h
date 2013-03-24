@@ -27,10 +27,12 @@
 + (PCSDBOperater *)shareInstance;
 
 
+
+- (PCSFileInfoItem *)getNextUploadFileInfo;
+- (BOOL)hasUploadingFile;
 - (BOOL)updateUploadFile:(NSString *)name status:(PCSFileUploadStatus)newStatus;
 - (BOOL)saveUploadFileToDB:(PCSFileInfoItem *)item;
 - (NSDictionary *)getUploadFileFromDB;
-
 
 - (BOOL)deleteFileWith:(NSString *)name;
 - (NSData *)getFileWith:(NSString *)name;

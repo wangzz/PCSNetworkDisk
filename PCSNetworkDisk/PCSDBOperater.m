@@ -163,10 +163,42 @@
  ("id" integer primary key  autoincrement  not null ,accountid integer , "name" text COLLATE NOCASE, "cachepath" text COLLATE NOCASE,"size" integer, "status" integer, "format" integer,"mtime" datetime, timestamp TimeStamp NOT NULL DEFAULT (datetime('now','localtime')));
 */
 
+//获得下一个要上传的文件信息
+//选择最早入库的那个（先添加先上传）
+//只找出一条
+- (PCSFileInfoItem *)getNextUploadFileInfo
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    PCSFileInfoItem *item = nil;
+    NSString    *sql = [NSString stringWithFormat:@"select id, name, cachepath,size,status,format,mtime from uploadfilelist where accountid=%d and status=%d order by mtime asc limit 1",accountID,PCSFileUploadStatusWaiting];
+    FMResultSet *rs = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
+    while ([rs next]){
+        item = [[PCSFileInfoItem alloc] init];
+        item.fid = [rs intForColumn:@"id"];
+        item.name = [rs stringForColumn:@"name"];
+        item.serverPath = [rs stringForColumn:@"cachepath"];
+        item.size = [rs intForColumn:@"size"];
+        item.format = [rs intForColumn:@"format"];
+        item.property = [rs intForColumn:@"status"];
+        item.mtime = [rs intForColumn:@"mtime"];
+    }
+    return item;
+}
+
+//判断当前是否有正在上传的文件
+- (BOOL)hasUploadingFile
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSString    *sql = [NSString stringWithFormat:@"select * from uploadfilelist where accountid=%d and status=%d",accountID,PCSFileUploadStatusUploading];
+    FMResultSet *rt = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
+    return rt.next;
+}
+
+//更新文件的上传状态
 - (BOOL)updateUploadFile:(NSString *)name status:(PCSFileUploadStatus)newStatus
 {
     NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
-    NSString    *sql = [NSString stringWithFormat:@"update uploadfilelist set status=%d where cachepath=\"%@\" and accountid=%d",newStatus,name,accountID];
+    NSString    *sql = [NSString stringWithFormat:@"update uploadfilelist set status=%d, mtime=%d where cachepath=\"%@\" and accountid=%d",newStatus,(NSInteger)[[NSDate date] timeIntervalSince1970],name,accountID];
     PCSLog(@"sql:%@",sql);
     BOOL result = NO;
     result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
@@ -212,7 +244,9 @@
         item.format = [rs intForColumn:@"format"];
         item.property = [rs intForColumn:@"status"];
         item.mtime = [rs intForColumn:@"mtime"];
-        if (item.property == PCSFileUploadStatusFailed || item.property == PCSFileUploadStatusUploading) {
+        if (item.property == PCSFileUploadStatusFailed ||
+            item.property == PCSFileUploadStatusUploading ||
+            item.property == PCSFileUploadStatusWaiting) {
             [uploadingArray addObject:item];
         } else if (item.property == PCSFileUploadStatusSuccess) {
             [uploadSuccessArray addObject:item];
@@ -220,10 +254,16 @@
         PCS_FUNC_SAFELY_RELEASE(item);
     }
     
-    NSString    *uploading = [NSString stringWithFormat:@"%d",PCSFileUploadStatusUploading];
-    NSString    *uploadSuccess = [NSString stringWithFormat:@"%d",PCSFileUploadStatusSuccess];
-    [fileDictionary setValue:uploadingArray forKey:uploading];
-    [fileDictionary setValue:uploadSuccessArray forKey:uploadSuccess];
+    if (uploadingArray.count > 0) {
+        NSString    *uploading = [NSString stringWithFormat:@"%d",PCSFileUploadStatusUploading];
+        [fileDictionary setValue:uploadingArray forKey:uploading];
+    }
+    
+    if (uploadSuccessArray.count > 0) {
+        NSString    *uploadSuccess = [NSString stringWithFormat:@"%d",PCSFileUploadStatusSuccess];
+        [fileDictionary setValue:uploadSuccessArray forKey:uploadSuccess];
+    }
+    
     return fileDictionary;
 }
 
