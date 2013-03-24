@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface PCSUploadViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITableViewDataSource,UITableViewDelegate,BaiduPCSStatusListener>
 {
-    UIProgressView  *progressView;
+    NSIndexPath *currentUploadFileIndexPath;//当前正在上传的文件index
 }
 @end

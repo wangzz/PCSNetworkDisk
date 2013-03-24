@@ -28,14 +28,12 @@
     if (self) {
         // Custom initialization
         self.title = @"上传记录";
-        progressView = [[UIProgressView alloc] init];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [progressView release];
     [super dealloc];
 }
 
@@ -43,8 +41,6 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    progressView.frame = CGRectMake(50, 75, 220, 20);
-    [self.view addSubview:progressView];
     
     [self reloadTableDataSource];
 }
@@ -81,32 +77,87 @@
 - (void)uploadTest
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingString:@"/test.pdf"];
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingString:@"/Cocoa.pdf"];
     NSData  *data = [NSData dataWithContentsOfFile:filePath];
-    NSString    *fileName = @"编码规范.pdf";
+    NSString    *fileName = @"面朝大海，春暖花开，我有一所房子909.pdf";
     NSString *target = [[NSString alloc] initWithFormat:@"%@%@",PCS_STRING_DEFAULT_PATH,fileName];
-    /*
-     PCS_FUNC_SENTENCED_EMPTY(item.name),PCS_FUNC_SENTENCED_EMPTY(item.serverPath),item.size,item.property,item.format,item.mtime
-     */
+    
+    [self uploadNewFileToServer:data name:fileName path:target];
+}
+
+//新选取的文件信息入库，文件缓存等操作，并根据操作结果判断是否需要立马上传服务器
+- (void)uploadNewFileToServer:(NSData *)data name:(NSString *)fileName path:(NSString *)filePath
+{
     //先将文件保存到缓存中
-    [[PCSDBOperater shareInstance] saveFile:data name:target];
+    [[PCSDBOperater shareInstance] saveFile:data name:filePath];
     
     PCSFileInfoItem *fileItem = [[PCSFileInfoItem alloc] init];
     fileItem.name = fileName;
-    fileItem.serverPath = target;
+    fileItem.serverPath = filePath;
     fileItem.size = data.length;
-    fileItem.property = PCSFileUploadStatusUploading;
     fileItem.format = [[PCSDBOperater shareInstance] getFileTypeWith:fileName];
-    fileItem.mtime = [[NSDate date] timeIntervalSince1970] ;
+    fileItem.mtime = [[NSDate date] timeIntervalSince1970];
     
-    BOOL    result = NO;
+    BOOL    hasUploadingFile = NO;
+    //判断是否有正在上传的文件
+    hasUploadingFile = [[PCSDBOperater shareInstance] hasUploadingFile];
+    if (hasUploadingFile) {
+        //如果已经有正在上传的文件，就将本次要上传的文件加入到下载队列中（状态置位等待上传）
+        fileItem.property = PCSFileUploadStatusWaiting;
+    } else {
+        //在此之前没有正在上传的文件，就将文件状态置为上传中，并且开始上传
+        fileItem.property = PCSFileUploadStatusUploading;
+    }
+    
+    BOOL result = NO;
+    //文件信息入库
     result = [[PCSDBOperater shareInstance] saveUploadFileToDB:fileItem];
     if (result) {
-        [self uploadFile:data name:target];
+        [self reloadTableDataSource];
+        
+        if (!hasUploadingFile) {
+            //当前没有正在上传的文件时，才立马开始上传，否则只是将文件加入到下载队列中
+            [self uploadFile:data name:filePath];
+        }
     }
     PCS_FUNC_SAFELY_RELEASE(fileItem);
 }
 
+//开始下一个等待上传文件的上传操作
+- (void)uploadNextWaitingFileToServer
+{
+    PCSFileInfoItem *item = nil;
+    item = [[PCSDBOperater shareInstance] getNextUploadFileInfo];
+    if (item != nil) {
+        BOOL    result = NO;
+        //更新文件状态为上传中
+        result = [[PCSDBOperater shareInstance] updateUploadFile:item.serverPath
+                                                          status:PCSFileUploadStatusUploading];
+        if (result) {
+            //更新文件状态成功后，更新界面显示，并开始上传操作
+            [self reloadTableDataSource];
+            NSData  *data = [[PCSDBOperater shareInstance] getFileWith:item.serverPath];
+            [self uploadFile:data name:item.serverPath];
+        }
+    }
+}
+
+//将上传失败的文件重新上传
+- (void)reuploadFileToServer:(PCSFileInfoItem *)item
+{
+    NSData  *data = [[PCSDBOperater shareInstance] getFileWith:item.serverPath];
+    
+    BOOL    result = NO;
+    //更新文件状态为上传中
+    result = [[PCSDBOperater shareInstance] updateUploadFile:item.serverPath
+                                                      status:PCSFileUploadStatusUploading];
+    if (result) {
+        [self reloadTableDataSource];
+        [self uploadFile:data name:item.serverPath];
+    }
+}
+
+//进行实际的服务器上传操作
 - (void)uploadFile:(NSData *)data name:(NSString *)name
 {
     if (nil == data || nil == name) {
@@ -120,43 +171,37 @@
                                                                               :name
                                                                               :self];
         PCSSimplefiedResponse   *result = response.status;
+        PCSFileUploadStatus newStatus = PCSFileUploadStatusNull;
         if (result.errorCode != 0) {
             PCSLog(@"upload file err,errCode:%d,message:%@",response.status.errorCode,response.status.message);
+            newStatus = PCSFileUploadStatusFailed;
         } else {
             PCSLog(@"upload file :%@ success",name);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                BOOL    result = NO;
-                //更新文件状态
-                result = [[PCSDBOperater shareInstance] updateUploadFile:name
-                                                                  status:PCSFileUploadStatusSuccess];
-                if (result) {
-                    [self reloadTableDataSource];
-                }
-            });
-            //发送开始数据更新操作通知
-            [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_INCREMENT_UPDATE
-                                                                object:nil];
+            newStatus = PCSFileUploadStatusSuccess;
         }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            BOOL    result = NO;
+            //更新文件状态
+            result = [[PCSDBOperater shareInstance] updateUploadFile:name
+                                                              status:newStatus];
+            if (result) {
+                [self reloadTableDataSource];
+                //发送开始数据更新操作通知
+                [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_INCREMENT_UPDATE
+                                                                    object:nil];
+                //如果有等待上传的文件，则将其上传
+                [self uploadNextWaitingFileToServer];
+            }
+        });
     });
 }
 
 - (void)reloadTableDataSource
 {
     self.uploadFileDictionary = [[PCSDBOperater shareInstance] getUploadFileFromDB];
-    self.sectionTitleArray = [self createSectionTitleArray];
+    self.sectionTitleArray = [self.uploadFileDictionary allKeys];
     [self.mTableView reloadData];
-}
-
-- (NSArray  *)createSectionTitleArray
-{
-    // 获取所有可显示联系人的首字母数组
-    NSMutableArray *myKeys = (NSMutableArray*)[self.uploadFileDictionary allKeys];
-    if(myKeys == nil || [myKeys count] == 0){
-        return myKeys;
-    }
-    NSMutableArray *mySortedKeys= [[NSMutableArray alloc]initWithArray:[myKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]];
-    PCS_FUNC_SAFELY_RELEASE(mySortedKeys);
-    return myKeys;
 }
 
 #pragma mark - 按钮响应事件
@@ -174,7 +219,10 @@
 
 #pragma mark - Table view data source
 
-#define UPLOAD_TABLEVIEW_HEIGHT 50.0f
+#define UPLOAD_TABLEVIEW_HEIGHT         50.0f
+#define TAG_UPLOAD_FILE_SIZE_LABLE      20001
+#define TAG_UPLOAD_PROGRESSVIEW         20002
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
     return UPLOAD_TABLEVIEW_HEIGHT;
@@ -185,9 +233,34 @@
     return self.sectionTitleArray.count;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString    *title = nil;
+    NSString    *uploading = [NSString stringWithFormat:@"%d",PCSFileUploadStatusUploading];
+    NSString    *uploadSuccess = [NSString stringWithFormat:@"%d",PCSFileUploadStatusSuccess];
+    NSString    *typeString = [self.sectionTitleArray objectAtIndex:section];
+    if ([typeString isEqualToString:uploading]) {
+        NSArray *uploadingArray = [self.uploadFileDictionary objectForKey:uploading];
+        if (uploadingArray.count > 0) {
+            title = [NSString stringWithFormat:@"上传中（%d）",uploadingArray.count];
+        } else {
+            title = @"上传中";
+        }
+    } else if ([typeString isEqualToString:uploadSuccess]) {
+        NSArray *uploadSucessArray = [self.uploadFileDictionary objectForKey:uploadSuccess];
+        if (uploadSucessArray.count > 0) {
+            title = [NSString stringWithFormat:@"上传成功（%d）",uploadSucessArray.count];
+        } else {
+            title = @"上传成功";
+        }
+    }
+    return title;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSArray *sectionArray = [self.uploadFileDictionary objectForKey:[self.sectionTitleArray objectAtIndex:section]];
+    NSArray *sectionArray = [self.uploadFileDictionary objectForKey:[self.sectionTitleArray
+                                                                     objectAtIndex:section]];
     return sectionArray.count;
 }
 
@@ -199,22 +272,86 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                        reuseIdentifier:CellIdentifier] autorelease];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        cell.textLabel.lineBreakMode = UILineBreakModeMiddleTruncation;
+        cell.textLabel.backgroundColor = [UIColor clearColor];
+        cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+        
+        UILabel *sizeLable = [[UILabel alloc] initWithFrame:CGRectMake(210, UPLOAD_TABLEVIEW_HEIGHT-23.5f, 90, 20)];
+        sizeLable.backgroundColor = [UIColor clearColor];
+        sizeLable.textColor = [UIColor grayColor];
+        sizeLable.tag = TAG_UPLOAD_FILE_SIZE_LABLE;
+        sizeLable.font = [UIFont systemFontOfSize:15.0f];
+        [cell.contentView addSubview:sizeLable];
+        PCS_FUNC_SAFELY_RELEASE(sizeLable);
+        
+        UIProgressView  *progress = [[UIProgressView alloc] initWithFrame:CGRectMake(10, 33, 180, 10)];
+        progress.backgroundColor = [UIColor clearColor];
+        progress.tag = TAG_UPLOAD_PROGRESSVIEW;
+        [cell.contentView addSubview:progress];
+        PCS_FUNC_SAFELY_RELEASE(progress);
     }
     
-    NSArray *sectionArray = [self.uploadFileDictionary objectForKey:[self.sectionTitleArray objectAtIndex:indexPath.section]];
+    NSArray *sectionArray = [self.uploadFileDictionary objectForKey:[self.sectionTitleArray
+                                                                     objectAtIndex:indexPath.section]];
     PCSFileInfoItem *fileItem = [sectionArray objectAtIndex:indexPath.row];
     
     cell.textLabel.text = fileItem.name;
+    
+    UIProgressView  *progress = (UIProgressView *)[cell.contentView viewWithTag:TAG_UPLOAD_PROGRESSVIEW];
+    progress.hidden = YES;
+    
+    if (fileItem.property == PCSFileUploadStatusSuccess) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"yyyy-MM-dd hh:mm";
+        NSDate  *date = [NSDate dateWithTimeIntervalSince1970:fileItem.mtime];
+        cell.detailTextLabel.text = [dateFormatter stringFromDate:date];
+        PCS_FUNC_SAFELY_RELEASE(dateFormatter);
+    } else if (fileItem.property == PCSFileUploadStatusFailed) {
+        cell.detailTextLabel.text = @"上传失败，点击重新上传";
+    } else if (fileItem.property == PCSFileUploadStatusWaiting) {
+        cell.detailTextLabel.text = @"等待上传...";
+    } else if (fileItem.property == PCSFileUploadStatusUploading) {
+        progress.hidden = NO;
+        cell.detailTextLabel.text = @" ";
+        currentUploadFileIndexPath = indexPath;
+    }
+    
+    UILabel *sizeLable = (UILabel *)[cell.contentView viewWithTag:TAG_UPLOAD_FILE_SIZE_LABLE];
+    float   fileSize = (float)fileItem.size/1024;
+    if (fileSize < 1024) {
+        sizeLable.text = [NSString stringWithFormat:@"%.2fKB",fileSize];
+    } else {
+        sizeLable.text = [NSString stringWithFormat:@"%.2fMB",fileSize/1024];
+    }
     
     
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSArray *sectionArray = [self.uploadFileDictionary objectForKey:[self.sectionTitleArray
+                                                                     objectAtIndex:indexPath.section]];
+    PCSFileInfoItem *fileItem = [sectionArray objectAtIndex:indexPath.row];
+    if (fileItem.property == PCSFileUploadStatusSuccess) {
+        //上传成功的文件点击进入文件预览
+        PCSLog(@"preview file:%@",fileItem);
+    } else if (fileItem.property == PCSFileUploadStatusFailed) {
+        //上传失败的文件，单击后重新上传
+        PCSLog(@"reupload file:%@",fileItem);
+        [self reuploadFileToServer:fileItem];
+    }
+}
 
 #pragma mark -- Baidu Listener Delegate
 -(void)onProgress:(long)bytes:(long)total
 {
-    progressView.progress = (float)bytes/(float)total;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //主线程中更新进度条的显示
+        UITableViewCell *cell = [self.mTableView cellForRowAtIndexPath:currentUploadFileIndexPath];
+        UIProgressView  *progress = (UIProgressView *)[cell.contentView viewWithTag:TAG_UPLOAD_PROGRESSVIEW];
+        progress.progress = (float)bytes/(float)total;
+    });
 }
 
 -(long)progressInterval
