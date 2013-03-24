@@ -14,6 +14,17 @@
 @property (nonatomic, retain) UITableView   *mTableView;
 @end
 
+#define PCS_TABLEVIEW_CELL_HEIGHT       50.0f
+#define PCS_TAG_FILE_TYPE_IMAGEVIEW     10001
+#define PCS_TAG_FILE_NAME_LABLE         10002
+#define PCS_TAG_FILE_SIZE_LABLE         10003
+#define PCS_TAG_FILE_DETAIL_LABLE       10007
+#define PCS_TAG_EXPAND_FAVORIT_BUTTON   10004
+#define PCS_TAG_EXPAND_MOVE_BUTTON      10005
+#define PCS_TAG_EXPAND_DELETE_BUTTON    10006
+#define PCS_TAG_ALERTVIEW_TEXTFIELD     10007
+#define PCS_TAG_CREAT_FOLDER_ALERTVIEW  10008
+
 @implementation PCSNetDiskViewController
 @synthesize path;
 @synthesize files;
@@ -25,8 +36,8 @@
     if (self) {
         self.title = @"我的云盘";
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(reloadTableViewDataSource)
-                                                     name:PCS_NOTIFICATION_RELOAD_DATA
+                                                 selector:@selector(updateFileInfoIncrement)
+                                                     name:PCS_NOTIFICATION_INCREMENT_UPDATE
                                                    object:nil];
     }
     
@@ -40,10 +51,8 @@
 	// 可在viewDidUnload调用或者在应用页面返回时调用或者在dealloc中调用
 	// 目前已在viewWillDisappear中调用
 	//
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:PCS_NOTIFICATION_RELOAD_DATA
-                                                  object:nil];
+                                              forKeyPath:PCS_NOTIFICATION_INCREMENT_UPDATE];
 	[adBanner stopRequest];
 	[adBanner removeFromSuperview];
     [path release];
@@ -58,6 +67,16 @@
     mTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 342)];
     mTableView.delegate = self;
     mTableView.dataSource = self;
+    
+    UIButton  *footViewButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+    [footViewButton addTarget:self
+                       action:@selector(onCreatFolderButtonAction)
+             forControlEvents:UIControlEventTouchUpInside];
+    [footViewButton setTitle:@"新建文件夹" forState:UIControlStateNormal];
+    footViewButton.backgroundColor = [UIColor grayColor];
+    mTableView.tableFooterView = footViewButton;
+    PCS_FUNC_SAFELY_RELEASE(footViewButton);
+    
     [self.view addSubview:mTableView];
     [mTableView release];
     
@@ -67,7 +86,12 @@
 //    [self addADBanner];
 //    [self loadFileListFromServer];
     
+}
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self updateFileInfoIncrement];
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning
@@ -79,12 +103,10 @@
 
 - (void)reloadTableViewDataSource
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        PCSLog(@"table view data source reload success.");
-        self.files = [[PCSDBOperater shareInstance] getSubFolderFileListFromDB:self.path];
-        selectCellIndexPath = nil;
-        [self.mTableView reloadData];
-    });
+    PCSLog(@"table view data source reload success.");
+    self.files = [[PCSDBOperater shareInstance] getSubFolderFileListFromDB:self.path];
+    selectCellIndexPath = nil;
+    [self.mTableView reloadData];
 }
 
 #pragma mark - 构建界面方法
@@ -129,6 +151,109 @@
 	[adBanner release];
 }
 
+#pragma mark - 增量更新界面数据
+- (void)updateFileInfoIncrement
+{
+    dispatch_queue_t queue = PCS_APP_DELEGATE.gcdQueue;
+    dispatch_async(queue, ^{
+        NSString    *cursor = nil;
+        cursor = [[NSUserDefaults standardUserDefaults] stringForKey:PCS_STRING_CURSOR];
+        BOOL    needReload = NO;
+        needReload = [self getIncrementUpdateFromServer:cursor];
+        if (needReload) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //更新界面数据
+                [self reloadTableViewDataSource];
+            });
+        }
+    });
+}
+
+/*!
+ @method
+ @abstract 从服务端获取文件增量更新数据
+ @param 上次从服务端获取的更新标识
+ @return 是否获取到了新的数据，用于确定是否需要更新界面
+ */
+-(BOOL)getIncrementUpdateFromServer:(NSString *)cursor
+{
+    PCSDiffResponse *response = [PCS_APP_DELEGATE.pcsClient diff:cursor];
+    if(response){
+        PCSSimplefiedResponse   *status = response.status;
+        if (status.errorCode != 0) {
+            PCSLog(@"get diff err,%@",status.message);
+            return NO;
+        }
+        PCSLog(@"upload new file count:%d.",response.entries.count);
+        
+        for(int i = 0; i < [response.entries count]; ++i){
+            PCSDifferEntryInfo *info = [response.entries objectAtIndex:i];
+            
+            PCSCommonFileInfo   *tmp = info.commonFileInfo;
+            NSArray *array = [tmp.path componentsSeparatedByString:@"/"];
+            NSMutableString    *parentPathString = [NSMutableString string];;
+            for (NSInteger i = 0;i < array.count;i++) {
+                NSString    *string = [array objectAtIndex:i];
+                if (i < (array.count - 1)) {
+                    [parentPathString appendFormat:@"%@/",string];
+                }
+            }
+            
+            if (array != nil) {
+                NSString    *fileName = [array objectAtIndex:(array.count - 1)];
+                PCSFileInfoItem *item = [[PCSFileInfoItem alloc] init];
+                item.name = fileName;
+                item.size = tmp.size;
+                item.hasSubFolder = tmp.hasSubFolder;
+                item.serverPath = tmp.path;
+                item.ctime = tmp.cTime;
+                item.mtime = tmp.mTime;
+                item.parentPath = parentPathString;
+                if (tmp.isDir) {
+                    item.format = PCSFileFormatFolder;
+                } else {
+                    item.format = [[PCSDBOperater shareInstance] getFileTypeWith:fileName];
+                }
+                
+                if (info.isDeleted) {
+                    item.property = PCSFilePropertyDelete;
+                } else {
+                    item.property = PCSFilePropertyDownLoad;
+                }
+                
+                //文件数据入库
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    [[PCSDBOperater shareInstance] saveFileInfoItemToDB:item];
+                });
+                
+            }
+        }
+        
+        [[NSUserDefaults standardUserDefaults] setValue:response.cursor
+                                                 forKey:PCS_STRING_CURSOR];
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            //重新发起请求的操作要放在主线程中，因为子线程的runloop并未启动，定时器是不会起作用的
+            if (response.hasMore) {
+                //服务端的数据未下载完全，5秒后再次发起请求
+                [self performSelector:@selector(updateFileInfoIncrement)
+                           withObject:nil
+                           afterDelay:5.0f];
+            } else {
+                //数据已经更新完毕，10分钟后再次发起请求
+                [self performSelector:@selector(updateFileInfoIncrement)
+                           withObject:nil
+                           afterDelay:10*60.0f];
+            }
+        });
+        if (response.entries.count > 0) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+
 #pragma mark - 数据处理方法
 - (BOOL)isFileVaild:(NSString *)fileName
 {
@@ -140,48 +265,6 @@
         return NO;
     }
     return YES;
-}
-
-- (PCSFileFormat)getFileTypeWith:(NSString *)name
-{
-    PCSFileFormat fileType = PCSFileFormatUnknown;
-    NSString    *pathExtension = [name pathExtension];
-    if ([pathExtension isEqualToString:@"txt"]) {
-        fileType = PCSFileFormatTxt;
-    } else if ([pathExtension isEqualToString:@"jpg"] ||
-               [pathExtension isEqualToString:@"jpeg"] ||
-               [pathExtension isEqualToString:@"png"] ||
-               [pathExtension isEqualToString:@"gif"] ||
-               [pathExtension isEqualToString:@"bmp"]) {
-        fileType = PCSFileFormatJpg;
-    } else if ([pathExtension isEqualToString:@"doc"] ||
-               [pathExtension isEqualToString:@"docx"]) {
-        fileType = PCSFileFormatDoc;
-    } else if ([pathExtension isEqualToString:@"pdf"]) {
-        fileType = PCSFileFormatPdf;
-    } else if ([pathExtension isEqualToString:@"rar"] ||
-               [pathExtension isEqualToString:@"zip"] ||
-               [pathExtension isEqualToString:@"7z"] ||
-               [pathExtension isEqualToString:@"tar"] ||
-               [pathExtension isEqualToString:@"tgz"]) {
-        fileType = PCSFileFormatZip;
-    } else if ([pathExtension isEqualToString:@"mp3"] ||
-               [pathExtension isEqualToString:@"pcm"] ||
-               [pathExtension isEqualToString:@"wav"] ||
-               [pathExtension isEqualToString:@"wma"] ||
-               [pathExtension isEqualToString:@"aac"]) {
-        fileType = PCSFileFormatAudio;
-    } else if ([pathExtension isEqualToString:@"avi"] ||
-               [pathExtension isEqualToString:@"wmv"] ||
-               [pathExtension isEqualToString:@"mpeg"] ||
-               [pathExtension isEqualToString:@"rmvb"] ||
-               [pathExtension isEqualToString:@"rm"] ||
-               [pathExtension isEqualToString:@"mp4"] ||
-               [pathExtension isEqualToString:@"3gp"] ||
-               [pathExtension isEqualToString:@"mov"]) {
-        fileType = PCSFileFormatVideo;
-    } 
-    return fileType;
 }
 
 - (UIImage *)getThumbnailImageWith:(PCSFileFormat)type
@@ -245,7 +328,7 @@
                 if (tmp.isDir) {
                     item.format = PCSFileFormatFolder;
                 } else {
-                    item.format = [self getFileTypeWith:fileName];
+                    item.format = [[PCSDBOperater shareInstance] getFileTypeWith:fileName];
                 }
                 item.property = PCSFilePropertyDownLoad;
                 item.ctime = tmp.cTime;
@@ -263,7 +346,54 @@
     }
 }
 
+- (void)creatFolderFromServer:(NSString  *)filePath
+{
+    dispatch_queue_t queue = PCS_APP_DELEGATE.gcdQueue;
+    dispatch_async(queue, ^{
+        NSString *folderPath = [[NSString alloc] initWithFormat:@"%@%@" , self.path, filePath];
+        PCSFileInfoResponse *response = [PCS_APP_DELEGATE.pcsClient makeDir:folderPath];
+        if(response){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                PCSSimplefiedResponse *status = response.status;
+                if (status.errorCode == 0) {
+                    PCSLog(@"creat folder %@ success.",filePath);
+                    //增量更新界面数据,服务端返回的结果一般都会有延时
+                    [self updateFileInfoIncrement];
+                } else {
+                    PCSLog(@"creat folder %@ err.%@",filePath,status.message);
+                }
+            });
+            
+            
+        }
+        PCS_FUNC_SAFELY_RELEASE(folderPath);
+    });
+}
+
 #pragma mark - 按钮响应事件
+- (void)onCreatFolderButtonAction
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"请输入文件夹名：               "
+                                                    message:@" "
+                                                   delegate:self
+                                          cancelButtonTitle:@"取消"
+                                          otherButtonTitles:@"新建", nil];
+    [alert setTransform:CGAffineTransformMakeTranslation(0.0, -100.0)];
+    alert.tag = PCS_TAG_CREAT_FOLDER_ALERTVIEW;
+    
+    UITextField *inputField = [[UITextField alloc] initWithFrame:CGRectMake(30, alert.center.y+45, 225, 30)];
+    inputField.delegate = self;
+    inputField.backgroundColor = [UIColor clearColor];
+    inputField.tag = PCS_TAG_ALERTVIEW_TEXTFIELD;
+    inputField.borderStyle = UITextBorderStyleRoundedRect;
+    inputField.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
+    inputField.returnKeyType = UIReturnKeyDone;
+    [alert addSubview:inputField];
+    [alert show];
+    PCS_FUNC_SAFELY_RELEASE(alert);
+    PCS_FUNC_SAFELY_RELEASE(inputField);
+}
+
 - (void)onRightBarButtonAction:(id)sender
 {
     UIBarButtonItem *barItem = nil;
@@ -340,19 +470,35 @@
     });
 }
 
+#pragma mark - UIAlertView 委托方法
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == PCS_TAG_CREAT_FOLDER_ALERTVIEW) {
+        if (buttonIndex == alertView.cancelButtonIndex) {
+            
+        } else {
+            UITextField *textField = (UITextField *)[alertView viewWithTag:PCS_TAG_ALERTVIEW_TEXTFIELD];
+            if (textField.text == nil || textField.text.length == 0) {
+                PCSLog(@"creat folder failed,folder name is nil.");
+            } else {
+                [self creatFolderFromServer:textField.text];
+            }
+        }
+    }
+}
+
+#pragma mark - UITextField 委托方法
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (textField.tag == PCS_TAG_ALERTVIEW_TEXTFIELD) {
+        [textField resignFirstResponder];
+        [textField.superview resignFirstResponder];
+    }
+    return YES;
+}
 
 #define TABLEVIEW_NORMAL_CELL   @"NormalCell"
 #define TABLEVIEW_EXPAND_CELL   @"ExpandCell"
-
-#define PCS_TABLEVIEW_CELL_HEIGHT       50.0f
-#define PCS_TAG_FILE_TYPE_IMAGEVIEW     10001
-#define PCS_TAG_FILE_NAME_LABLE         10002
-#define PCS_TAG_FILE_SIZE_LABLE         10003
-#define PCS_TAG_FILE_DETAIL_LABLE       10007
-#define PCS_TAG_EXPAND_FAVORIT_BUTTON   10004
-#define PCS_TAG_EXPAND_MOVE_BUTTON      10005
-#define PCS_TAG_EXPAND_DELETE_BUTTON    10006
-
 
 #pragma mark - Table view data source
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -399,6 +545,7 @@
         
         UILabel *nameLable = [[UILabel alloc] initWithFrame:CGRectMake(60, 3, 170, 30)];
         nameLable.tag = PCS_TAG_FILE_NAME_LABLE;
+        nameLable.lineBreakMode = UILineBreakModeMiddleTruncation;
         nameLable.font = [UIFont systemFontOfSize:20.0f];
         nameLable.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:nameLable];
@@ -479,7 +626,12 @@
         sizeLable.text = nil;//文件夹不显示大小
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     } else {
-        sizeLable.text = [NSString stringWithFormat:@"%.2fKB",((float)item.size/1024)];
+        float   fileSize = (float)item.size/1024;
+        if (fileSize < 1024) {
+            sizeLable.text = [NSString stringWithFormat:@"%.2fKB",fileSize];
+        } else {
+            sizeLable.text = [NSString stringWithFormat:@"%.2fMB",fileSize/1024];
+        }
         [cell setAccessoryType:UITableViewCellAccessoryNone];
     }
     
