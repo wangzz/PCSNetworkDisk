@@ -233,6 +233,10 @@
                                                  forKey:PCS_STRING_CURSOR];
         
         dispatch_sync(dispatch_get_main_queue(), ^{
+            //如果有未执行的延迟执行操作，则将其取消掉，放置增量更新操作被恶性循环的调用导致队列阻塞，及流量耗损
+            [PCSNetDiskViewController cancelPreviousPerformRequestsWithTarget:self
+                                                                     selector:@selector(updateFileInfoIncrement)
+                                                                       object:nil];
             //重新发起请求的操作要放在主线程中，因为子线程的runloop并未启动，定时器是不会起作用的
             if (response.hasMore) {
                 //服务端的数据未下载完全，5秒后再次发起请求
