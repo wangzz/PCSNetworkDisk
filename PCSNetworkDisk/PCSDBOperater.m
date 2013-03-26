@@ -157,11 +157,30 @@
     return fileType;
 }
 
-#pragma mark - uploadfilelist表数据库操作方法
+#pragma mark - 删除一个文件记录在本地所有内容
+- (BOOL)deleteAllFileInfoFromLocal:(PCSFileInfoItem *)item
+{
+    BOOL    result = NO;
+    //删除filelist表的内容
+    result = [self deleteFileFromFileList:item.fid];
+    
+    return result;
+}
 
-/*
- ("id" integer primary key  autoincrement  not null ,accountid integer , "name" text COLLATE NOCASE, "cachepath" text COLLATE NOCASE,"size" integer, "status" integer, "format" integer,"mtime" datetime, timestamp TimeStamp NOT NULL DEFAULT (datetime('now','localtime')));
-*/
+#pragma mark - uploadfilelist表数据库操作方法
+- (BOOL)deleteFromUploadFileList:(NSInteger)fid
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSString    *sql = [NSString stringWithFormat:@"delete from uploadfilelist where id=%d and accountid=%d",fid,accountID];
+    PCSLog(@"sql:%@",sql);
+    BOOL result = NO;
+    result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
+    if (!result) {
+        PCSLog(@"delete upload file failed.%@",[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
+    }
+    
+    return result;
+}
 
 //获得下一个要上传的文件信息
 //选择最早入库的那个（先添加先上传）
@@ -268,7 +287,16 @@
 }
 
 #pragma mark - filelist表数据库操作方法
-- (BOOL)deleteFile:(NSInteger)fileId
+//根据文件所属的目录名从filelist表中删除文件记录
+//用于删除文件夹时，同时删除该文件夹目录下面的子文件
+- (BOOL)deleteFileFromFileListByParentpath:(NSString *)parentPath
+{
+    
+    return NO;
+}
+
+//根据文件ID删除filelist表中的文件记录
+- (BOOL)deleteFileFromFileList:(NSInteger)fileId
 {
     NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
     NSString    *sql = [NSString stringWithFormat:@"delete from filelist where id=%d and accountid=%d",fileId,accountID];
