@@ -60,7 +60,7 @@
         picker.allowsEditing = YES;
         picker.videoQuality = UIImagePickerControllerQualityTypeLow;
         picker.sourceType = sourceType;
-        [self presentViewController:picker animated:YES completion:nil];
+        [self presentModalViewController:picker animated:YES];
         PCS_FUNC_SAFELY_RELEASE(picker);
     }else{
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
@@ -294,7 +294,6 @@
     NSArray *sectionArray = [self.uploadFileDictionary objectForKey:[self.sectionTitleArray
                                                                      objectAtIndex:indexPath.section]];
     PCSFileInfoItem *fileItem = [sectionArray objectAtIndex:indexPath.row];
-    
     cell.textLabel.text = fileItem.name;
     
     UIProgressView  *progress = (UIProgressView *)[cell.contentView viewWithTag:TAG_UPLOAD_PROGRESSVIEW];
@@ -335,6 +334,8 @@
     PCSFileInfoItem *fileItem = [sectionArray objectAtIndex:indexPath.row];
     if (fileItem.property == PCSFileUploadStatusSuccess) {
         //上传成功的文件点击进入文件预览
+        //从cache中获取文件数据失败时，可以从服务端直接下载
+        
         PCSLog(@"preview file:%@",fileItem);
     } else if (fileItem.property == PCSFileUploadStatusFailed) {
         //上传失败的文件，单击后重新上传
@@ -342,6 +343,32 @@
         [self reuploadFileToServer:fileItem];
     }
 }
+
+#pragma mark - Table view delegate
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        NSArray *sectionArray = [self.uploadFileDictionary objectForKey:[self.sectionTitleArray
+                                                                         objectAtIndex:indexPath.section]];
+        PCSFileInfoItem *fileItem = [sectionArray objectAtIndex:indexPath.row];
+        BOOL    result = NO;
+        result = [[PCSDBOperater shareInstance] deleteFromUploadFileList:fileItem.fid];
+        if (result) {
+            [self reloadTableDataSource];
+        }
+    }
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"删除";
+}
+
 
 #pragma mark -- Baidu Listener Delegate
 -(void)onProgress:(long)bytes:(long)total
