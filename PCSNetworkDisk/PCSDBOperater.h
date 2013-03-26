@@ -24,24 +24,167 @@
 
 @property(nonatomic,retain) FMDatabase  *PCSDB;
 
+#pragma mark - 类方法
+/*****************************类方法*****************************/
+/*!
+ @method
+ @abstract  单例的方式生成一个PCSDBOperater对象
+ @return    PCSDBOperater类型对象的指针，获取结果
+ */
 + (PCSDBOperater *)shareInstance;
 
-
-
-- (PCSFileInfoItem *)getNextUploadFileInfo;
-- (BOOL)hasUploadingFile;
-- (BOOL)updateUploadFile:(NSString *)name status:(PCSFileUploadStatus)newStatus;
-- (BOOL)saveUploadFileToDB:(PCSFileInfoItem *)item;
-- (NSDictionary *)getUploadFileFromDB;
-
+#pragma mark - 本地文件操作方法
+/*****************************本地文件操作*****************************/
+/*!
+ @method
+ @abstract  删除本地Document目录下面子目录cache目录下的指定名称的文件
+ @param     name    NSString类型的指针，指向要删除的文件名称
+ @return    BOOL型，表示删除结果
+ */
 - (BOOL)deleteFileWith:(NSString *)name;
+
+/*!
+ @method
+ @abstract  获取Document目录下面子目录cache目录下的指定名称的文件二进制数据
+ @param     name    想要获取数据的文件名称
+ @return    NSData型指针，指向获取到的文件数据
+ */
 - (NSData *)getFileWith:(NSString *)name;
+
+/*!
+ @method
+ @abstract  将二进制文件数据以特定名称保存到Document目录下面子目录cache目录下
+ @param     value   NSData类型的指针，指向要保存的文件
+ @param     name    NSString类型的指针，指向要保存的文件名
+ @return    BOOL型，表示保存结果
+ */
 - (BOOL)saveFile:(NSData *)value name:(NSString *)name;
 
-- (BOOL)saveLoginInfoToDB:(BaiduOAuthResponse *)response;
-- (BOOL)saveFileInfoItemToDB:(PCSFileInfoItem *)item;
-- (NSArray *)getSubFolderFileListFromDB:(NSString *)currentPath;
-- (BOOL)updateFile:(NSInteger)fileId property:(PCSFileProperty)newProperty;
-- (BOOL)deleteFile:(NSInteger)fileId;
+/*!
+ @method
+ @abstract  获取指定名称的文件格式
+ @param     name    NSString类型指针，指向要获取类型的文件名称
+ @return    PCSFileFormat型，表示获取到的文件类型
+ */
 - (PCSFileFormat)getFileTypeWith:(NSString *)name;
+
+#pragma mark - accountlist表数据库操作方法
+/*****************************accountlist表数据库操作方法*****************************/
+
+/*!
+ @method
+ @abstract  保存登陆返回的数据到accountlist表中
+ @param     response    BaiduOAuthResponse类型的指针，登陆时从服务端返回的登陆结果
+ @return    BOOL型，保存数据库的结果
+ */
+- (BOOL)saveLoginInfoToDB:(BaiduOAuthResponse *)response;
+
+#pragma mark - uploadfilelist表数据库操作方法
+/*****************************uploadfilelist操作方法*****************************/
+
+/*!
+ @method    
+ @abstract  从uploadfilelist表中删除一条上传的历史记录，该上传文件在cache中对应的文件数据
+            不用删除，因为上传时保存的cache文件名跟filelist表中对应的cache文件名是一样的
+ @param     fid NSInteger型，表示要删除的文件ID
+ @return    BOOL型，表示删除结果
+ */
+- (BOOL)deleteFromUploadFileList:(NSInteger)fid;
+
+/*!
+ @method    
+ @abstract  获取下一条要上传的文件信息。通常用于一个文件上传成功以后，检查是否有处于等待
+            上传状态的传真,获得下一个要上传的文件信息,选择最早入库的那个（先添加先上传）且
+            只查找出一条
+ @return    PCSFileInfoItem类型的指针，指向下一条上传的文件信息
+ @
+ */
+- (PCSFileInfoItem *)getNextUploadFileInfo;
+
+/*!
+ @method
+ @abstract  判断是否有处于正在上传中的文件
+ @return    BOOL型，YES表示有上传中的文件，NO表示没有上传中的文件
+ */
+- (BOOL)hasUploadingFile;
+
+/*!
+ @method
+ @abstract  更新uploadfilelist表中上传文件的上传状态
+ @param     name    NSString类型，文件名称，uploadfilelist文件表中对应cachepath字段，能够唯一标识一
+                    个文件记录
+ @param     newStatus   PCSFileUploadStatus类型，新的文件状态
+ @return    BOOL型，YES表示状态更新成功，NO表示状态更新失败
+ */
+- (BOOL)updateUploadFile:(NSString *)name status:(PCSFileUploadStatus)newStatus;
+
+/*!
+ @method
+ @abstract  将一条新的文件记录保存到uploadfilelist表中
+ @param     item    PCSFileInfoItem类型的指针，指向要入库的文件信息
+ @return    BOOL型，表示入库结果
+ */
+- (BOOL)saveUploadFileToDB:(PCSFileInfoItem *)item;
+
+/*!
+ @method
+ @abstract  获取uploadfilelist表中的文件记录信息，用于“上传“界面的数据展示
+ @return    NSDictionary类型的指针，指向可以用于”上传“界面展示的数据结构
+ */
+- (NSDictionary *)getUploadFileFromDB;
+
+#pragma mark - filelist表数据库操作方法
+/*****************************filelist表数据库操作方法*****************************/
+/*!
+ @method
+ @abstract  保存从服务端下载的文件信息到filelist表
+ @param     item    PCSFileInfoItem类型的指针，指向一条文件记录
+ @return    BOOL型，表示保存数据库结果
+ */
+- (BOOL)saveFileInfoItemToDB:(PCSFileInfoItem *)item;
+
+/*!
+ @method
+ @abstract  从本地数据库获取当前目录下面的子文件（文件夹）用于我的文档界面展示
+            获取属性为下载和离线两种类型的文件
+            以是否为文件夹降序排序，名字升序排序
+ @param     currentPath NSString类型的指针，要获取文件信息的目录
+ @return    NSArray型指针，为PCSFileInfoItem类型对象的集合，用于“我的云盘”界面展示
+ */
+- (NSArray *)getSubFolderFileListFromDB:(NSString *)currentPath;
+
+/*!
+ @method
+ @abstract  更新filelist表中的文件属性信息
+ @param     fileId  NSInteger型，表示要更新的文件ID
+ @param     newProperty PCSFileProperty型，表示新的文件属性
+ @return    BOOL型，表示更新结果
+ */
+- (BOOL)updateFile:(NSInteger)fileId property:(PCSFileProperty)newProperty;
+
+/*!
+ @method
+ @abstract  从filelist表中删除指定的文件数据
+ @param     fileId  NSInteger型，表示要删除的文件ID
+ @return    BOOL型，表示删除结果
+ */
+- (BOOL)deleteFileFromFileList:(NSInteger)fileId;
+
+/*!
+ @method
+ @abstract  删除指定目录下面的所有文件（或者文件夹，如果是文件夹，则删除子文件夹下的内容，以此类推）
+ @param     parentPath  NSString类型的指针，指向将被删除子目录信息的目录名称
+ @return    BOOL型，表示删除结果
+ */
+- (BOOL)deleteFileFromFileListByParentpath:(NSString *)parentPath;
+
+/*!
+ @method
+ @abstract  删除文件在本地的全部信息，包括filelist表，uploadfilelist表，cache文件夹中
+ 的信息。一个文件记录被删除后，该文件在本地的全部信息都将被删除；一个文件夹被删
+ 除后，该文件夹，以及该文件夹目录下面的子文件或文件夹在本地的所有信息都将被清除
+ @param     item    PCSFileInfoItem类型的对象，描述要删除的文件信息
+ @return    BOOL类型，表示删除结果
+ */
+- (BOOL)deleteAllFileInfoFromLocal:(PCSFileInfoItem *)item;
 @end
