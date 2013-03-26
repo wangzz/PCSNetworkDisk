@@ -24,6 +24,8 @@
 #define PCS_TAG_EXPAND_DELETE_BUTTON    10006
 #define PCS_TAG_ALERTVIEW_TEXTFIELD     10007
 #define PCS_TAG_CREAT_FOLDER_ALERTVIEW  10008
+#define PCS_TAG_TABLEVIEW_EXPAND_BUTTON 10009
+
 
 @implementation PCSNetDiskViewController
 @synthesize path;
@@ -233,7 +235,7 @@
                                                  forKey:PCS_STRING_CURSOR];
         
         dispatch_sync(dispatch_get_main_queue(), ^{
-            //如果有未执行的延迟执行操作，则将其取消掉，放置增量更新操作被恶性循环的调用导致队列阻塞，及流量耗损
+            //如果有未执行的延迟执行操作，则将其取消掉，防止增量更新操作被恶性循环的调用导致队列阻塞，及流量耗损
             [PCSNetDiskViewController cancelPreviousPerformRequestsWithTarget:self
                                                                      selector:@selector(updateFileInfoIncrement)
                                                                        object:nil];
@@ -375,6 +377,26 @@
 }
 
 #pragma mark - 按钮响应事件
+- (void)onExpandButtonAction:(id)sender event:(id)event
+{
+    UIButton    *button = (UIButton *)sender;
+    button.selected = !button.selected;
+    
+    NSSet *touches = [event allTouches];
+    UITouch *touch = [touches anyObject];
+    CGPoint currentTouchPosition = [touch locationInView:self.mTableView];
+    NSIndexPath *indexPath = [self.mTableView indexPathForRowAtPoint: currentTouchPosition];
+    
+    if([selectCellIndexPath isEqual:indexPath])
+    {
+        selectCellIndexPath =nil;
+    } else {
+        selectCellIndexPath = indexPath;
+    }
+    [self.mTableView reloadData];
+    [mTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+}
+
 - (void)onCreatFolderButtonAction
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"请输入文件夹名：               "
@@ -460,7 +482,8 @@
             //从服务端删除成功，开始从本地数据库删除，并置位，更新界面数据
             dispatch_async(dispatch_get_main_queue(), ^{
                 BOOL result = NO;
-                result = [[PCSDBOperater shareInstance] updateFile:item.fid property:PCSFilePropertyDelete];
+                //删除每条文件记录在本地的全部信息
+                result = [[PCSDBOperater shareInstance] deleteAllFileInfoFromLocal:item];
                 if (result) {
                     [self reloadTableViewDataSource];
                 }
@@ -571,6 +594,17 @@
         [cell.contentView addSubview:sizeLable];
         PCS_FUNC_SAFELY_RELEASE(sizeLable);
         
+        UIButton    *expandButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 0, 40, PCS_TABLEVIEW_CELL_HEIGHT)];
+        expandButton.tag = PCS_TAG_TABLEVIEW_EXPAND_BUTTON;
+        expandButton.backgroundColor = [UIColor redColor];
+        [expandButton setTitle:@"展开" forState:UIControlStateNormal];
+        [expandButton setTitle:@"收缩" forState:UIControlStateSelected];
+        [expandButton addTarget:self
+                         action:@selector(onExpandButtonAction:event:)
+               forControlEvents:UIControlEventTouchUpInside];
+        [cell.contentView addSubview:expandButton];
+        PCS_FUNC_SAFELY_RELEASE(expandButton);
+        
         if ([CellIdentifier isEqualToString:TABLEVIEW_EXPAND_CELL]) {
             UIView  *mainView = [[UIView alloc] initWithFrame:CGRectMake(0, PCS_TABLEVIEW_CELL_HEIGHT, 320, 50)];
             mainView.backgroundColor = [UIColor grayColor];
@@ -628,7 +662,6 @@
     fileTypeImageView.image = [self getThumbnailImageWith:item.format];
     if (item.format == PCSFileFormatFolder) {
         sizeLable.text = nil;//文件夹不显示大小
-        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     } else {
         float   fileSize = (float)item.size/1024;
         if (fileSize < 1024) {
@@ -636,7 +669,6 @@
         } else {
             sizeLable.text = [NSString stringWithFormat:@"%.2fMB",fileSize/1024];
         }
-        [cell setAccessoryType:UITableViewCellAccessoryNone];
     }
     
     if ([CellIdentifier isEqualToString:TABLEVIEW_EXPAND_CELL]) {
@@ -646,6 +678,14 @@
         } else if (item.property == PCSFilePropertyOffLine) {
             [favoritButton setTitle:@"取消收藏" forState:UIControlStateNormal];
         }  
+    }
+    
+    //展开按钮的处理逻辑
+    UIButton    *expandButton = (UIButton *)[cell.contentView viewWithTag:PCS_TAG_TABLEVIEW_EXPAND_BUTTON];
+    if ([selectCellIndexPath isEqual:indexPath]) {
+        expandButton.selected = YES;
+    } else {
+        expandButton.selected = NO;
     }
     
     return cell;
@@ -662,15 +702,8 @@
         [[self navigationController] pushViewController:detailViewController animated:YES];
         [detailViewController release];
     } else {
-        if([selectCellIndexPath isEqual:indexPath])
-        {
-            selectCellIndexPath =nil;
-        }
-        else {
-            selectCellIndexPath = indexPath;
-        }
-        [tableView reloadData];
-        [mTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+        //进入文件预览界面
+        
     }
 }
 
