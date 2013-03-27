@@ -61,7 +61,7 @@
     netDiskViewController.path = PCS_STRING_DEFAULT_PATH;
     netDiskNavController = [[UINavigationController alloc]initWithRootViewController:netDiskViewController];
     netDiskNavController.tabBarItem.title = @"云盘";
-    netDiskViewController.tabBarItem.image = [UIImage imageNamed:@"tab_vdisk"];
+    netDiskViewController.tabBarItem.image = [UIImage imageNamed:@"tab_netdisk"];
     PCS_FUNC_SAFELY_RELEASE(netDiskViewController);
     
     UIViewController *uploadViewController = [[PCSUploadViewController alloc] init];
@@ -73,7 +73,7 @@
     UIViewController *offlineViewController = [[PCSOfflineViewController alloc] init] ;
     offlineNavController = [[UINavigationController alloc] initWithRootViewController:offlineViewController];
     offlineNavController.tabBarItem.title = @"离线";
-    offlineNavController.tabBarItem.image = [UIImage imageNamed:@"tab_shares"];
+    offlineNavController.tabBarItem.image = [UIImage imageNamed:@"tab_offline"];
     PCS_FUNC_SAFELY_RELEASE(offlineViewController);
     
     UIViewController *moreViewController = [[PCSMoreViewController alloc] init];

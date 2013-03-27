@@ -21,20 +21,36 @@
         // Custom initialization
         self.title = @"离线文件";
         progressView = [[UIProgressView alloc] init];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(reloadOfflineTableViewData:)
-                                                     name:PCS_NOTIFICATION_RELOAD_OFFLINE_DATA
-                                                   object:nil];
+        [self registerLoaclNotification];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                              forKeyPath:PCS_NOTIFICATION_RELOAD_OFFLINE_DATA];
+    [self removeLocalNotification];
     [progressView release];
     [super dealloc];
+}
+
+- (void)registerLoaclNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadOfflineTableViewData)
+                                                 name:PCS_NOTIFICATION_RELOAD_OFFLINE_DATA
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateOfflineFile:)
+                                                 name:PCS_NOTIFICATION_UPDATE_OFFLINE_FILE
+                                               object:nil];
+}
+
+- (void)removeLocalNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                              forKeyPath:PCS_NOTIFICATION_RELOAD_OFFLINE_DATA];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                              forKeyPath:PCS_NOTIFICATION_UPDATE_OFFLINE_FILE];
 }
 
 - (void)viewDidLoad
@@ -51,13 +67,12 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)reloadOfflineTableViewData:(NSNotification *)notification
+- (void)updateOfflineFile:(NSNotification *)notification
 {
     PCSFileInfoItem    *item = notification.object;
     if (item.property == PCSFilePropertyDownLoad) {
         //将本地保存的文件从缓存中删除
-        [[PCSDBOperater shareInstance] deleteFileWith:item.serverPath];
-        
+        [[PCSDBOperater shareInstance] deleteFileFromOfflineCache:item.serverPath];
     } else if (item.property == PCSFilePropertyOffLine) {
         //执行文件下载操作
         dispatch_queue_t queue = PCS_APP_DELEGATE.gcdQueue;
@@ -65,13 +80,13 @@
             NSData  *data = [self downLoadFileFromServer:item.serverPath];
             if (data != nil) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [[PCSDBOperater shareInstance] saveFile:data name:item.serverPath];
+                    [[PCSDBOperater shareInstance] saveFileToOfflineCache:data name:item.serverPath];
                 });
             }
         });
     }
     //重新加载界面数据
-    PCSLog(@"reload offline data.");
+    [self reloadOfflineTableViewData];
 }
 
 - (NSData *)downLoadFileFromServer:(NSString *)path
@@ -87,6 +102,10 @@
     return data;
 }
 
+- (void)reloadOfflineTableViewData
+{
+    
+}
 
 #pragma mark -- Baidu Listener Delegate
 -(void)onProgress:(long)bytes:(long)total

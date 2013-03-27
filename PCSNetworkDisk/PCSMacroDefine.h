@@ -18,6 +18,8 @@ typedef enum
     PCSFileFormatTxt,
     PCSFileFormatDoc,
     PCSFileFormatPdf,
+    PCSFileFormatExcel,
+    PCSFileFormatPpt,
     PCSFileFormatJpg,
     PCSFileFormatZip,
     PCSFileFormatVideo,
@@ -46,11 +48,14 @@ typedef enum
 }PCSFileUploadStatus;
 
 
+//文件夹名称
+#define PCS_FOLDER_UPLOAD_CACHE             @"uploadCache"  //本地上传的缓存文件保存文件夹
+#define PCS_FOLDER_OFFLINE_CACHE            @"offlineCache" //离线文件的缓存文件夹
+
 //字符串
 #define PCS_STRING_MOBWIN_UNIT_ID           @"A495798C12C030F28E7711F3613DFC1B"
 #define PCS_STRING_BAIDU_API_KEY            @"L6g70tBRRIXLsY0Z3HwKqlRE"
 #define PCS_STRING_DEFAULT_PATH             @"/apps/pcstest_oauth/"
-#define PCS_STRING_OFFLINE_CACHE            @"cache"    //本地缓存文件夹名称
 
 #define PCS_STRING_EVER_LAUNCHED            @"everLaunched"
 #define PCS_STRING_FIRST_LAUNCH             @"firstLaunch"
@@ -58,8 +63,11 @@ typedef enum
 #define PCS_STRING_ACCESS_TOKEN             @"accessToken"
 #define PCS_STRING_CURSOR                   @"cursor"
 #define PCS_INTEGER_ACCOUNT_ID              @"accountID"
-#define PCS_NOTIFICATION_INCREMENT_UPDATE   @"incrementUpdate"
+
+//本地通知名称
+#define PCS_NOTIFICATION_INCREMENT_UPDATE       @"incrementUpdate"
 #define PCS_NOTIFICATION_RELOAD_OFFLINE_DATA    @"reloadOfflineData"
+#define PCS_NOTIFICATION_UPDATE_OFFLINE_FILE    @"updateOfflineData"
 
 
 

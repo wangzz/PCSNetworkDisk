@@ -79,7 +79,7 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *filePath = [[paths objectAtIndex:0] stringByAppendingString:@"/Cocoa.pdf"];
     NSData  *data = [NSData dataWithContentsOfFile:filePath];
-    NSString    *fileName = @"面朝大海，春暖花开，我有一所房子909.pdf";
+    NSString    *fileName = @"世界真美好.pdf";
     NSString *target = [[NSString alloc] initWithFormat:@"%@%@",PCS_STRING_DEFAULT_PATH,fileName];
     
     [self uploadNewFileToServer:data name:fileName path:target];
@@ -89,7 +89,7 @@
 - (void)uploadNewFileToServer:(NSData *)data name:(NSString *)fileName path:(NSString *)filePath
 {
     //先将文件保存到缓存中
-    [[PCSDBOperater shareInstance] saveFile:data name:filePath];
+    [[PCSDBOperater shareInstance] saveFileToUploadCache:data name:filePath];
     
     PCSFileInfoItem *fileItem = [[PCSFileInfoItem alloc] init];
     fileItem.name = fileName;
@@ -136,7 +136,7 @@
         if (result) {
             //更新文件状态成功后，更新界面显示，并开始上传操作
             [self reloadTableDataSource];
-            NSData  *data = [[PCSDBOperater shareInstance] getFileWith:item.serverPath];
+            NSData  *data = [[PCSDBOperater shareInstance] getFileFromUploadCacheBy:item.serverPath];
             [self uploadFile:data name:item.serverPath];
         }
     }
@@ -145,7 +145,7 @@
 //将上传失败的文件重新上传
 - (void)reuploadFileToServer:(PCSFileInfoItem *)item
 {
-    NSData  *data = [[PCSDBOperater shareInstance] getFileWith:item.serverPath];
+    NSData  *data = [[PCSDBOperater shareInstance] getFileFromUploadCacheBy:item.serverPath];
     
     BOOL    result = NO;
     //更新文件状态为上传中

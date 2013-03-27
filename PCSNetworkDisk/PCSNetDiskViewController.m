@@ -190,7 +190,6 @@
         
         for(int i = 0; i < [response.entries count]; ++i){
             PCSDifferEntryInfo *info = [response.entries objectAtIndex:i];
-            
             PCSCommonFileInfo   *tmp = info.commonFileInfo;
             NSArray *array = [tmp.path componentsSeparatedByString:@"/"];
             NSMutableString    *parentPathString = [NSMutableString string];;
@@ -219,14 +218,21 @@
                 
                 if (info.isDeleted) {
                     item.property = PCSFilePropertyDelete;
+                    //被删除的文件，从本地彻底清空数据入库
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        [[PCSDBOperater shareInstance] deleteAllFileInfoFromLocal:item];
+                        //通知离线列表界面数据更新
+                        [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_RELOAD_OFFLINE_DATA
+                                                                            object:nil];
+                    });
                 } else {
                     item.property = PCSFilePropertyDownLoad;
+                    //新下载的文件数据入库
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        [[PCSDBOperater shareInstance] saveFileInfoItemToDB:item];
+                    });
                 }
                 
-                //文件数据入库
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    [[PCSDBOperater shareInstance] saveFileInfoItemToDB:item];
-                });
                 
             }
         }
@@ -458,7 +464,7 @@
 
     if (result) {
         //通知离线列表界面数据更新
-        [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_RELOAD_OFFLINE_DATA
+        [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_UPDATE_OFFLINE_FILE
                                                             object:item];
         //更新当前界面数据
         [self.mTableView reloadData];
@@ -486,6 +492,9 @@
                 result = [[PCSDBOperater shareInstance] deleteAllFileInfoFromLocal:item];
                 if (result) {
                     [self reloadTableViewDataSource];
+                    //通知离线列表界面数据更新
+                    [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_RELOAD_OFFLINE_DATA
+                                                                        object:nil];
                 }
             });
         } else {
