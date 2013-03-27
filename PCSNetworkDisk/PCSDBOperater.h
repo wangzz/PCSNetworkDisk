@@ -37,28 +37,53 @@
 /*****************************本地文件操作*****************************/
 /*!
  @method
- @abstract  删除本地Document目录下面子目录cache目录下的指定名称的文件
+ @abstract  删除本地Document目录下面子目录uploadCache目录下的指定名称的文件
  @param     name    NSString类型的指针，指向要删除的文件名称
  @return    BOOL型，表示删除结果
  */
-- (BOOL)deleteFileWith:(NSString *)name;
+- (BOOL)deleteFileFromUploadCache:(NSString *)name;
 
 /*!
  @method
- @abstract  获取Document目录下面子目录cache目录下的指定名称的文件二进制数据
+ @abstract  删除本地Document目录下面子目录offlineCache目录下的指定名称的文件
+ @param     name    NSString类型的指针，指向要删除的文件名称
+ @return    BOOL型，表示删除结果
+ */
+- (BOOL)deleteFileFromOfflineCache:(NSString *)name;
+
+/*!
+ @method
+ @abstract  获取Document目录下面子目录uploadCache目录下的指定名称的文件二进制数据
  @param     name    想要获取数据的文件名称
  @return    NSData型指针，指向获取到的文件数据
  */
-- (NSData *)getFileWith:(NSString *)name;
+- (NSData *)getFileFromUploadCacheBy:(NSString *)name;
 
 /*!
  @method
- @abstract  将二进制文件数据以特定名称保存到Document目录下面子目录cache目录下
+ @abstract  获取Document目录下面子目录offlineCache目录下的指定名称的文件二进制数据
+ @param     name    想要获取数据的文件名称
+ @return    NSData型指针，指向获取到的文件数据
+ */
+- (NSData *)getFileFromOfflineCacheBy:(NSString *)name;
+
+/*!
+ @method
+ @abstract  将二进制文件数据以特定名称保存到Document目录下面子目录uploadCache目录下
  @param     value   NSData类型的指针，指向要保存的文件
  @param     name    NSString类型的指针，指向要保存的文件名
  @return    BOOL型，表示保存结果
  */
-- (BOOL)saveFile:(NSData *)value name:(NSString *)name;
+- (BOOL)saveFileToUploadCache:(NSData *)value name:(NSString *)name;
+
+/*!
+ @method
+ @abstract  将二进制文件数据以特定名称保存到Document目录下面子目录offlineCache目录下
+ @param     value   NSData类型的指针，指向要保存的文件
+ @param     name    NSString类型的指针，指向要保存的文件名
+ @return    BOOL型，表示保存结果
+ */
+- (BOOL)saveFileToOfflineCache:(NSData *)value name:(NSString *)name;
 
 /*!
  @method

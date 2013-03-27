@@ -54,11 +54,11 @@
 }
 
 #pragma mark - 文件的本地缓存操作
-//删除本地缓存的文件
-- (BOOL)deleteFileWith:(NSString *)name
+//从本地缓存uploadCache目录下的文件
+- (BOOL)deleteFileFromUploadCache:(NSString *)name
 {
     NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
-                       stringByAppendingPathComponent:PCS_STRING_OFFLINE_CACHE]
+                       stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE]
                       stringByAppendingPathComponent:[name md5Hash]];
     BOOL    result = NO;
     NSError *err = nil;
@@ -72,23 +72,61 @@
     return result;
 }
 
-//根据文件名获取文件的二进制数据
-- (NSData *)getFileWith:(NSString *)name
+//从本地缓存offlineCache目录下的文件
+- (BOOL)deleteFileFromOfflineCache:(NSString *)name
 {
     NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
-                       stringByAppendingPathComponent:PCS_STRING_OFFLINE_CACHE]
+                       stringByAppendingPathComponent:PCS_FOLDER_OFFLINE_CACHE]
+                      stringByAppendingPathComponent:[name md5Hash]];
+    BOOL    result = NO;
+    NSError *err = nil;
+    result = [[NSFileManager defaultManager] removeItemAtPath:path error:&err];
+    if (!result) {
+        PCSLog(@"delete file :%@ failed.%@",name,err);
+    } else {
+        PCSLog(@"delete file :%@ success.",name);
+    }
+    
+    return result;
+}
+
+//根据文件名从Documents/uploadCache文件夹获取文件的二进制数据
+- (NSData *)getFileFromUploadCacheBy:(NSString *)name
+{
+    NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+                       stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE]
                       stringByAppendingPathComponent:[name md5Hash]];
     NSData  *fileData = [NSData dataWithContentsOfFile:path];
-    
     return fileData;
 }
 
-//将文件保存到本地
-//为防止文件重名，直接用文件路径经过MD5处理后，作为文件名。
-- (BOOL)saveFile:(NSData *)value name:(NSString *)name
+//根据文件名从Documents/offlineCache文件夹获取文件的二进制数据
+- (NSData *)getFileFromOfflineCacheBy:(NSString *)name
 {
-    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_STRING_OFFLINE_CACHE];
+    NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+                       stringByAppendingPathComponent:PCS_FOLDER_OFFLINE_CACHE]
+                      stringByAppendingPathComponent:[name md5Hash]];
+    NSData  *fileData = [NSData dataWithContentsOfFile:path];
+    return fileData;
+}
 
+//将文件保存到沙盒Documents/uploadCache目录下
+- (BOOL)saveFileToUploadCache:(NSData *)value name:(NSString *)name
+{
+    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE];
+    return [self saveFileToPath:path data:value name:name];
+}
+
+//将文件保存到沙盒Documents/offlineCache目录下
+- (BOOL)saveFileToOfflineCache:(NSData *)value name:(NSString *)name
+{
+    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_OFFLINE_CACHE];
+    return [self saveFileToPath:path data:value name:name];
+}
+
+//为防止文件重名，直接用文件路径经过MD5处理后，作为文件名。
+- (BOOL)saveFileToPath:(NSString *)path data:(NSData *)value name:(NSString *)name
+{
     BOOL    isDirectory = YES;
     BOOL    directoryExit = [[NSFileManager defaultManager] fileExistsAtPath:path
                                                                  isDirectory:&isDirectory];
@@ -132,6 +170,16 @@
         fileType = PCSFileFormatDoc;
     } else if ([pathExtension isEqualToString:@"pdf"]) {
         fileType = PCSFileFormatPdf;
+    } else if ([pathExtension isEqualToString:@"xls"] ||
+               [pathExtension isEqualToString:@"xlsx"] ||
+               [pathExtension isEqualToString:@"xlt"] ||
+               [pathExtension isEqualToString:@"xltx"]) {
+        fileType = PCSFileFormatExcel;
+    } else if ([pathExtension isEqualToString:@"ppt"] ||
+               [pathExtension isEqualToString:@"pptx"] ||
+               [pathExtension isEqualToString:@"pot"] ||
+               [pathExtension isEqualToString:@"potx"]) {
+        fileType = PCSFileFormatPpt;
     } else if ([pathExtension isEqualToString:@"rar"] ||
                [pathExtension isEqualToString:@"zip"] ||
                [pathExtension isEqualToString:@"7z"] ||
@@ -160,9 +208,36 @@
 #pragma mark - 删除一个文件记录在本地所有内容
 - (BOOL)deleteAllFileInfoFromLocal:(PCSFileInfoItem *)item
 {
-    BOOL    result = NO;
-    //删除filelist表的内容
-    result = [self deleteFileFromFileList:item.fid];
+    //找出该文件夹所有子文件
+    //排除掉子目录，因为目录在offlineCache中没有缓存文件
+    //且只查找property为PCSFilePropertyOffLine状态的记录（有缓存文件的）
+    //将这些这文件在offlineCache中的缓存文件删除
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSString    *deleteCacheql = [NSString stringWithFormat:@"select serverpath from filelist where parentPath like \"%@%%\" and accountid=%d and format not in(%d) and property=%d",item.serverPath,accountID,PCSFileFormatFolder,PCSFilePropertyOffLine];
+    FMResultSet *rs = [[PCSDBOperater shareInstance].PCSDB executeQuery:deleteCacheql];
+    while ([rs next]){
+        NSString    *filePath = [rs stringForColumn:@"serverpath"];
+        [self deleteFileFromOfflineCache:filePath];
+    }
+    
+    //删除该目录，以及该目录下面的所有子文件、文件夹在filelist表中的记录
+    BOOL result = NO;
+    NSString    *deleteSubSql = [NSString stringWithFormat:@"delete from filelist where parentPath like \"%@%%\" and accountid=%d",item.serverPath,accountID];
+    result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:deleteSubSql];
+    if (!result) {
+        PCSLog(@"delete %@ sub file from filelist failed.%@ ",item.serverPath,[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
+    } else {
+        PCSLog(@"delete %@ sub file from filelist success.",item.serverPath);
+    }  
+    
+    //从filelist表中删除当前文件记录
+    NSString    *deleteCurrentSql = [NSString stringWithFormat:@"delete from filelist where serverpath= \"%@\" and accountid=%d",item.serverPath,accountID];
+    result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:deleteCurrentSql];
+    if (!result) {
+        PCSLog(@"delete %@ current file from filelist failed.%@ ",item.serverPath,[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
+    } else {
+        PCSLog(@"delete %@ current file from filelist success.",item.serverPath);
+    }
     
     return result;
 }
@@ -202,6 +277,15 @@
         item.mtime = [rs intForColumn:@"mtime"];
     }
     return item;
+}
+
+//判断serverpath值为cachePath的文件是否在在uploadfilelist数据库中
+- (BOOL)isFileInUploadFileList:(NSString *)cachePath
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSString    *sql = [NSString stringWithFormat:@"select * from uploadfilelist where accountid=%d and cachepath=\"%@\"",accountID,cachePath];
+    FMResultSet *rt = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
+    return rt.next;
 }
 
 //判断当前是否有正在上传的文件
@@ -287,14 +371,6 @@
 }
 
 #pragma mark - filelist表数据库操作方法
-//根据文件所属的目录名从filelist表中删除文件记录
-//用于删除文件夹时，同时删除该文件夹目录下面的子文件
-- (BOOL)deleteFileFromFileListByParentpath:(NSString *)parentPath
-{
-    
-    return NO;
-}
-
 //根据文件ID删除filelist表中的文件记录
 - (BOOL)deleteFileFromFileList:(NSInteger)fileId
 {
@@ -332,7 +408,7 @@
 {
     NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
     NSMutableArray  *listArray = [NSMutableArray array];
-    NSString    *sql = [NSString stringWithFormat:@"select id, name, serverpath,size,property,format,hassubfolder,ctime,mtime from filelist where parentPath=\"%@\" and accountid=%d and property in (2,3) order by isdir desc,name asc",currentPath,accountID];
+    NSString    *sql = [NSString stringWithFormat:@"select id, name, serverpath,size,property,format,hassubfolder,ctime,mtime from filelist where parentPath=\"%@\" and accountid=%d and property in (%d,%d) order by isdir desc,name asc",currentPath,accountID,PCSFilePropertyDownLoad,PCSFilePropertyOffLine];
     FMResultSet *rs = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
     while ([rs next]){
         PCSFileInfoItem *item = [[PCSFileInfoItem alloc] init];
