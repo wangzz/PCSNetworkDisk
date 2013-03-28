@@ -9,8 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface PCSOfflineViewController : UIViewController<BaiduPCSStatusListener>
-{
-    UIProgressView  *progressView;
-}
 
 @end
