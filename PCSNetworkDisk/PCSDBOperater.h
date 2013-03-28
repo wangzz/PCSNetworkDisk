@@ -160,6 +160,28 @@
 
 #pragma mark - filelist表数据库操作方法
 /*****************************filelist表数据库操作方法*****************************/
+
+/*!
+ @method
+ @abstract  从filelist表中查找出offline状态的文件，按照修改时间降序排列
+ @return    NSDictionary型指针，指向离线状态数组格式化的PCSFileInfoItem类型文件集合
+ */
+- (NSDictionary *)getOfflineFileFromDB;
+
+/*!
+ @method
+ @abstract  获取下一个要离线下载的文件信息
+ @return    PCSFileInfoItem型指针，指向下一个要离线下载的文件信息
+ */
+- (PCSFileInfoItem *)getNextOfflineFileItem;
+
+/*!
+ @method
+ @abstract  判断当前是否有离线下载中的文件
+ @return    BOOL型，表示是否有离线下载中的文件
+ */
+- (BOOL)hasOffliningFile;
+
 /*!
  @method
  @abstract  保存从服务端下载的文件信息到filelist表

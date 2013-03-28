@@ -210,10 +210,10 @@
 {
     //找出该文件夹所有子文件
     //排除掉子目录，因为目录在offlineCache中没有缓存文件
-    //且只查找property为PCSFilePropertyOffLine状态的记录（有缓存文件的）
+    //且只查找property为PCSFilePropertyOffLineSuccess状态的记录（有缓存文件的）
     //将这些这文件在offlineCache中的缓存文件删除
     NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
-    NSString    *deleteCacheql = [NSString stringWithFormat:@"select serverpath from filelist where parentPath like \"%@%%\" and accountid=%d and format not in(%d) and property=%d",item.serverPath,accountID,PCSFileFormatFolder,PCSFilePropertyOffLine];
+    NSString    *deleteCacheql = [NSString stringWithFormat:@"select serverpath from filelist where parentPath like \"%@%%\" and accountid=%d and format not in(%d) and property=%d",item.serverPath,accountID,PCSFileFormatFolder,PCSFilePropertyOffLineSuccess];
     FMResultSet *rs = [[PCSDBOperater shareInstance].PCSDB executeQuery:deleteCacheql];
     while ([rs next]){
         NSString    *filePath = [rs stringForColumn:@"serverpath"];
@@ -267,7 +267,7 @@
     NSString    *sql = [NSString stringWithFormat:@"select id, name, cachepath,size,status,format,mtime from uploadfilelist where accountid=%d and status=%d order by mtime asc limit 1",accountID,PCSFileUploadStatusWaiting];
     FMResultSet *rs = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
     while ([rs next]){
-        item = [[PCSFileInfoItem alloc] init];
+        item = [[[PCSFileInfoItem alloc] init] autorelease];
         item.fid = [rs intForColumn:@"id"];
         item.name = [rs stringForColumn:@"name"];
         item.serverPath = [rs stringForColumn:@"cachepath"];
@@ -371,6 +371,74 @@
 }
 
 #pragma mark - filelist表数据库操作方法
+//从filelist表中查找出offline状态的文件，按照修改时间降序排列
+- (NSDictionary *)getOfflineFileFromDB
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSMutableDictionary *offlineDictionary = [NSMutableDictionary dictionary];
+    NSMutableArray  *offliningArray = [NSMutableArray array];
+    NSMutableArray  *offlinedArray = [NSMutableArray array];
+    NSString    *sql = [NSString stringWithFormat:@"select * from filelist where accountid=%d and property in(%d,%d,%d,%d) order by property desc,mtime desc",accountID,PCSFilePropertyOffLineFailed,PCSFilePropertyOffLineSuccess,PCSFilePropertyOffLining,PCSFilePropertyOffLineWaiting];
+    FMResultSet *rs = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
+    while ([rs next]){
+        PCSFileInfoItem* item = [[PCSFileInfoItem alloc] init];
+        item.fid = [rs intForColumn:@"id"];
+        item.name = [rs stringForColumn:@"name"];
+        item.serverPath = [rs stringForColumn:@"serverpath"];
+        item.size = [rs intForColumn:@"size"];
+        item.format = [rs intForColumn:@"format"];
+        item.hasSubFolder = [rs boolForColumn:@"hassubfolder"];
+        item.property = [rs intForColumn:@"property"];
+        item.ctime = [rs intForColumn:@"ctime"];
+        item.mtime = [rs intForColumn:@"mtime"];
+        
+        if (item.property == PCSFilePropertyOffLineFailed ||
+            item.property == PCSFilePropertyOffLineWaiting ||
+            item.property == PCSFilePropertyOffLining) {
+            [offliningArray addObject:item];
+        } else if (item.property == PCSFilePropertyOffLineSuccess) {
+            [offlinedArray addObject:item];
+        }
+        PCS_FUNC_SAFELY_RELEASE(item);
+        
+        if (offliningArray.count > 0) {
+            [offlineDictionary setValue:offliningArray forKey:[NSString stringWithFormat:@"%d",PCSFilePropertyOffLining]];
+        }
+        
+        if (offlinedArray.count > 0) {
+            [offlineDictionary setValue:offlinedArray forKey:[NSString stringWithFormat:@"%d",PCSFilePropertyOffLineSuccess]];
+        }
+    }
+    return offlineDictionary;
+}
+
+//获得下一个要离线下载的文件在服务器上的地址
+//选择最早入库的那个（先添加先下载）
+//只找出一条
+- (PCSFileInfoItem *)getNextOfflineFileItem
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    PCSFileInfoItem *item = nil;
+    NSString    *sql = [NSString stringWithFormat:@"select id,serverpath from filelist where accountid=%d and property=%d order by mtime asc limit 1",accountID,PCSFilePropertyOffLineWaiting];
+    FMResultSet *rs = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
+    while ([rs next]){
+        item = [[[PCSFileInfoItem alloc] init] autorelease];
+        item.fid = [rs intForColumn:@"id"];
+        item.serverPath = [rs stringForColumn:@"serverpath"];
+    }
+    
+    return item;
+}
+
+//判断当前是否有离线下载中的文件
+- (BOOL)hasOffliningFile
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSString    *sql = [NSString stringWithFormat:@"select * from filelist where accountid=%d and property=%d",accountID,PCSFilePropertyOffLining];
+    FMResultSet *rt = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
+    return rt.next;
+}
+
 //根据文件ID删除filelist表中的文件记录
 - (BOOL)deleteFileFromFileList:(NSInteger)fileId
 {
@@ -390,8 +458,7 @@
 - (BOOL)updateFile:(NSInteger)fileId property:(PCSFileProperty)newProperty
 {
     NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
-    NSString    *sql = [NSString stringWithFormat:@"update filelist set property=%d where id=%d and accountid=%d",newProperty,fileId,accountID];
-    PCSLog(@"sql:%@",sql);
+    NSString    *sql = [NSString stringWithFormat:@"update filelist set property=%d, mtime=%d where id=%d and accountid=%d",newProperty,(NSInteger)[[NSDate date] timeIntervalSince1970],fileId,accountID];
     BOOL result = NO;
     result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
     if (!result) {
@@ -408,7 +475,7 @@
 {
     NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
     NSMutableArray  *listArray = [NSMutableArray array];
-    NSString    *sql = [NSString stringWithFormat:@"select id, name, serverpath,size,property,format,hassubfolder,ctime,mtime from filelist where parentPath=\"%@\" and accountid=%d and property in (%d,%d) order by isdir desc,name asc",currentPath,accountID,PCSFilePropertyDownLoad,PCSFilePropertyOffLine];
+    NSString    *sql = [NSString stringWithFormat:@"select id, name, serverpath,size,property,format,hassubfolder,ctime,mtime from filelist where parentPath=\"%@\" and accountid=%d and property not in (%d,%d) order by isdir desc,name asc",currentPath,accountID,PCSFilePropertyNull,PCSFilePropertyDelete];
     FMResultSet *rs = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
     while ([rs next]){
         PCSFileInfoItem *item = [[PCSFileInfoItem alloc] init];
