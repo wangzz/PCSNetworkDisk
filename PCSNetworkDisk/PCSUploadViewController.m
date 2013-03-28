@@ -180,7 +180,7 @@
             newStatus = PCSFileUploadStatusSuccess;
         }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
             BOOL    result = NO;
             //更新文件状态
             result = [[PCSDBOperater shareInstance] updateUploadFile:name
@@ -368,7 +368,6 @@
 {
     return @"删除";
 }
-
 
 #pragma mark -- Baidu Listener Delegate
 -(void)onProgress:(long)bytes:(long)total

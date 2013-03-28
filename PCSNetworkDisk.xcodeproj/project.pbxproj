@@ -80,7 +80,7 @@
 		82019713170317C600541518 /* tab_netdisk@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_netdisk@2x.png"; sourceTree = "<group>"; };
 		82019714170317C600541518 /* tab_offline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_offline@2x.png"; sourceTree = "<group>"; };
 		8214A29016F0AA2E00BEA785 /* PCSDBOperater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSDBOperater.h; sourceTree = "<group>"; };
-		8214A29116F0AA2E00BEA785 /* PCSDBOperater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSDBOperater.m; sourceTree = "<group>"; };
+		8214A29116F0AA2E00BEA785 /* PCSDBOperater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PCSDBOperater.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		8214A29516F0AAA000BEA785 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		8214A29616F0AAA000BEA785 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
 		8214A29716F0AAA000BEA785 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
@@ -129,7 +129,7 @@
 		822F7B9516E8E45F00898CA4 /* PCSLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PCSLoginViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		822F7B9616E8E45F00898CA4 /* PCSLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSLoginViewController.xib; sourceTree = "<group>"; };
 		822F7BA316E8E74F00898CA4 /* PCSNetDiskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSNetDiskViewController.h; sourceTree = "<group>"; };
-		822F7BA416E8E74F00898CA4 /* PCSNetDiskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSNetDiskViewController.m; sourceTree = "<group>"; };
+		822F7BA416E8E74F00898CA4 /* PCSNetDiskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PCSNetDiskViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		822F7BA516E8E74F00898CA4 /* PCSNetDiskViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSNetDiskViewController.xib; sourceTree = "<group>"; };
 		822F7BA816E8E77000898CA4 /* PCSUploadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSUploadViewController.h; sourceTree = "<group>"; };
 		822F7BA916E8E77000898CA4 /* PCSUploadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSUploadViewController.m; sourceTree = "<group>"; };
@@ -138,7 +138,7 @@
 		822F7BAE16E8E78800898CA4 /* PCSMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSMoreViewController.m; sourceTree = "<group>"; };
 		822F7BAF16E8E78800898CA4 /* PCSMoreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSMoreViewController.xib; sourceTree = "<group>"; };
 		822F7BB216E8EE0700898CA4 /* PCSOfflineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSOfflineViewController.h; sourceTree = "<group>"; };
-		822F7BB316E8EE0700898CA4 /* PCSOfflineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSOfflineViewController.m; sourceTree = "<group>"; };
+		822F7BB316E8EE0700898CA4 /* PCSOfflineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PCSOfflineViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		822F7BB416E8EE0700898CA4 /* PCSOfflineViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSOfflineViewController.xib; sourceTree = "<group>"; };
 		822F7BBC16E8F7A300898CA4 /* BaiduOAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaiduOAuth.h; sourceTree = "<group>"; };
 		822F7BBD16E8F7A300898CA4 /* BaiduPCSActionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaiduPCSActionInfo.h; sourceTree = "<group>"; };

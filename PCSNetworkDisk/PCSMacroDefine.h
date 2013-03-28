@@ -35,7 +35,11 @@ typedef enum
     PCSFilePropertyNull = 0,
     PCSFilePropertyDelete,//被删除的文件
     PCSFilePropertyDownLoad,//从服务器下载的文件
-    PCSFilePropertyOffLine,//离线的文件
+    PCSFilePropertyOffLineFailed,//离线下载失败的文件
+    PCSFilePropertyOffLineWaiting,//等待进行离线下载的文件
+    PCSFilePropertyOffLining,//正在离线下载中的文件
+    PCSFilePropertyOffLineSuccess,//离线下载成功的文件
+    //正在下载中的
 }PCSFileProperty;
 
 typedef enum
@@ -66,6 +70,7 @@ typedef enum
 
 //本地通知名称
 #define PCS_NOTIFICATION_INCREMENT_UPDATE       @"incrementUpdate"
+#define PCS_NOTIFICATION_RELOAD_NETDISK_DATA    @"reloadNetDiskData"
 #define PCS_NOTIFICATION_RELOAD_OFFLINE_DATA    @"reloadOfflineData"
 #define PCS_NOTIFICATION_UPDATE_OFFLINE_FILE    @"updateOfflineData"
 
