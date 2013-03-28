@@ -37,13 +37,30 @@
     self = [super init];
     if (self) {
         self.title = @"我的云盘";
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(updateFileInfoIncrement)
-                                                     name:PCS_NOTIFICATION_INCREMENT_UPDATE
-                                                   object:nil];
+        [self registerNetDiskLocalNotification];
     }
     
     return self;
+}
+
+- (void)registerNetDiskLocalNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateFileInfoIncrement)
+                                                 name:PCS_NOTIFICATION_INCREMENT_UPDATE
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadTableViewDataSource)
+                                                 name:PCS_NOTIFICATION_RELOAD_NETDISK_DATA
+                                               object:nil];
+}
+
+- (void)removeNetDiskLocalNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                              forKeyPath:PCS_NOTIFICATION_INCREMENT_UPDATE];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                              forKeyPath:PCS_NOTIFICATION_RELOAD_NETDISK_DATA];
 }
 
 - (void)dealloc
@@ -53,11 +70,10 @@
 	// 可在viewDidUnload调用或者在应用页面返回时调用或者在dealloc中调用
 	// 目前已在viewWillDisappear中调用
 	//
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                              forKeyPath:PCS_NOTIFICATION_INCREMENT_UPDATE];
-	[adBanner stopRequest];
+    [adBanner stopRequest];
 	[adBanner removeFromSuperview];
     [path release];
+    [self removeNetDiskLocalNotification];
     [super dealloc];
 }
 
@@ -365,7 +381,7 @@
         NSString *folderPath = [[NSString alloc] initWithFormat:@"%@%@" , self.path, filePath];
         PCSFileInfoResponse *response = [PCS_APP_DELEGATE.pcsClient makeDir:folderPath];
         if(response){
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_sync(dispatch_get_main_queue(), ^{
                 PCSSimplefiedResponse *status = response.status;
                 if (status.errorCode == 0) {
                     PCSLog(@"creat folder %@ success.",filePath);
@@ -455,16 +471,29 @@
 {
     BOOL result = NO;
     PCSFileInfoItem *item = [self.files objectAtIndex:selectCellIndexPath.row];
-    if (item.property == PCSFilePropertyOffLine) { 
+    if (item.property == PCSFilePropertyOffLineSuccess ||
+        item.property == PCSFilePropertyOffLineWaiting ||
+        item.property == PCSFilePropertyOffLining) {
+        //将文件的状态由离线状态置为正常的下载状态
         result = [[PCSDBOperater shareInstance] updateFile:item.fid property:PCSFilePropertyDownLoad];
         if (result) {
             item.property = PCSFilePropertyDownLoad;
         }
         
-    } else if (item.property == PCSFilePropertyDownLoad) {
-        result = [[PCSDBOperater shareInstance] updateFile:item.fid property:PCSFilePropertyOffLine];
+    } else if (item.property == PCSFilePropertyDownLoad ||
+               item.property == PCSFilePropertyOffLineFailed) {
+        PCSFileProperty nextProperty = PCSFilePropertyNull;
+        BOOL    hasOffLiningFile = [[PCSDBOperater shareInstance] hasOffliningFile];
+        if (hasOffLiningFile) {
+            //有正在等待离线下载的文件，则将该文件状态置为等待下载
+            nextProperty = PCSFilePropertyOffLineWaiting;
+        } else {
+            //没有等待离线下载的文件，则将文件状态置位下载中，并随后开始下载
+            nextProperty = PCSFilePropertyOffLining;
+        }
+        result = [[PCSDBOperater shareInstance] updateFile:item.fid property:nextProperty];
         if (result) {
-            item.property = PCSFilePropertyOffLine;
+            item.property = nextProperty;
         }
     }
 
@@ -492,7 +521,7 @@
         PCSSimplefiedResponse   *response = [PCS_APP_DELEGATE.pcsClient deleteFile:item.serverPath];
         if (response.errorCode == 0) {
             //从服务端删除成功，开始从本地数据库删除，并置位，更新界面数据
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_sync(dispatch_get_main_queue(), ^{
                 BOOL result = NO;
                 //删除每条文件记录在本地的全部信息
                 result = [[PCSDBOperater shareInstance] deleteAllFileInfoFromLocal:item];
@@ -688,9 +717,12 @@
     
     if ([CellIdentifier isEqualToString:TABLEVIEW_EXPAND_CELL]) {
         UIButton    *favoritButton = (UIButton *)[cell.contentView viewWithTag:PCS_TAG_EXPAND_FAVORIT_BUTTON];
-        if (item.property == PCSFilePropertyDownLoad) {
+        if (item.property == PCSFilePropertyDownLoad ||
+            item.property == PCSFilePropertyOffLineFailed) {
             [favoritButton setTitle:@"收藏" forState:UIControlStateNormal];
-        } else if (item.property == PCSFilePropertyOffLine) {
+        } else if (item.property == PCSFilePropertyOffLineSuccess ||
+                   item.property == PCSFilePropertyOffLineWaiting ||
+                   item.property == PCSFilePropertyOffLining) {
             [favoritButton setTitle:@"取消收藏" forState:UIControlStateNormal];
         }  
     }
