@@ -392,14 +392,20 @@
     UITouch *touch = [touches anyObject];
     CGPoint currentTouchPosition = [touch locationInView:self.mTableView];
     NSIndexPath *indexPath = [self.mTableView indexPathForRowAtPoint: currentTouchPosition];
-    
+    NSArray *indexArray = nil;
     if([selectCellIndexPath isEqual:indexPath])
     {
+        //两次点的是相同的Cell，因此只需要重新加载当前Cell
+        indexArray = [[NSArray alloc] initWithObjects:indexPath,nil];
         selectCellIndexPath =nil;
     } else {
+        //两次点的是不同的Cell，因此需要重新加载上次，和本次点击的两个Cell
+        indexArray = [[NSArray alloc] initWithObjects:indexPath,selectCellIndexPath,nil];
         selectCellIndexPath = indexPath;
     }
-    [self.mTableView reloadData];
+    //实现动态加载
+    [self.mTableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationFade];
+    PCS_FUNC_SAFELY_RELEASE(indexArray);
     [mTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
