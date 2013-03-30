@@ -462,7 +462,9 @@
     BOOL result = NO;
     result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
     if (!result) {
-        PCSLog(@" update file property failed.%@",[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
+        PCSLog(@" update file:%d property:%d failed.%@",fileId,newProperty,[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
+    } else {
+        PCSLog(@" update file:%d property:%d success.",fileId,newProperty);
     }
     
     return result;

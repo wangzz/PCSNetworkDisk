@@ -99,12 +99,12 @@
         dispatch_sync(dispatch_get_main_queue(), ^{
             PCSFileProperty fileProperty = PCSFilePropertyNull;
             if (response.errorCode == 0) {
-                [[PCSDBOperater shareInstance] saveFileToOfflineCache:data name:item.serverPath];
-                fileProperty = PCSFilePropertyOffLineSuccess;
                 PCSLog(@"download file :%@ from server success.",item.serverPath);
+                [[PCSDBOperater shareInstance] saveFileToOfflineCache:data name:item.serverPath];
+                fileProperty = PCSFilePropertyOffLineSuccess;   
             } else {
-                fileProperty = PCSFilePropertyOffLineFailed;
                 PCSLog(@"download file :%@ from server failed.",item.serverPath);
+                fileProperty = PCSFilePropertyOffLineFailed;
             }
             [[PCSDBOperater shareInstance] updateFile:item.fid property:fileProperty];
             //文件状态改变时，需要我的云盘界面数据
@@ -115,11 +115,13 @@
             nextOfflineFileItem = [[PCSDBOperater shareInstance] getNextOfflineFileItem];
             if (nextOfflineFileItem != nil) {
                 //将等待状态的文件状态置为下载中
-                [[PCSDBOperater shareInstance] updateFile:item.fid property:PCSFilePropertyOffLining];
+                [[PCSDBOperater shareInstance] updateFile:nextOfflineFileItem.fid property:PCSFilePropertyOffLining];
             }
-            //然后开始下载
-            [self downloadFileFromServer:nextOfflineFileItem];
             [self reloadOfflineTableViewData];
+            //然后开始下载
+            [self performSelector:@selector(downloadFileFromServer:)
+                       withObject:nextOfflineFileItem
+                       afterDelay:0.0f];
         });
     });
 }
@@ -236,7 +238,7 @@
     } else if (fileItem.property == PCSFilePropertyOffLining) {
         progress.hidden = NO;
         cell.detailTextLabel.text = @" ";
-        currentOfflineFileIndexPath = indexPath;
+        self.currentOfflineFileIndexPath = indexPath;
     }
     
     UILabel *sizeLable = (UILabel *)[cell.contentView viewWithTag:TAG_OFFLINE_FILE_SIZE_LABLE];
@@ -299,11 +301,11 @@
 
 
 #pragma mark -- Baidu Listener Delegate
--(void)onProgress:(long)bytes:(long)total
+-(void)onProgress:(long)bytes :(long)total
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_sync(dispatch_get_main_queue(), ^{
         //主线程中更新进度条的显示
-        UITableViewCell *cell = [self.mTableView cellForRowAtIndexPath:currentOfflineFileIndexPath];
+        UITableViewCell *cell = [self.mTableView cellForRowAtIndexPath:self.currentOfflineFileIndexPath];
         UIProgressView  *progress = (UIProgressView *)[cell.contentView viewWithTag:TAG_OFFLINE_PROGRESSVIEW];
         progress.progress = (float)bytes/(float)total;
     });
