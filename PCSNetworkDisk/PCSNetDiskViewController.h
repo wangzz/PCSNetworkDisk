@@ -10,7 +10,6 @@
 
 @interface PCSNetDiskViewController : UIViewController<MobWinBannerViewDelegate,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>
 {
-    NSIndexPath *selectCellIndexPath;
     MobWinBannerView *adBanner;
 }
 

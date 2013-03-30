@@ -10,7 +10,5 @@
 
 
 @interface PCSUploadViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITableViewDataSource,UITableViewDelegate,BaiduPCSStatusListener>
-{
-    NSIndexPath *currentUploadFileIndexPath;//当前正在上传的文件index
-}
+
 @end

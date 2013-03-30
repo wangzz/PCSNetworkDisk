@@ -12,6 +12,8 @@
 @interface PCSNetDiskViewController ()
 @property (nonatomic, retain) NSArray *files;
 @property (nonatomic, retain) UITableView   *mTableView;
+@property (nonatomic, retain) NSIndexPath *selectCellIndexPath;
+
 @end
 
 #define PCS_TABLEVIEW_CELL_HEIGHT       50.0f
@@ -31,6 +33,7 @@
 @synthesize path;
 @synthesize files;
 @synthesize mTableView;
+@synthesize selectCellIndexPath;
 
 - (id)init
 {
@@ -123,7 +126,7 @@
 {
     PCSLog(@"table view data source reload success.");
     self.files = [[PCSDBOperater shareInstance] getSubFolderFileListFromDB:self.path];
-    selectCellIndexPath = nil;
+    self.selectCellIndexPath = nil;
     [self.mTableView reloadData];
 }
 
@@ -409,15 +412,15 @@
     CGPoint currentTouchPosition = [touch locationInView:self.mTableView];
     NSIndexPath *indexPath = [self.mTableView indexPathForRowAtPoint: currentTouchPosition];
     NSArray *indexArray = nil;
-    if([selectCellIndexPath isEqual:indexPath])
+    if([self.selectCellIndexPath isEqual:indexPath])
     {
         //两次点的是相同的Cell，因此只需要重新加载当前Cell
         indexArray = [[NSArray alloc] initWithObjects:indexPath,nil];
-        selectCellIndexPath =nil;
+        self.selectCellIndexPath =nil;
     } else {
         //两次点的是不同的Cell，因此需要重新加载上次，和本次点击的两个Cell
-        indexArray = [[NSArray alloc] initWithObjects:indexPath,selectCellIndexPath,nil];
-        selectCellIndexPath = indexPath;
+        indexArray = [[NSArray alloc] initWithObjects:indexPath,self.selectCellIndexPath,nil];
+        self.selectCellIndexPath = indexPath;
     }
     //实现动态加载
     [self.mTableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationFade];
@@ -470,7 +473,7 @@
 - (void)onFavoritButtonAction
 {
     BOOL result = NO;
-    PCSFileInfoItem *item = [self.files objectAtIndex:selectCellIndexPath.row];
+    PCSFileInfoItem *item = [self.files objectAtIndex:self.selectCellIndexPath.row];
     if (item.property == PCSFilePropertyOffLineSuccess ||
         item.property == PCSFilePropertyOffLineWaiting ||
         item.property == PCSFilePropertyOffLining) {
@@ -517,7 +520,7 @@
     button.userInteractionEnabled = NO;
     dispatch_queue_t    queue = PCS_APP_DELEGATE.gcdQueue;
     dispatch_async(queue, ^{
-        PCSFileInfoItem *item = [self.files objectAtIndex:selectCellIndexPath.row];
+        PCSFileInfoItem *item = [self.files objectAtIndex:self.selectCellIndexPath.row];
         PCSSimplefiedResponse   *response = [PCS_APP_DELEGATE.pcsClient deleteFile:item.serverPath];
         if (response.errorCode == 0) {
             //从服务端删除成功，开始从本地数据库删除，并置位，更新界面数据
@@ -574,7 +577,7 @@
 #pragma mark - Table view data source
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    if ([selectCellIndexPath isEqual:indexPath]) {
+    if ([self.selectCellIndexPath isEqual:indexPath]) {
         return (PCS_TABLEVIEW_CELL_HEIGHT + 50.0f);
         
     } else {
@@ -595,14 +598,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = nil;
-    if ([selectCellIndexPath isEqual:indexPath]) {
+    if ([self.selectCellIndexPath isEqual:indexPath]) {
         CellIdentifier = TABLEVIEW_EXPAND_CELL;
     } else {
         CellIdentifier = TABLEVIEW_NORMAL_CELL;
     }
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                        reuseIdentifier:CellIdentifier] autorelease];
@@ -729,7 +731,7 @@
     
     //展开按钮的处理逻辑
     UIButton    *expandButton = (UIButton *)[cell.contentView viewWithTag:PCS_TAG_TABLEVIEW_EXPAND_BUTTON];
-    if ([selectCellIndexPath isEqual:indexPath]) {
+    if ([self.selectCellIndexPath isEqual:indexPath]) {
         expandButton.selected = YES;
     } else {
         expandButton.selected = NO;

@@ -13,6 +13,7 @@
 @property (nonatomic,retain) IBOutlet   UITableView *mTableView;
 @property (nonatomic,retain) NSDictionary   *uploadFileDictionary;
 @property (nonatomic,retain) NSArray   *sectionTitleArray;
+@property (nonatomic,retain) NSIndexPath *currentUploadFileIndexPath;//当前正在上传的文件index
 
 @end
 
@@ -20,7 +21,7 @@
 @synthesize mTableView;
 @synthesize uploadFileDictionary;
 @synthesize sectionTitleArray;
-
+@synthesize currentUploadFileIndexPath;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -312,7 +313,7 @@
     } else if (fileItem.property == PCSFileUploadStatusUploading) {
         progress.hidden = NO;
         cell.detailTextLabel.text = @" ";
-        currentUploadFileIndexPath = indexPath;
+        self.currentUploadFileIndexPath = indexPath;
     }
     
     UILabel *sizeLable = (UILabel *)[cell.contentView viewWithTag:TAG_UPLOAD_FILE_SIZE_LABLE];
@@ -374,7 +375,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         //主线程中更新进度条的显示
-        UITableViewCell *cell = [self.mTableView cellForRowAtIndexPath:currentUploadFileIndexPath];
+        UITableViewCell *cell = [self.mTableView cellForRowAtIndexPath:self.currentUploadFileIndexPath];
         UIProgressView  *progress = (UIProgressView *)[cell.contentView viewWithTag:TAG_UPLOAD_PROGRESSVIEW];
         progress.progress = (float)bytes/(float)total;
     });
