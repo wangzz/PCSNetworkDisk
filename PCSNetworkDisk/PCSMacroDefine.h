@@ -66,7 +66,11 @@ typedef enum
 #define PCS_STRING_IS_LOGIN                 @"isLogin"
 #define PCS_STRING_ACCESS_TOKEN             @"accessToken"
 #define PCS_STRING_CURSOR                   @"cursor"
+#define PCS_STRING_USER_NAME                @"userName"
+
+
 #define PCS_INTEGER_ACCOUNT_ID              @"accountID"
+#define PCS_BOOL_USE_PWD_LOCK               @"usePasswordLock"
 
 //本地通知名称
 #define PCS_NOTIFICATION_INCREMENT_UPDATE       @"incrementUpdate"
