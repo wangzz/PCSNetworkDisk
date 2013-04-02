@@ -125,6 +125,8 @@
                                             forKey:PCS_STRING_IS_LOGIN];
     [[NSUserDefaults standardUserDefaults] setValue:response.accessToken
                                              forKey:PCS_STRING_ACCESS_TOKEN];
+    [[NSUserDefaults standardUserDefaults] setValue:response.userName
+                                             forKey:PCS_STRING_USER_NAME];
     PCS_APP_DELEGATE.pcsClient.accessToken = response.accessToken;
     PCSLog(@"%@",[NSString stringWithFormat:@"login success./nAccess Token:%@  User Name:%@  Expres In %@", response.accessToken, response.userName, response.expiresIn]);
 }
