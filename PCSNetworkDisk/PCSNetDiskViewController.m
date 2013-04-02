@@ -61,9 +61,11 @@
 - (void)removeNetDiskLocalNotification
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                              forKeyPath:PCS_NOTIFICATION_INCREMENT_UPDATE];
+                                              name:PCS_NOTIFICATION_INCREMENT_UPDATE
+                                                  object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                              forKeyPath:PCS_NOTIFICATION_RELOAD_NETDISK_DATA];
+                                              name:PCS_NOTIFICATION_RELOAD_NETDISK_DATA
+                                                  object:nil];
 }
 
 - (void)dealloc

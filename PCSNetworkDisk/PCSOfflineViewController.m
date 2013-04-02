@@ -54,9 +54,11 @@
 - (void)removeLocalNotification
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                              forKeyPath:PCS_NOTIFICATION_RELOAD_OFFLINE_DATA];
+                                                    name:PCS_NOTIFICATION_RELOAD_OFFLINE_DATA
+                                                  object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                              forKeyPath:PCS_NOTIFICATION_UPDATE_OFFLINE_FILE];
+                                                    name:PCS_NOTIFICATION_UPDATE_OFFLINE_FILE
+                                                  object:nil];
 }
 
 - (void)viewDidLoad
