@@ -74,6 +74,8 @@
 		8271AE051709DD6C002DEFB1 /* SDWebImagePrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 8271ADFC1709DD6C002DEFB1 /* SDWebImagePrefetcher.m */; };
 		8271AE061709DD6C002DEFB1 /* UIButton+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8271ADFE1709DD6C002DEFB1 /* UIButton+WebCache.m */; };
 		8271AE071709DD6C002DEFB1 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8271AE001709DD6C002DEFB1 /* UIImageView+WebCache.m */; };
+		82A3C7781711BBCD007CD231 /* PCSAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82A3C7761711BBCD007CD231 /* PCSAboutViewController.m */; };
+		82A3C7791711BBCD007CD231 /* PCSAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82A3C7771711BBCD007CD231 /* PCSAboutViewController.xib */; };
 		82DAA48E16F207D8003FEAF1 /* netdisk_type_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82DAA48516F207D8003FEAF1 /* netdisk_type_default@2x.png */; };
 		82DAA48F16F207D8003FEAF1 /* netdisk_type_folder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82DAA48616F207D8003FEAF1 /* netdisk_type_folder@2x.png */; };
 		82DAA49116F207D8003FEAF1 /* netdisk_type_pdf@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82DAA48816F207D8003FEAF1 /* netdisk_type_pdf@2x.png */; };
@@ -191,6 +193,10 @@
 		8271ADFE1709DD6C002DEFB1 /* UIButton+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIButton+WebCache.m"; path = "SDWebImage/UIButton+WebCache.m"; sourceTree = "<group>"; };
 		8271ADFF1709DD6C002DEFB1 /* UIImageView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+WebCache.h"; path = "SDWebImage/UIImageView+WebCache.h"; sourceTree = "<group>"; };
 		8271AE001709DD6C002DEFB1 /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+WebCache.m"; path = "SDWebImage/UIImageView+WebCache.m"; sourceTree = "<group>"; };
+		82A3C7741711B743007CD231 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		82A3C7751711BBCD007CD231 /* PCSAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSAboutViewController.h; sourceTree = "<group>"; };
+		82A3C7761711BBCD007CD231 /* PCSAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSAboutViewController.m; sourceTree = "<group>"; };
+		82A3C7771711BBCD007CD231 /* PCSAboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSAboutViewController.xib; sourceTree = "<group>"; };
 		82DAA48516F207D8003FEAF1 /* netdisk_type_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_default@2x.png"; sourceTree = "<group>"; };
 		82DAA48616F207D8003FEAF1 /* netdisk_type_folder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_folder@2x.png"; sourceTree = "<group>"; };
 		82DAA48816F207D8003FEAF1 /* netdisk_type_pdf@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_pdf@2x.png"; sourceTree = "<group>"; };
@@ -201,9 +207,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				822C912516EA386A00F80D00 /* MessageUI.framework in Frameworks */,
 				8214A2A816F0D2E500BEA785 /* libsqlite3.0.dylib in Frameworks */,
 				822C912716EA387500F80D00 /* libz.dylib in Frameworks */,
-				822C912516EA386A00F80D00 /* MessageUI.framework in Frameworks */,
 				822C912316EA386200F80D00 /* QuartzCore.framework in Frameworks */,
 				822C912116EA385700F80D00 /* CoreLocation.framework in Frameworks */,
 				822C911F16EA384E00F80D00 /* MobileCoreServices.framework in Frameworks */,
@@ -371,6 +377,9 @@
 				822F7B9416E8E45F00898CA4 /* PCSLoginViewController.h */,
 				822F7B9516E8E45F00898CA4 /* PCSLoginViewController.m */,
 				822F7B9616E8E45F00898CA4 /* PCSLoginViewController.xib */,
+				82A3C7751711BBCD007CD231 /* PCSAboutViewController.h */,
+				82A3C7761711BBCD007CD231 /* PCSAboutViewController.m */,
+				82A3C7771711BBCD007CD231 /* PCSAboutViewController.xib */,
 			);
 			name = SubViewController;
 			sourceTree = "<group>";
@@ -584,6 +593,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = 822F7B1016E8CE5B00898CA4;
 			productRefGroup = 822F7B1C16E8CE5B00898CA4 /* Products */;
@@ -627,6 +638,7 @@
 				8226D265170726850077D21F /* netdisk_type_zip@2x.png in Resources */,
 				824CFF2B170B22740036AC2D /* fax_list_progress_image@2x.png in Resources */,
 				824CFF2C170B22740036AC2D /* fax_list_progress_track_image@2x.png in Resources */,
+				82A3C7791711BBCD007CD231 /* PCSAboutViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -666,6 +678,7 @@
 				8271AE051709DD6C002DEFB1 /* SDWebImagePrefetcher.m in Sources */,
 				8271AE061709DD6C002DEFB1 /* UIButton+WebCache.m in Sources */,
 				8271AE071709DD6C002DEFB1 /* UIImageView+WebCache.m in Sources */,
+				82A3C7781711BBCD007CD231 /* PCSAboutViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -676,6 +689,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				822F7B2916E8CE5B00898CA4 /* en */,
+				82A3C7741711B743007CD231 /* zh-Hant */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -791,7 +805,7 @@
 				822F7B3E16E8CE5B00898CA4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		822F7B3F16E8CE5B00898CA4 /* Build configuration list for PBXNativeTarget "PCSNetworkDisk" */ = {
 			isa = XCConfigurationList;
@@ -800,7 +814,7 @@
 				822F7B4116E8CE5B00898CA4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
