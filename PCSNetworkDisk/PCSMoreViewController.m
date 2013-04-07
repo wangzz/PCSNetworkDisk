@@ -8,6 +8,9 @@
 
 #import "PCSMoreViewController.h"
 #import "PCSRootViewController.h"
+#import "PCSAboutViewController.h"
+#import <MessageUI/MessageUI.h>
+
 
 @interface PCSMoreViewController ()
 @property(nonatomic,retain) IBOutlet    UITableView *mTableView;
@@ -246,11 +249,39 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
             [self goToAppStoreGiveAMark];
         } else if (indexPath.row == 1) {
             //意见反馈
+            MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+            picker.mailComposeDelegate = self;
+            [picker setToRecipients:[NSArray arrayWithObject:@"wzzvictory_tjsd@163.com"]];            
+            [picker setSubject:@"意见反馈"];
+            [picker setMessageBody:@"it is a test." isHTML:NO];
+            [self presentModalViewController:picker animated:YES];
+            PCS_FUNC_SAFELY_RELEASE(picker);
         } else if (indexPath.row == 2) {
             //关于
-        
+            PCSAboutViewController  *about = [[PCSAboutViewController alloc] init];
+            [self.navigationController pushViewController:about animated:YES];
+            PCS_FUNC_SAFELY_RELEASE(about);
         }
     }
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    if(result==MFMailComposeResultCancelled){
+        PCSLog(@"Cancel!");
+    }else if(result==MFMailComposeResultSent){
+        PCSLog(@"OK!");
+    }else if(result==MFMailComposeResultFailed){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                        message:@"AAMFeedbackMailDidFinishWithError"
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"OK", nil];
+        [alert show];
+        [alert release];
+    }
+    [controller dismissModalViewControllerAnimated:YES];
 }
 
 -(void)goToAppStoreGiveAMark

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
-@interface PCSMoreViewController : UIViewController
+@interface PCSMoreViewController : UIViewController<MFMailComposeViewControllerDelegate>
 
 @end
