@@ -21,14 +21,6 @@
 		8214A2A816F0D2E500BEA785 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8214A2A716F0D2E500BEA785 /* libsqlite3.0.dylib */; };
 		8225CC8D16FA00C8004B3711 /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8225CC8C16FA00C8004B3711 /* NSStringAdditions.m */; };
 		8225CC9016FA0F97004B3711 /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8225CC8F16FA0F97004B3711 /* NSDataAdditions.m */; };
-		8226D25E170726850077D21F /* netdisk_type_excel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8226D256170726850077D21F /* netdisk_type_excel@2x.png */; };
-		8226D25F170726850077D21F /* netdisk_type_music@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8226D257170726850077D21F /* netdisk_type_music@2x.png */; };
-		8226D260170726850077D21F /* netdisk_type_picture@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8226D258170726850077D21F /* netdisk_type_picture@2x.png */; };
-		8226D261170726850077D21F /* netdisk_type_ppt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8226D259170726850077D21F /* netdisk_type_ppt@2x.png */; };
-		8226D262170726850077D21F /* netdisk_type_text@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8226D25A170726850077D21F /* netdisk_type_text@2x.png */; };
-		8226D263170726850077D21F /* netdisk_type_video@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8226D25B170726850077D21F /* netdisk_type_video@2x.png */; };
-		8226D264170726850077D21F /* netdisk_type_word@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8226D25C170726850077D21F /* netdisk_type_word@2x.png */; };
-		8226D265170726850077D21F /* netdisk_type_zip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8226D25D170726850077D21F /* netdisk_type_zip@2x.png */; };
 		822C911516EA2D0100F80D00 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 822C911416EA2D0100F80D00 /* MBProgressHUD.m */; };
 		822C911B16EA383700F80D00 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822C911A16EA383700F80D00 /* CFNetwork.framework */; };
 		822C911D16EA384000F80D00 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822C911C16EA384000F80D00 /* SystemConfiguration.framework */; };
@@ -77,8 +69,25 @@
 		82A3C7781711BBCD007CD231 /* PCSAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82A3C7761711BBCD007CD231 /* PCSAboutViewController.m */; };
 		82A3C7791711BBCD007CD231 /* PCSAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82A3C7771711BBCD007CD231 /* PCSAboutViewController.xib */; };
 		82DAA48E16F207D8003FEAF1 /* netdisk_type_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82DAA48516F207D8003FEAF1 /* netdisk_type_default@2x.png */; };
-		82DAA48F16F207D8003FEAF1 /* netdisk_type_folder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82DAA48616F207D8003FEAF1 /* netdisk_type_folder@2x.png */; };
-		82DAA49116F207D8003FEAF1 /* netdisk_type_pdf@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82DAA48816F207D8003FEAF1 /* netdisk_type_pdf@2x.png */; };
+		82EB9FE41713091D00CCE19D /* netdisk_type_excel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FDA1713091D00CCE19D /* netdisk_type_excel@2x.png */; };
+		82EB9FE51713091D00CCE19D /* netdisk_type_folder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FDB1713091D00CCE19D /* netdisk_type_folder@2x.png */; };
+		82EB9FE61713091D00CCE19D /* netdisk_type_music@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FDC1713091D00CCE19D /* netdisk_type_music@2x.png */; };
+		82EB9FE71713091D00CCE19D /* netdisk_type_pdf@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FDD1713091D00CCE19D /* netdisk_type_pdf@2x.png */; };
+		82EB9FE81713091D00CCE19D /* netdisk_type_picture@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FDE1713091D00CCE19D /* netdisk_type_picture@2x.png */; };
+		82EB9FE91713091D00CCE19D /* netdisk_type_ppt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FDF1713091D00CCE19D /* netdisk_type_ppt@2x.png */; };
+		82EB9FEA1713091D00CCE19D /* netdisk_type_text@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FE01713091D00CCE19D /* netdisk_type_text@2x.png */; };
+		82EB9FEB1713091D00CCE19D /* netdisk_type_video@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FE11713091D00CCE19D /* netdisk_type_video@2x.png */; };
+		82EB9FEC1713091D00CCE19D /* netdisk_type_word@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FE21713091D00CCE19D /* netdisk_type_word@2x.png */; };
+		82EB9FED1713091D00CCE19D /* netdisk_type_zip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FE31713091D00CCE19D /* netdisk_type_zip@2x.png */; };
+		82EBA0011713126800CCE19D /* KKKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 82EB9FF91713126800CCE19D /* KKKeychain.m */; };
+		82EBA0021713126800CCE19D /* KKPasscodeLock.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FFA1713126800CCE19D /* KKPasscodeLock.bundle */; };
+		82EBA0031713126800CCE19D /* KKPasscodeLock.m in Sources */ = {isa = PBXBuildFile; fileRef = 82EB9FFC1713126800CCE19D /* KKPasscodeLock.m */; };
+		82EBA0041713126800CCE19D /* KKPasscodeSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82EB9FFE1713126800CCE19D /* KKPasscodeSettingsViewController.m */; };
+		82EBA0051713126800CCE19D /* KKPasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82EBA0001713126800CCE19D /* KKPasscodeViewController.m */; };
+		82EBA0071713150D00CCE19D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82EBA0061713150D00CCE19D /* Security.framework */; };
+		82EBA0091713153E00CCE19D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82EBA0081713153D00CCE19D /* AudioToolbox.framework */; };
+		82EBA00D17131FD900CCE19D /* PCSClearCacheViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82EBA00B17131FD900CCE19D /* PCSClearCacheViewController.m */; };
+		82EBA00E17131FD900CCE19D /* PCSClearCacheViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82EBA00C17131FD900CCE19D /* PCSClearCacheViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -105,14 +114,6 @@
 		8225CC8C16FA00C8004B3711 /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
 		8225CC8E16FA0F97004B3711 /* NSDataAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataAdditions.h; sourceTree = "<group>"; };
 		8225CC8F16FA0F97004B3711 /* NSDataAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataAdditions.m; sourceTree = "<group>"; };
-		8226D256170726850077D21F /* netdisk_type_excel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_excel@2x.png"; sourceTree = "<group>"; };
-		8226D257170726850077D21F /* netdisk_type_music@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_music@2x.png"; sourceTree = "<group>"; };
-		8226D258170726850077D21F /* netdisk_type_picture@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_picture@2x.png"; sourceTree = "<group>"; };
-		8226D259170726850077D21F /* netdisk_type_ppt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_ppt@2x.png"; sourceTree = "<group>"; };
-		8226D25A170726850077D21F /* netdisk_type_text@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_text@2x.png"; sourceTree = "<group>"; };
-		8226D25B170726850077D21F /* netdisk_type_video@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_video@2x.png"; sourceTree = "<group>"; };
-		8226D25C170726850077D21F /* netdisk_type_word@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_word@2x.png"; sourceTree = "<group>"; };
-		8226D25D170726850077D21F /* netdisk_type_zip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_zip@2x.png"; sourceTree = "<group>"; };
 		822C911316EA2D0100F80D00 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		822C911416EA2D0100F80D00 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		822C911A16EA383700F80D00 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -198,8 +199,30 @@
 		82A3C7761711BBCD007CD231 /* PCSAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSAboutViewController.m; sourceTree = "<group>"; };
 		82A3C7771711BBCD007CD231 /* PCSAboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSAboutViewController.xib; sourceTree = "<group>"; };
 		82DAA48516F207D8003FEAF1 /* netdisk_type_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_default@2x.png"; sourceTree = "<group>"; };
-		82DAA48616F207D8003FEAF1 /* netdisk_type_folder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_folder@2x.png"; sourceTree = "<group>"; };
-		82DAA48816F207D8003FEAF1 /* netdisk_type_pdf@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_pdf@2x.png"; sourceTree = "<group>"; };
+		82EB9FDA1713091D00CCE19D /* netdisk_type_excel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_excel@2x.png"; sourceTree = "<group>"; };
+		82EB9FDB1713091D00CCE19D /* netdisk_type_folder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_folder@2x.png"; sourceTree = "<group>"; };
+		82EB9FDC1713091D00CCE19D /* netdisk_type_music@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_music@2x.png"; sourceTree = "<group>"; };
+		82EB9FDD1713091D00CCE19D /* netdisk_type_pdf@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_pdf@2x.png"; sourceTree = "<group>"; };
+		82EB9FDE1713091D00CCE19D /* netdisk_type_picture@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_picture@2x.png"; sourceTree = "<group>"; };
+		82EB9FDF1713091D00CCE19D /* netdisk_type_ppt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_ppt@2x.png"; sourceTree = "<group>"; };
+		82EB9FE01713091D00CCE19D /* netdisk_type_text@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_text@2x.png"; sourceTree = "<group>"; };
+		82EB9FE11713091D00CCE19D /* netdisk_type_video@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_video@2x.png"; sourceTree = "<group>"; };
+		82EB9FE21713091D00CCE19D /* netdisk_type_word@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_word@2x.png"; sourceTree = "<group>"; };
+		82EB9FE31713091D00CCE19D /* netdisk_type_zip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_zip@2x.png"; sourceTree = "<group>"; };
+		82EB9FF81713126800CCE19D /* KKKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKKeychain.h; sourceTree = "<group>"; };
+		82EB9FF91713126800CCE19D /* KKKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKKeychain.m; sourceTree = "<group>"; };
+		82EB9FFA1713126800CCE19D /* KKPasscodeLock.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KKPasscodeLock.bundle; sourceTree = "<group>"; };
+		82EB9FFB1713126800CCE19D /* KKPasscodeLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKPasscodeLock.h; sourceTree = "<group>"; };
+		82EB9FFC1713126800CCE19D /* KKPasscodeLock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKPasscodeLock.m; sourceTree = "<group>"; };
+		82EB9FFD1713126800CCE19D /* KKPasscodeSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKPasscodeSettingsViewController.h; sourceTree = "<group>"; };
+		82EB9FFE1713126800CCE19D /* KKPasscodeSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKPasscodeSettingsViewController.m; sourceTree = "<group>"; };
+		82EB9FFF1713126800CCE19D /* KKPasscodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKPasscodeViewController.h; sourceTree = "<group>"; };
+		82EBA0001713126800CCE19D /* KKPasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKPasscodeViewController.m; sourceTree = "<group>"; };
+		82EBA0061713150D00CCE19D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		82EBA0081713153D00CCE19D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		82EBA00A17131FD900CCE19D /* PCSClearCacheViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSClearCacheViewController.h; sourceTree = "<group>"; };
+		82EBA00B17131FD900CCE19D /* PCSClearCacheViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSClearCacheViewController.m; sourceTree = "<group>"; };
+		82EBA00C17131FD900CCE19D /* PCSClearCacheViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSClearCacheViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,6 +230,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82EBA0091713153E00CCE19D /* AudioToolbox.framework in Frameworks */,
+				82EBA0071713150D00CCE19D /* Security.framework in Frameworks */,
 				822C912516EA386A00F80D00 /* MessageUI.framework in Frameworks */,
 				8214A2A816F0D2E500BEA785 /* libsqlite3.0.dylib in Frameworks */,
 				822C912716EA387500F80D00 /* libz.dylib in Frameworks */,
@@ -267,6 +292,8 @@
 		822F7B1016E8CE5B00898CA4 = {
 			isa = PBXGroup;
 			children = (
+				82EBA0081713153D00CCE19D /* AudioToolbox.framework */,
+				82EBA0061713150D00CCE19D /* Security.framework */,
 				822F7B2516E8CE5B00898CA4 /* PCSNetworkDisk */,
 				822F7B1E16E8CE5B00898CA4 /* Frameworks */,
 				822F7B1C16E8CE5B00898CA4 /* Products */,
@@ -330,6 +357,7 @@
 		822F7B7D16E8D73600898CA4 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				82EB9FF71713119100CCE19D /* KKPasscodeLock */,
 				8271ADEE1709DD29002DEFB1 /* SDWebImage */,
 				8225CC8916FA0087004B3711 /* NSString+Addition */,
 				8214A29416F0AA5E00BEA785 /* FMDB */,
@@ -380,6 +408,9 @@
 				82A3C7751711BBCD007CD231 /* PCSAboutViewController.h */,
 				82A3C7761711BBCD007CD231 /* PCSAboutViewController.m */,
 				82A3C7771711BBCD007CD231 /* PCSAboutViewController.xib */,
+				82EBA00A17131FD900CCE19D /* PCSClearCacheViewController.h */,
+				82EBA00B17131FD900CCE19D /* PCSClearCacheViewController.m */,
+				82EBA00C17131FD900CCE19D /* PCSClearCacheViewController.xib */,
 			);
 			name = SubViewController;
 			sourceTree = "<group>";
@@ -534,17 +565,17 @@
 		82DAA47816F20773003FEAF1 /* NetDisk */ = {
 			isa = PBXGroup;
 			children = (
-				8226D256170726850077D21F /* netdisk_type_excel@2x.png */,
-				8226D257170726850077D21F /* netdisk_type_music@2x.png */,
-				8226D258170726850077D21F /* netdisk_type_picture@2x.png */,
-				8226D259170726850077D21F /* netdisk_type_ppt@2x.png */,
-				8226D25A170726850077D21F /* netdisk_type_text@2x.png */,
-				8226D25B170726850077D21F /* netdisk_type_video@2x.png */,
-				8226D25C170726850077D21F /* netdisk_type_word@2x.png */,
-				8226D25D170726850077D21F /* netdisk_type_zip@2x.png */,
+				82EB9FDA1713091D00CCE19D /* netdisk_type_excel@2x.png */,
+				82EB9FDB1713091D00CCE19D /* netdisk_type_folder@2x.png */,
+				82EB9FDC1713091D00CCE19D /* netdisk_type_music@2x.png */,
+				82EB9FDD1713091D00CCE19D /* netdisk_type_pdf@2x.png */,
+				82EB9FDE1713091D00CCE19D /* netdisk_type_picture@2x.png */,
+				82EB9FDF1713091D00CCE19D /* netdisk_type_ppt@2x.png */,
+				82EB9FE01713091D00CCE19D /* netdisk_type_text@2x.png */,
+				82EB9FE11713091D00CCE19D /* netdisk_type_video@2x.png */,
+				82EB9FE21713091D00CCE19D /* netdisk_type_word@2x.png */,
+				82EB9FE31713091D00CCE19D /* netdisk_type_zip@2x.png */,
 				82DAA48516F207D8003FEAF1 /* netdisk_type_default@2x.png */,
-				82DAA48616F207D8003FEAF1 /* netdisk_type_folder@2x.png */,
-				82DAA48816F207D8003FEAF1 /* netdisk_type_pdf@2x.png */,
 			);
 			name = NetDisk;
 			sourceTree = "<group>";
@@ -557,6 +588,23 @@
 			);
 			path = Resources;
 			sourceTree = "<group>";
+		};
+		82EB9FF71713119100CCE19D /* KKPasscodeLock */ = {
+			isa = PBXGroup;
+			children = (
+				82EB9FF81713126800CCE19D /* KKKeychain.h */,
+				82EB9FF91713126800CCE19D /* KKKeychain.m */,
+				82EB9FFA1713126800CCE19D /* KKPasscodeLock.bundle */,
+				82EB9FFB1713126800CCE19D /* KKPasscodeLock.h */,
+				82EB9FFC1713126800CCE19D /* KKPasscodeLock.m */,
+				82EB9FFD1713126800CCE19D /* KKPasscodeSettingsViewController.h */,
+				82EB9FFE1713126800CCE19D /* KKPasscodeSettingsViewController.m */,
+				82EB9FFF1713126800CCE19D /* KKPasscodeViewController.h */,
+				82EBA0001713126800CCE19D /* KKPasscodeViewController.m */,
+			);
+			name = KKPasscodeLock;
+			path = /Users/wangzz/Desktop/PCSNetworkDisk/PCSNetworkDisk/KKPasscodeLock;
+			sourceTree = "<absolute>";
 		};
 /* End PBXGroup section */
 
@@ -621,24 +669,26 @@
 				822F7BB116E8E78800898CA4 /* PCSMoreViewController.xib in Resources */,
 				822F7BB616E8EE0700898CA4 /* PCSOfflineViewController.xib in Resources */,
 				82DAA48E16F207D8003FEAF1 /* netdisk_type_default@2x.png in Resources */,
-				82DAA48F16F207D8003FEAF1 /* netdisk_type_folder@2x.png in Resources */,
-				82DAA49116F207D8003FEAF1 /* netdisk_type_pdf@2x.png in Resources */,
 				825E417F16F20F16003604A2 /* PcsNetDisk.db in Resources */,
 				82019715170317C600541518 /* tab_upload@2x.png in Resources */,
 				82019716170317C600541518 /* tab_more@2x.png in Resources */,
 				82019717170317C600541518 /* tab_netdisk@2x.png in Resources */,
 				82019718170317C600541518 /* tab_offline@2x.png in Resources */,
-				8226D25E170726850077D21F /* netdisk_type_excel@2x.png in Resources */,
-				8226D25F170726850077D21F /* netdisk_type_music@2x.png in Resources */,
-				8226D260170726850077D21F /* netdisk_type_picture@2x.png in Resources */,
-				8226D261170726850077D21F /* netdisk_type_ppt@2x.png in Resources */,
-				8226D262170726850077D21F /* netdisk_type_text@2x.png in Resources */,
-				8226D263170726850077D21F /* netdisk_type_video@2x.png in Resources */,
-				8226D264170726850077D21F /* netdisk_type_word@2x.png in Resources */,
-				8226D265170726850077D21F /* netdisk_type_zip@2x.png in Resources */,
 				824CFF2B170B22740036AC2D /* fax_list_progress_image@2x.png in Resources */,
 				824CFF2C170B22740036AC2D /* fax_list_progress_track_image@2x.png in Resources */,
 				82A3C7791711BBCD007CD231 /* PCSAboutViewController.xib in Resources */,
+				82EB9FE41713091D00CCE19D /* netdisk_type_excel@2x.png in Resources */,
+				82EB9FE51713091D00CCE19D /* netdisk_type_folder@2x.png in Resources */,
+				82EB9FE61713091D00CCE19D /* netdisk_type_music@2x.png in Resources */,
+				82EB9FE71713091D00CCE19D /* netdisk_type_pdf@2x.png in Resources */,
+				82EB9FE81713091D00CCE19D /* netdisk_type_picture@2x.png in Resources */,
+				82EB9FE91713091D00CCE19D /* netdisk_type_ppt@2x.png in Resources */,
+				82EB9FEA1713091D00CCE19D /* netdisk_type_text@2x.png in Resources */,
+				82EB9FEB1713091D00CCE19D /* netdisk_type_video@2x.png in Resources */,
+				82EB9FEC1713091D00CCE19D /* netdisk_type_word@2x.png in Resources */,
+				82EB9FED1713091D00CCE19D /* netdisk_type_zip@2x.png in Resources */,
+				82EBA0021713126800CCE19D /* KKPasscodeLock.bundle in Resources */,
+				82EBA00E17131FD900CCE19D /* PCSClearCacheViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -679,6 +729,11 @@
 				8271AE061709DD6C002DEFB1 /* UIButton+WebCache.m in Sources */,
 				8271AE071709DD6C002DEFB1 /* UIImageView+WebCache.m in Sources */,
 				82A3C7781711BBCD007CD231 /* PCSAboutViewController.m in Sources */,
+				82EBA0011713126800CCE19D /* KKKeychain.m in Sources */,
+				82EBA0031713126800CCE19D /* KKPasscodeLock.m in Sources */,
+				82EBA0041713126800CCE19D /* KKPasscodeSettingsViewController.m in Sources */,
+				82EBA0051713126800CCE19D /* KKPasscodeViewController.m in Sources */,
+				82EBA00D17131FD900CCE19D /* PCSClearCacheViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
