@@ -69,6 +69,9 @@
             break;
         case PCSControllerStateResetPwd:
             break;
+        case PCSControllerStatePasscode:
+            [self showPasscodeViewController];
+            break;
         default:
             break;
     }
@@ -93,7 +96,6 @@
     PCS_FUNC_SAFELY_RELEASE(loginController);
 }
 
-
 - (void)showMainViewController
 {
     PCSMainTabBarController  *mainController = [[PCSMainTabBarController alloc] init];
@@ -110,7 +112,33 @@
     PCS_FUNC_SAFELY_RELEASE(mainController);
 }
 
-#pragma - Baidu OAuth Response Delegate
+- (void)showPasscodeViewController
+{
+    KKPasscodeViewController *vc = [[KKPasscodeViewController alloc] initWithNibName:nil bundle:nil];
+    vc.delegate = self;
+    vc.mode = KKPasscodeModeEnter;
+    [self pushViewController:vc animated:YES];
+    PCS_FUNC_SAFELY_RELEASE(vc);
+}
+
+#pragma mark - KKPasscodeViewControllerDelegate
+- (void)didPasscodeEnteredCorrectly:(KKPasscodeViewController*)viewController
+{
+    PCSLog(@"passcode enter correctly.");
+    [self showViewControllerWith:PCSControllerStateMain];
+}
+
+- (void)didPasscodeEnteredIncorrectly:(KKPasscodeViewController*)viewController
+{
+    PCSLog(@"passcode enter incorrectly.");
+}
+
+- (void)shouldEraseApplicationData:(KKPasscodeViewController*)viewController
+{
+    PCSLog(@"passcode should erase app data.");
+}
+
+#pragma mark - Baidu OAuth Response Delegate
 // success to get access token
 -(void)onSuccess:(BaiduOAuthResponse*)response
 {

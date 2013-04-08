@@ -10,6 +10,8 @@
 #import "PCSRootViewController.h"
 #import "PCSAboutViewController.h"
 #import <MessageUI/MessageUI.h>
+#import "KKPasscodeLock.h"
+#import "PCSClearCacheViewController.h"
 
 
 @interface PCSMoreViewController ()
@@ -208,9 +210,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     } else if (indexPath.section == 2) {
         cell.textLabel.text = @"密码锁";
         rightLable.hidden = NO;
-        BOOL    usePassword = NO;
-        usePassword = [[NSUserDefaults standardUserDefaults] boolForKey:PCS_BOOL_USE_PWD_LOCK];
-        if (usePassword) {
+        if ([[KKPasscodeLock sharedLock] isPasscodeRequired]) {
             rightLable.text = @"开启";
         } else {
             rightLable.text = @"关闭";
@@ -235,14 +235,15 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 1) {
         //临时文件清理
+        PCSClearCacheViewController *clearCache = [[PCSClearCacheViewController alloc] initWithNibName:@"PCSClearCacheViewController"
+                                                                                                bundle:nil];
+        [self.navigationController pushViewController:clearCache animated:YES];
+        PCS_FUNC_SAFELY_RELEASE(clearCache);
     } else if (indexPath.section == 2) {
-        BOOL    usePassword = NO;
-        usePassword = [[NSUserDefaults standardUserDefaults] boolForKey:PCS_BOOL_USE_PWD_LOCK];
-        if (usePassword) {
-            //密码锁开启
-        } else {
-            //密码锁关闭
-        }
+        KKPasscodeSettingsViewController *vc = [[KKPasscodeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        vc.delegate = self;
+        [self.navigationController pushViewController:vc animated:YES];
+        PCS_FUNC_SAFELY_RELEASE(vc);
     } else if (indexPath.section == 3) {
         if (indexPath.row == 0) {
             //给Hi网盘评分
@@ -291,5 +292,9 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
 }
 
+- (void)didSettingsChanged:(KKPasscodeSettingsViewController*)viewController
+{
+    [self.mTableView reloadData];
+}
 
 @end

@@ -15,6 +15,5 @@
 @property (nonatomic,retain) UINavigationController     *offlineNavController;
 @property (nonatomic,retain) UINavigationController     *moreNavController;
 
-- (void)updateFileInfo;
 
 @end

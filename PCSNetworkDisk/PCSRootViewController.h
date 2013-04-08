@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "BaiduOAuth.h"
+#import "KKPasscodeViewController.h"
 
 typedef enum
 {
@@ -15,11 +16,12 @@ typedef enum
     PCSControllerStateLogin,
     PCSControllerStateMain,
     PCSControllerStateHelp,
-    PCSControllerStateResetPwd
+    PCSControllerStateResetPwd,
+    PCSControllerStatePasscode
 }PCSControllerState;
 
 
-@interface PCSRootViewController : UINavigationController<BaiduOAuthDelegate>
+@interface PCSRootViewController : UINavigationController<BaiduOAuthDelegate,KKPasscodeViewControllerDelegate>
 
 @property (nonatomic,assign) PCSControllerState  currentControllerState;
 

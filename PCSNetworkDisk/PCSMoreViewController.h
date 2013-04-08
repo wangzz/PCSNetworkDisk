@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MFMailComposeViewController.h>
+#import "KKPasscodeSettingsViewController.h"
 
-@interface PCSMoreViewController : UIViewController<MFMailComposeViewControllerDelegate>
+@interface PCSMoreViewController : UIViewController<KKPasscodeSettingsViewControllerDelegate,MFMailComposeViewControllerDelegate>
 
 @end

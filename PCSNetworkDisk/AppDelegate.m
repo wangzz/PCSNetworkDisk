@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "BaiduPCSClient.h"
 #import "PCSRootViewController.h"
+#import "KKPasscodeLock.h"
 
 @implementation AppDelegate
 @synthesize pcsClient;
@@ -48,7 +49,12 @@
     hasLogin = [[NSUserDefaults standardUserDefaults]
                      boolForKey:PCS_STRING_IS_LOGIN];
     if (hasLogin) {
-        controllerState = PCSControllerStateMain;
+        if ([[KKPasscodeLock sharedLock] isPasscodeRequired]) {
+            controllerState = PCSControllerStatePasscode;
+        } else {
+            controllerState = PCSControllerStateMain;
+        }
+    
         NSString    *mpToken = [[NSUserDefaults standardUserDefaults]
                                     stringForKey:PCS_STRING_ACCESS_TOKEN];
         pcsClient.accessToken = mpToken;
