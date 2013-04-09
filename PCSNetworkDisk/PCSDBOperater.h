@@ -93,6 +93,30 @@
  */
 - (PCSFileFormat)getFileTypeWith:(NSString *)name;
 
+/*!
+ @method
+ @abstract  删除指定目录的文件或文件夹
+ @param     filePath    NSString类型指针，指向要删除的文件或文件夹目录
+ @return    BOOL型，表示删除结果
+ */
+- (BOOL)clearDataAtPath:(NSString *)filePath;
+
+/*!
+ @method
+ @abstract  获取指定文件或文件夹的大小
+ @param     filePath    NSString类型指针，指向要获取大小的文件或文件夹目录
+ @return    long long型，表示文件或文件夹大小
+ */
+- (long long)fileSizeAtPath:(NSString *)filePath;
+
+/*!
+@method
+@abstract  将指定大小的字节数转换成以B、KB、MB或GB为单位的字符串
+@param     sizeBytes    long类型数据，表示转换单位前的字节数
+@return    NSString类型指针，指向转换单位后的字符串
+*/
+- (NSString *)getFormatSizeString:(long)sizeBytes;
+
 #pragma mark - accountlist表数据库操作方法
 /*****************************accountlist表数据库操作方法*****************************/
 

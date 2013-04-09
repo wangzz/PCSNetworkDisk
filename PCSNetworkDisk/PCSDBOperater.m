@@ -9,7 +9,8 @@
 #import "PCSDBOperater.h"
 #import "PCSFileInfoItem.h"
 #import "BaiduOAuth.h"
-#import "NSStringAdditions.h"
+#import "NSStringAdditions.h" 
+#include <sys/stat.h>
 
 @implementation PCSDBOperater
 @synthesize PCSDB;
@@ -203,6 +204,46 @@
         fileType = PCSFileFormatVideo;
     }
     return fileType;
+}
+
+- (long long)fileSizeAtPath:(NSString *)filePath
+{
+    unsigned long long int cacheFolderSize = 0;
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSArray *cacheFileList = [manager subpathsAtPath:filePath];
+    NSEnumerator *cacheEnumerator = [cacheFileList objectEnumerator];
+    NSString *cacheFilePath = nil;
+    while (cacheFilePath = [cacheEnumerator nextObject]) {
+        NSError *err = nil;
+        NSDictionary *cacheFileAttributes = [manager attributesOfFileSystemForPath:[filePath stringByAppendingPathComponent:cacheFilePath] error:&err];
+        cacheFolderSize += [cacheFileAttributes fileSize];
+    }
+
+    return cacheFolderSize;
+}
+
+- (BOOL)clearDataAtPath:(NSString *)filePath
+{
+    NSFileManager* manager = [NSFileManager defaultManager];
+    if ([manager fileExistsAtPath:filePath]){
+        return [manager removeItemAtPath:filePath error:nil];
+    }
+    return YES;
+}
+
+- (NSString *)getFormatSizeString:(long)sizeBytes
+{
+    NSString    *formatString = nil;
+    if (sizeBytes <= 1024) {
+        formatString = [NSString stringWithFormat:@"%.2ldB",sizeBytes];
+    } else if (sizeBytes/1024 <= 1024) {
+        formatString = [NSString stringWithFormat:@"%.2ldKB",sizeBytes/1024];
+    } else if (sizeBytes/(1024*1024) <= 1024) {
+        formatString = [NSString stringWithFormat:@"%.2ldMB",sizeBytes/(1024*1024)];
+    } else if (sizeBytes/(1024*1024*1024) <= 1024) {
+        formatString = [NSString stringWithFormat:@"%.2ldGB",sizeBytes/(1024*1024*1024)];
+    }
+    return formatString;
 }
 
 #pragma mark - 删除一个文件记录在本地所有内容
