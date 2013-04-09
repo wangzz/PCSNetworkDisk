@@ -328,6 +328,9 @@
         case PCSFileFormatFolder:
             image = [UIImage imageNamed:@"netdisk_type_folder"];
             break;
+        case PCSFileFormatPpt:
+            image = [UIImage imageNamed:@"netdisk_type_ppt"];
+            break;
         case PCSFileFormatUnknown:
         default:
             image = [UIImage imageNamed:@"netdisk_type_default"];

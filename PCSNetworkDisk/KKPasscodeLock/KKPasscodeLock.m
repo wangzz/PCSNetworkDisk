@@ -65,7 +65,7 @@ static KKPasscodeLock *sharedLock = nil;
     }
     
     value = [bundle localizedStringForKey:key value:value table:nil];
-    return [[NSBundle mainBundle] localizedStringForKey:key value:value table:nil];
+    return [[NSBundle mainBundle] localizedStringForKey:key value:value table:@"ChineseLocalizable"];
 }
 
 

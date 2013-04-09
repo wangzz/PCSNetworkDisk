@@ -116,21 +116,6 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     return 44;
 }
 
-- (NSString *)getFormatSizeString:(long)sizeBytes
-{
-    NSString    *formatString = nil;
-    if (sizeBytes <= 1024) {
-        formatString = [NSString stringWithFormat:@"%.2ldB",sizeBytes];
-    } else if (sizeBytes/1024 <= 1024) {
-        formatString = [NSString stringWithFormat:@"%.2ldKB",sizeBytes/1024];
-    } else if (sizeBytes/(1024*1024) <= 1024) {
-        formatString = [NSString stringWithFormat:@"%.2ldMB",sizeBytes/(1024*1024)];
-    } else if (sizeBytes/(1024*1024*1024) <= 1024) {
-        formatString = [NSString stringWithFormat:@"%.2ldGB",sizeBytes/(1024*1024*1024)];
-    }
-    return formatString;
-}
-
 #define PCS_TAG_MORE_PROGRESS       400001
 #define PCS_TAG_MORE_USAGE_LABLE    400002
 #define PCS_TAG_MORE_RIGHT_LABLE    400003
@@ -201,8 +186,8 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
             }
             
             usageLable.hidden = NO;
-            NSString    *usage = [self getFormatSizeString:self.volumeUsage];
-            NSString    *total = [self getFormatSizeString:self.volumeTotal];
+            NSString    *usage = [[PCSDBOperater shareInstance] getFormatSizeString:self.volumeUsage];
+            NSString    *total = [[PCSDBOperater shareInstance] getFormatSizeString:self.volumeTotal];
             usageLable.text = [NSString stringWithFormat:@"%@/%@",usage,total];
         }
     } else if (indexPath.section == 1) {
