@@ -1,0 +1,33 @@
+/* 
+  ChineseLocalizable.strings
+  PCSNetworkDisk
+
+  Created by wangzz on 13-4-9.
+  Copyright (c) 2013年 hisunsray. All rights reserved.
+*/
+
+"Passcode Lock" = "密码锁";
+
+"All data in this app will be erased after %d failed passcode attempts." = "尝试输入密码失败 %d 次后，本应用中的所有数据都将被清空.";
+"Cancel" = "取消";
+"Enable" = "允许";
+"Erase all content in the app after %d failed passcode attempts." = "尝试输入密码失败 %d 次后，将会清除本应用中的全部数据.";
+
+"Turn Passcode Off" = "关闭密码锁";
+"Turn Passcode On" = "打开密码锁";
+"Change Passcode" = "更改密码";
+"Erase Data" = "清除数据";
+"Set Passcode" = "设置密码";
+"Turn off Passcode" = "关闭密码锁";
+"Enter Passcode" = "密码输入";
+"1 Failed Passcode Attempt" = "输入密码错误 1 次";
+"%i Failed Passcode Attempts" = "输入密码错误 %i 次";
+"Passcodes did not match. Try again." = "密码有误，请重新输入。";
+"Enter a different passcode. You cannot re-use the same passcode." = "请输入不同的密码，您不能再使用相同的密码。";
+
+"Enter your passcode" = "请输入您的密码";
+"Enter a passcode" = "请输入密码";
+"Re-enter your passcode" = "请重新输入您的密码";
+"Enter your old passcode" = "请输入您的旧密码";
+"Enter your new passcode" = "请输入您的新密码";
+"Re-enter your new passcode" = "请再次输入您的新密码";
