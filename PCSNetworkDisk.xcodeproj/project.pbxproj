@@ -19,6 +19,7 @@
 		8214A2A316F0AAA000BEA785 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8214A29E16F0AAA000BEA785 /* FMResultSet.m */; };
 		8214A2A616F0C64600BEA785 /* PCSFileInfoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8214A2A516F0C64600BEA785 /* PCSFileInfoItem.m */; };
 		8214A2A816F0D2E500BEA785 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8214A2A716F0D2E500BEA785 /* libsqlite3.0.dylib */; };
+		821A364917144DBC007E0EC5 /* ChineseLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 821A364817144DBC007E0EC5 /* ChineseLocalizable.strings */; };
 		8225CC8D16FA00C8004B3711 /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8225CC8C16FA00C8004B3711 /* NSStringAdditions.m */; };
 		8225CC9016FA0F97004B3711 /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8225CC8F16FA0F97004B3711 /* NSDataAdditions.m */; };
 		822C911516EA2D0100F80D00 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 822C911416EA2D0100F80D00 /* MBProgressHUD.m */; };
@@ -68,6 +69,10 @@
 		8271AE071709DD6C002DEFB1 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8271AE001709DD6C002DEFB1 /* UIImageView+WebCache.m */; };
 		82A3C7781711BBCD007CD231 /* PCSAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82A3C7761711BBCD007CD231 /* PCSAboutViewController.m */; };
 		82A3C7791711BBCD007CD231 /* PCSAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82A3C7771711BBCD007CD231 /* PCSAboutViewController.xib */; };
+		82D1673617146BFB0071FF9F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 82D1672F17146BFB0071FF9F /* README.md */; };
+		82D1673717146BFB0071FF9F /* RIButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 82D1673117146BFB0071FF9F /* RIButtonItem.m */; };
+		82D1673817146BFB0071FF9F /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 82D1673317146BFB0071FF9F /* UIActionSheet+Blocks.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		82D1673917146BFB0071FF9F /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 82D1673517146BFB0071FF9F /* UIAlertView+Blocks.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		82DAA48E16F207D8003FEAF1 /* netdisk_type_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82DAA48516F207D8003FEAF1 /* netdisk_type_default@2x.png */; };
 		82EB9FE41713091D00CCE19D /* netdisk_type_excel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FDA1713091D00CCE19D /* netdisk_type_excel@2x.png */; };
 		82EB9FE51713091D00CCE19D /* netdisk_type_folder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FDB1713091D00CCE19D /* netdisk_type_folder@2x.png */; };
@@ -79,7 +84,7 @@
 		82EB9FEB1713091D00CCE19D /* netdisk_type_video@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FE11713091D00CCE19D /* netdisk_type_video@2x.png */; };
 		82EB9FEC1713091D00CCE19D /* netdisk_type_word@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FE21713091D00CCE19D /* netdisk_type_word@2x.png */; };
 		82EB9FED1713091D00CCE19D /* netdisk_type_zip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FE31713091D00CCE19D /* netdisk_type_zip@2x.png */; };
-		82EBA0011713126800CCE19D /* KKKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 82EB9FF91713126800CCE19D /* KKKeychain.m */; };
+		82EBA0011713126800CCE19D /* KKKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 82EB9FF91713126800CCE19D /* KKKeychain.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		82EBA0021713126800CCE19D /* KKPasscodeLock.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FFA1713126800CCE19D /* KKPasscodeLock.bundle */; };
 		82EBA0031713126800CCE19D /* KKPasscodeLock.m in Sources */ = {isa = PBXBuildFile; fileRef = 82EB9FFC1713126800CCE19D /* KKPasscodeLock.m */; };
 		82EBA0041713126800CCE19D /* KKPasscodeSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82EB9FFE1713126800CCE19D /* KKPasscodeSettingsViewController.m */; };
@@ -110,6 +115,7 @@
 		8214A2A416F0C64600BEA785 /* PCSFileInfoItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSFileInfoItem.h; sourceTree = "<group>"; };
 		8214A2A516F0C64600BEA785 /* PCSFileInfoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSFileInfoItem.m; sourceTree = "<group>"; };
 		8214A2A716F0D2E500BEA785 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		821A364817144DBC007E0EC5 /* ChineseLocalizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ChineseLocalizable.strings; path = /Users/wangzz/Desktop/PCSNetworkDisk/PCSNetworkDisk/KKPasscodeLock/ChineseLocalizable.strings; sourceTree = "<absolute>"; };
 		8225CC8B16FA00C8004B3711 /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
 		8225CC8C16FA00C8004B3711 /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
 		8225CC8E16FA0F97004B3711 /* NSDataAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataAdditions.h; sourceTree = "<group>"; };
@@ -198,6 +204,13 @@
 		82A3C7751711BBCD007CD231 /* PCSAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSAboutViewController.h; sourceTree = "<group>"; };
 		82A3C7761711BBCD007CD231 /* PCSAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSAboutViewController.m; sourceTree = "<group>"; };
 		82A3C7771711BBCD007CD231 /* PCSAboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSAboutViewController.xib; sourceTree = "<group>"; };
+		82D1672F17146BFB0071FF9F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = "UIAlertView-Blocks/README.md"; sourceTree = "<group>"; };
+		82D1673017146BFB0071FF9F /* RIButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RIButtonItem.h; path = "UIAlertView-Blocks/RIButtonItem.h"; sourceTree = "<group>"; };
+		82D1673117146BFB0071FF9F /* RIButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RIButtonItem.m; path = "UIAlertView-Blocks/RIButtonItem.m"; sourceTree = "<group>"; };
+		82D1673217146BFB0071FF9F /* UIActionSheet+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIActionSheet+Blocks.h"; path = "UIAlertView-Blocks/UIActionSheet+Blocks.h"; sourceTree = "<group>"; };
+		82D1673317146BFB0071FF9F /* UIActionSheet+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIActionSheet+Blocks.m"; path = "UIAlertView-Blocks/UIActionSheet+Blocks.m"; sourceTree = "<group>"; };
+		82D1673417146BFB0071FF9F /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertView+Blocks.h"; path = "UIAlertView-Blocks/UIAlertView+Blocks.h"; sourceTree = "<group>"; };
+		82D1673517146BFB0071FF9F /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIAlertView+Blocks.m"; path = "UIAlertView-Blocks/UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		82DAA48516F207D8003FEAF1 /* netdisk_type_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_default@2x.png"; sourceTree = "<group>"; };
 		82EB9FDA1713091D00CCE19D /* netdisk_type_excel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_excel@2x.png"; sourceTree = "<group>"; };
 		82EB9FDB1713091D00CCE19D /* netdisk_type_folder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_folder@2x.png"; sourceTree = "<group>"; };
@@ -292,8 +305,6 @@
 		822F7B1016E8CE5B00898CA4 = {
 			isa = PBXGroup;
 			children = (
-				82EBA0081713153D00CCE19D /* AudioToolbox.framework */,
-				82EBA0061713150D00CCE19D /* Security.framework */,
 				822F7B2516E8CE5B00898CA4 /* PCSNetworkDisk */,
 				822F7B1E16E8CE5B00898CA4 /* Frameworks */,
 				822F7B1C16E8CE5B00898CA4 /* Products */,
@@ -311,6 +322,8 @@
 		822F7B1E16E8CE5B00898CA4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				82EBA0081713153D00CCE19D /* AudioToolbox.framework */,
+				82EBA0061713150D00CCE19D /* Security.framework */,
 				822C912616EA387500F80D00 /* libz.dylib */,
 				8214A2A716F0D2E500BEA785 /* libsqlite3.0.dylib */,
 				822C912416EA386A00F80D00 /* MessageUI.framework */,
@@ -357,6 +370,7 @@
 		822F7B7D16E8D73600898CA4 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				82D1672E17146BE00071FF9F /* UIAlertView-Blocks */,
 				82EB9FF71713119100CCE19D /* KKPasscodeLock */,
 				8271ADEE1709DD29002DEFB1 /* SDWebImage */,
 				8225CC8916FA0087004B3711 /* NSString+Addition */,
@@ -518,6 +532,20 @@
 			name = SDWebImage;
 			sourceTree = "<group>";
 		};
+		82D1672E17146BE00071FF9F /* UIAlertView-Blocks */ = {
+			isa = PBXGroup;
+			children = (
+				82D1672F17146BFB0071FF9F /* README.md */,
+				82D1673017146BFB0071FF9F /* RIButtonItem.h */,
+				82D1673117146BFB0071FF9F /* RIButtonItem.m */,
+				82D1673217146BFB0071FF9F /* UIActionSheet+Blocks.h */,
+				82D1673317146BFB0071FF9F /* UIActionSheet+Blocks.m */,
+				82D1673417146BFB0071FF9F /* UIAlertView+Blocks.h */,
+				82D1673517146BFB0071FF9F /* UIAlertView+Blocks.m */,
+			);
+			name = "UIAlertView-Blocks";
+			sourceTree = "<group>";
+		};
 		82DAA47216F20721003FEAF1 /* 640×960 */ = {
 			isa = PBXGroup;
 			children = (
@@ -592,15 +620,16 @@
 		82EB9FF71713119100CCE19D /* KKPasscodeLock */ = {
 			isa = PBXGroup;
 			children = (
+				821A364817144DBC007E0EC5 /* ChineseLocalizable.strings */,
+				82EB9FFA1713126800CCE19D /* KKPasscodeLock.bundle */,
 				82EB9FF81713126800CCE19D /* KKKeychain.h */,
 				82EB9FF91713126800CCE19D /* KKKeychain.m */,
-				82EB9FFA1713126800CCE19D /* KKPasscodeLock.bundle */,
 				82EB9FFB1713126800CCE19D /* KKPasscodeLock.h */,
 				82EB9FFC1713126800CCE19D /* KKPasscodeLock.m */,
-				82EB9FFD1713126800CCE19D /* KKPasscodeSettingsViewController.h */,
-				82EB9FFE1713126800CCE19D /* KKPasscodeSettingsViewController.m */,
 				82EB9FFF1713126800CCE19D /* KKPasscodeViewController.h */,
 				82EBA0001713126800CCE19D /* KKPasscodeViewController.m */,
+				82EB9FFD1713126800CCE19D /* KKPasscodeSettingsViewController.h */,
+				82EB9FFE1713126800CCE19D /* KKPasscodeSettingsViewController.m */,
 			);
 			name = KKPasscodeLock;
 			path = /Users/wangzz/Desktop/PCSNetworkDisk/PCSNetworkDisk/KKPasscodeLock;
@@ -689,6 +718,8 @@
 				82EB9FED1713091D00CCE19D /* netdisk_type_zip@2x.png in Resources */,
 				82EBA0021713126800CCE19D /* KKPasscodeLock.bundle in Resources */,
 				82EBA00E17131FD900CCE19D /* PCSClearCacheViewController.xib in Resources */,
+				821A364917144DBC007E0EC5 /* ChineseLocalizable.strings in Resources */,
+				82D1673617146BFB0071FF9F /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -734,6 +765,9 @@
 				82EBA0041713126800CCE19D /* KKPasscodeSettingsViewController.m in Sources */,
 				82EBA0051713126800CCE19D /* KKPasscodeViewController.m in Sources */,
 				82EBA00D17131FD900CCE19D /* PCSClearCacheViewController.m in Sources */,
+				82D1673717146BFB0071FF9F /* RIButtonItem.m in Sources */,
+				82D1673817146BFB0071FF9F /* UIActionSheet+Blocks.m in Sources */,
+				82D1673917146BFB0071FF9F /* UIAlertView+Blocks.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
