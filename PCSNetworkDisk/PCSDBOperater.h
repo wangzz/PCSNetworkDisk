@@ -53,6 +53,14 @@
 
 /*!
  @method
+ @abstract  删除本地Document目录下面子目录netCache目录下的指定名称的文件
+ @param     name    NSString类型的指针，指向要删除的文件名称
+ @return    BOOL型，表示删除结果
+ */
+- (BOOL)deleteFileFromNetCache:(NSString *)name;
+
+/*!
+ @method
  @abstract  获取Document目录下面子目录uploadCache目录下的指定名称的文件二进制数据
  @param     name    想要获取数据的文件名称
  @return    NSData型指针，指向获取到的文件数据
@@ -66,6 +74,14 @@
  @return    NSData型指针，指向获取到的文件数据
  */
 - (NSData *)getFileFromOfflineCacheBy:(NSString *)name;
+
+/*!
+ @method
+ @abstract  获取Document目录下面子目录netCache目录下的指定名称的文件二进制数据
+ @param     name    想要获取数据的文件名称
+ @return    NSData型指针，指向获取到的文件数据
+ */
+- (NSData *)getFileFromNetCacheBy:(NSString *)name;
 
 /*!
  @method
@@ -84,6 +100,15 @@
  @return    BOOL型，表示保存结果
  */
 - (BOOL)saveFileToOfflineCache:(NSData *)value name:(NSString *)name;
+
+/*!
+ @method
+ @abstract  将二进制文件数据以特定名称保存到Document目录下面子目录netCache目录下
+ @param     value   NSData类型的指针，指向要保存的文件
+ @param     name    NSString类型的指针，指向要保存的文件名
+ @return    BOOL型，表示保存结果
+ */
+- (BOOL)saveFileToNetCache:(NSData *)value name:(NSString *)name;
 
 /*!
  @method
@@ -107,7 +132,7 @@
  @param     filePath    NSString类型指针，指向要获取大小的文件或文件夹目录
  @return    long long型，表示文件或文件夹大小
  */
-- (long long)fileSizeAtPath:(NSString *)filePath;
+- (long long)folderSizeAtPath:(NSString *)filePath;
 
 /*!
 @method
@@ -115,7 +140,7 @@
 @param     sizeBytes    long类型数据，表示转换单位前的字节数
 @return    NSString类型指针，指向转换单位后的字符串
 */
-- (NSString *)getFormatSizeString:(long)sizeBytes;
+- (NSString *)getFormatSizeString:(float)sizeBytes;
 
 #pragma mark - accountlist表数据库操作方法
 /*****************************accountlist表数据库操作方法*****************************/
@@ -184,6 +209,14 @@
 
 #pragma mark - filelist表数据库操作方法
 /*****************************filelist表数据库操作方法*****************************/
+
+/*!
+ @method
+ @abstract  将filelist表中属性为PCSFilePropertyOffLineSuccess状态的文件置为
+            PCSFilePropertyDownLoad，用于清空离线文件本地缓存
+ @return    BOOL型，表示执行结果
+ */
+- (BOOL)resetOfflineSuccessFileStatus;
 
 /*!
  @method

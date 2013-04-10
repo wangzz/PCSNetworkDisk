@@ -82,7 +82,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         if (indexPath.row == 0) {
             NSString *offlinePath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_OFFLINE_CACHE];
             NSString    *unitString = [[PCSDBOperater shareInstance] getFormatSizeString:
-                                       [[PCSDBOperater shareInstance] fileSizeAtPath:offlinePath]];
+                                       [[PCSDBOperater shareInstance] folderSizeAtPath:offlinePath]];
             cell.textLabel.text = [NSString stringWithFormat:@"离线可用(已使用%@)",unitString];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         } else if (indexPath.row == 1) {
@@ -91,9 +91,9 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         }
     } else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
-            NSString *uploadPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE];
+            NSString *uploadPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_NET_CACHE];
             NSString    *unitString = [[PCSDBOperater shareInstance] getFormatSizeString:
-                                       [[PCSDBOperater shareInstance] fileSizeAtPath:uploadPath]];
+                                       [[PCSDBOperater shareInstance] folderSizeAtPath:uploadPath]];
             cell.textLabel.text = [NSString stringWithFormat:@"其它缓存(已使用%@)",unitString];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         } else if (indexPath.row == 1) {
@@ -118,11 +118,20 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
                 if (result) {
                     [self.mTableView reloadData];
                 }
+                
+                result = [[PCSDBOperater shareInstance] resetOfflineSuccessFileStatus];
+                if (result) {
+                    //更新我的云盘和离线两个界面数据
+                    [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_RELOAD_OFFLINE_DATA
+                                                                        object:nil];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_RELOAD_NETDISK_DATA
+                                                                        object:nil];
+                }
             };
         } else if (indexPath.section == 1) {
             message = @"确定清空其它缓存文件？";
             clearAction = ^{
-                NSString *uploadPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE];
+                NSString *uploadPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_NET_CACHE];
                 BOOL    result = NO;
                 result = [[PCSDBOperater shareInstance] clearDataAtPath:uploadPath];
                 if (result) {

@@ -47,6 +47,7 @@
                      action:@selector(onLogoffButtonAction)
            forControlEvents:UIControlEventTouchUpInside];
     self.mTableView.tableFooterView = logoffButton;
+    PCS_FUNC_SAFELY_RELEASE(logoffButton);
 }
 
 - (void)didReceiveMemoryWarning

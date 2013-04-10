@@ -91,6 +91,24 @@
     return result;
 }
 
+//从本地缓存netCache目录下的文件
+- (BOOL)deleteFileFromNetCache:(NSString *)name
+{
+    NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+                       stringByAppendingPathComponent:PCS_FOLDER_NET_CACHE]
+                      stringByAppendingPathComponent:[name md5Hash]];
+    BOOL    result = NO;
+    NSError *err = nil;
+    result = [[NSFileManager defaultManager] removeItemAtPath:path error:&err];
+    if (!result) {
+        PCSLog(@"delete file :%@ failed.%@",name,err);
+    } else {
+        PCSLog(@"delete file :%@ success.",name);
+    }
+    
+    return result;
+}
+
 //根据文件名从Documents/uploadCache文件夹获取文件的二进制数据
 - (NSData *)getFileFromUploadCacheBy:(NSString *)name
 {
@@ -111,6 +129,16 @@
     return fileData;
 }
 
+//根据文件名从Documents/netCache文件夹获取文件的二进制数据
+- (NSData *)getFileFromNetCacheBy:(NSString *)name
+{
+    NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+                       stringByAppendingPathComponent:PCS_FOLDER_NET_CACHE]
+                      stringByAppendingPathComponent:[name md5Hash]];
+    NSData  *fileData = [NSData dataWithContentsOfFile:path];
+    return fileData;
+}
+
 //将文件保存到沙盒Documents/uploadCache目录下
 - (BOOL)saveFileToUploadCache:(NSData *)value name:(NSString *)name
 {
@@ -122,6 +150,13 @@
 - (BOOL)saveFileToOfflineCache:(NSData *)value name:(NSString *)name
 {
     NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_OFFLINE_CACHE];
+    return [self saveFileToPath:path data:value name:name];
+}
+
+//将文件保存到沙盒Documents/netCache目录下
+- (BOOL)saveFileToNetCache:(NSData *)value name:(NSString *)name
+{
+    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_NET_CACHE];
     return [self saveFileToPath:path data:value name:name];
 }
 
@@ -206,20 +241,29 @@
     return fileType;
 }
 
+//获取单个文件大小
 - (long long)fileSizeAtPath:(NSString *)filePath
 {
-    unsigned long long int cacheFolderSize = 0;
-    NSFileManager *manager = [NSFileManager defaultManager];
-    NSArray *cacheFileList = [manager subpathsAtPath:filePath];
-    NSEnumerator *cacheEnumerator = [cacheFileList objectEnumerator];
-    NSString *cacheFilePath = nil;
-    while (cacheFilePath = [cacheEnumerator nextObject]) {
-        NSError *err = nil;
-        NSDictionary *cacheFileAttributes = [manager attributesOfFileSystemForPath:[filePath stringByAppendingPathComponent:cacheFilePath] error:&err];
-        cacheFolderSize += [cacheFileAttributes fileSize];
+    struct stat st;
+    if(lstat([filePath cStringUsingEncoding:NSUTF8StringEncoding], &st) == 0){
+        return st.st_size;
     }
+    return 0;
+}
 
-    return cacheFolderSize;
+//获取目录大小
+- (long long)folderSizeAtPath:(NSString *)filePath
+{
+    NSFileManager* manager = [NSFileManager defaultManager];
+    if (![manager fileExistsAtPath:filePath]) return 0;
+    NSEnumerator *childFilesEnumerator = [[manager subpathsAtPath:filePath] objectEnumerator];
+    NSString* fileName;
+    long long folderSize = 0;
+    while ((fileName = [childFilesEnumerator nextObject]) != nil){
+        NSString* fileAbsolutePath = [filePath stringByAppendingPathComponent:fileName];
+        folderSize += [self fileSizeAtPath:fileAbsolutePath];
+    }
+    return folderSize;
 }
 
 - (BOOL)clearDataAtPath:(NSString *)filePath
@@ -231,17 +275,17 @@
     return YES;
 }
 
-- (NSString *)getFormatSizeString:(long)sizeBytes
+- (NSString *)getFormatSizeString:(float)sizeBytes
 {
     NSString    *formatString = nil;
     if (sizeBytes <= 1024) {
-        formatString = [NSString stringWithFormat:@"%.2ldB",sizeBytes];
+        formatString = [NSString stringWithFormat:@"%.2fB",sizeBytes];
     } else if (sizeBytes/1024 <= 1024) {
-        formatString = [NSString stringWithFormat:@"%.2ldKB",sizeBytes/1024];
+        formatString = [NSString stringWithFormat:@"%.2fKB",sizeBytes/1024];
     } else if (sizeBytes/(1024*1024) <= 1024) {
-        formatString = [NSString stringWithFormat:@"%.2ldMB",sizeBytes/(1024*1024)];
+        formatString = [NSString stringWithFormat:@"%.2fMB",sizeBytes/(1024*1024)];
     } else if (sizeBytes/(1024*1024*1024) <= 1024) {
-        formatString = [NSString stringWithFormat:@"%.2ldGB",sizeBytes/(1024*1024*1024)];
+        formatString = [NSString stringWithFormat:@"%.2fGB",sizeBytes/(1024*1024*1024)];
     }
     return formatString;
 }
@@ -412,6 +456,20 @@
 }
 
 #pragma mark - filelist表数据库操作方法
+- (BOOL)resetOfflineSuccessFileStatus
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSString    *sql = [NSString stringWithFormat:@"update filelist set property=%d where property=%d and accountid=%d",PCSFilePropertyDownLoad,PCSFilePropertyOffLineSuccess,accountID];
+    PCSLog(@"sql:%@",sql);
+    BOOL result = NO;
+    result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
+    if (!result) {
+        PCSLog(@" reset file property failed.%@",[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
+    }
+    
+    return result;
+}
+
 //从filelist表中查找出offline状态的文件，按照修改时间降序排列
 - (NSDictionary *)getOfflineFileFromDB
 {

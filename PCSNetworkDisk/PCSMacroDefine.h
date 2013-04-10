@@ -55,6 +55,7 @@ typedef enum
 //文件夹名称
 #define PCS_FOLDER_UPLOAD_CACHE             @"uploadCache"  //本地上传的缓存文件保存文件夹
 #define PCS_FOLDER_OFFLINE_CACHE            @"offlineCache" //离线文件的缓存文件夹
+#define PCS_FOLDER_NET_CACHE                @"netCache" //查看网盘文件时，下载到本地的缓存文件夹
 
 //字符串
 #define PCS_STRING_MOBWIN_UNIT_ID           @"A495798C12C030F28E7711F3613DFC1B"
