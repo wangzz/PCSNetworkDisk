@@ -624,14 +624,14 @@
         UILabel *nameLable = [[UILabel alloc] initWithFrame:CGRectMake(60, 3, 170, 30)];
         nameLable.tag = PCS_TAG_FILE_NAME_LABLE;
         nameLable.lineBreakMode = UILineBreakModeMiddleTruncation;
-        nameLable.font = [UIFont systemFontOfSize:20.0f];
+        nameLable.font = PCS_MAIN_FONT;
         nameLable.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:nameLable];
         PCS_FUNC_SAFELY_RELEASE(nameLable);
         
         UILabel *detailLable = [[UILabel alloc] initWithFrame:CGRectMake(60, 28, 170, 20)];
         detailLable.tag = PCS_TAG_FILE_DETAIL_LABLE;
-        detailLable.font = [UIFont systemFontOfSize:13.0f];
+        detailLable.font = PCS_DETAIL_FONT;
         detailLable.textColor = [UIColor lightGrayColor];
         detailLable.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:detailLable];

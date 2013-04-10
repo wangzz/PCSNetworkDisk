@@ -129,6 +129,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                       reuseIdentifier:cellid];
         cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+        cell.textLabel.font = PCS_MAIN_FONT;
         
         UIProgressView  *progress = [[UIProgressView alloc] initWithFrame:CGRectMake(10, 27, 250, 7.5f)];
         progress.backgroundColor = [UIColor redColor];
@@ -144,7 +145,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         UILabel *usageLable = [[UILabel alloc] initWithFrame:CGRectMake(10, 23, 250, 15)];
         usageLable.textAlignment = NSTextAlignmentCenter;
         usageLable.tag = PCS_TAG_MORE_USAGE_LABLE;
-        usageLable.font = [UIFont systemFontOfSize:13.5f];
+        usageLable.font = PCS_DETAIL_FONT;
         usageLable.backgroundColor = [UIColor greenColor];
         [cell.contentView addSubview:usageLable];
         PCS_FUNC_SAFELY_RELEASE(usageLable);
@@ -153,7 +154,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         rightLable.textAlignment = NSTextAlignmentRight;
         rightLable.lineBreakMode = NSLineBreakByTruncatingMiddle;
         rightLable.tag = PCS_TAG_MORE_RIGHT_LABLE;
-        rightLable.font = [UIFont systemFontOfSize:16];
+        rightLable.font = PCS_MAIN_FONT;
         rightLable.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:rightLable];
         PCS_FUNC_SAFELY_RELEASE(rightLable);

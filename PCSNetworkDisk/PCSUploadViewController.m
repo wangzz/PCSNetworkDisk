@@ -42,8 +42,50 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
+    [self createTableViewHeaderView];
     [self reloadTableDataSource];
+}
+
+- (void)createTableViewHeaderView
+{
+    UIImageView *headerView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 70)];
+    headerView.userInteractionEnabled = YES;
+    headerView.backgroundColor = [UIColor lightGrayColor];
+    UIButton    *addPicBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, 13, 73, 44)];
+    addPicBtn.tag = 1001;
+    addPicBtn.titleLabel.font = PCS_MAIN_FONT;
+    [addPicBtn setTitle:@"添加图片" forState:UIControlStateNormal];
+    addPicBtn.backgroundColor = [UIColor redColor];
+    [addPicBtn addTarget:self
+                  action:@selector(onButtonAction:)
+        forControlEvents:UIControlEventTouchUpInside];
+    [headerView addSubview:addPicBtn];
+    
+    UIButton    *addCameraPicBtn = [[UIButton alloc] initWithFrame:CGRectMake(119, 13, 73, 44)];
+    addCameraPicBtn.tag = 1002;
+    addCameraPicBtn.titleLabel.font = PCS_MAIN_FONT;
+    [addCameraPicBtn setTitle:@"拍摄图片" forState:UIControlStateNormal];
+    addCameraPicBtn.backgroundColor = [UIColor redColor];
+    [addCameraPicBtn addTarget:self
+                  action:@selector(onButtonAction:)
+        forControlEvents:UIControlEventTouchUpInside];
+    [headerView addSubview:addCameraPicBtn];
+    
+    UIButton    *addFileBtn = [[UIButton alloc] initWithFrame:CGRectMake(215, 13, 73, 44)];
+    addFileBtn.tag = 1003;
+    addFileBtn.titleLabel.font = PCS_MAIN_FONT;
+    [addFileBtn setTitle:@"添加文件" forState:UIControlStateNormal];
+    addFileBtn.backgroundColor = [UIColor redColor];
+    [addFileBtn addTarget:self
+                        action:@selector(onButtonAction:)
+              forControlEvents:UIControlEventTouchUpInside];
+    [headerView addSubview:addFileBtn];
+    
+    self.mTableView.tableHeaderView = headerView;
+    PCS_FUNC_SAFELY_RELEASE(headerView);
+    PCS_FUNC_SAFELY_RELEASE(addFileBtn);
+    PCS_FUNC_SAFELY_RELEASE(addCameraPicBtn);
+    PCS_FUNC_SAFELY_RELEASE(addPicBtn);
 }
 
 - (void)didReceiveMemoryWarning
@@ -84,6 +126,7 @@
     NSString *target = [[NSString alloc] initWithFormat:@"%@%@",PCS_STRING_DEFAULT_PATH,fileName];
     
     [self uploadNewFileToServer:data name:fileName path:target];
+    PCS_FUNC_SAFELY_RELEASE(target);
 }
 
 //新选取的文件信息入库，文件缓存等操作，并根据操作结果判断是否需要立马上传服务器
@@ -136,9 +179,9 @@
                                                           status:PCSFileUploadStatusUploading];
         if (result) {
             //更新文件状态成功后，更新界面显示，并开始上传操作
-            [self reloadTableDataSource];
             NSData  *data = [[PCSDBOperater shareInstance] getFileFromUploadCacheBy:item.serverPath];
             [self uploadFile:data name:item.serverPath];
+            [self reloadTableDataSource];
         }
     }
 }
@@ -153,8 +196,8 @@
     result = [[PCSDBOperater shareInstance] updateUploadFile:item.serverPath
                                                       status:PCSFileUploadStatusUploading];
     if (result) {
-        [self reloadTableDataSource];
         [self uploadFile:data name:item.serverPath];
+        [self reloadTableDataSource];
     }
 }
 
@@ -206,7 +249,7 @@
 }
 
 #pragma mark - 按钮响应事件
-- (IBAction)onButtonAction:(id)sender
+- (void)onButtonAction:(id)sender
 {
     UIButton *button = (UIButton *)sender;
     if (button.tag == 1001) {
@@ -275,6 +318,7 @@
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         cell.textLabel.lineBreakMode = UILineBreakModeMiddleTruncation;
         cell.textLabel.backgroundColor = [UIColor clearColor];
+        cell.textLabel.font = PCS_MAIN_FONT;
         cell.detailTextLabel.backgroundColor = [UIColor clearColor];
         
         UILabel *sizeLable = [[UILabel alloc] initWithFrame:CGRectMake(210, UPLOAD_TABLEVIEW_HEIGHT-23.5f, 90, 20)];
@@ -368,6 +412,23 @@
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return @"删除";
+}
+
+#pragma mark - UIImagePickerControllerDelegate methods
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo
+{
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    dateFormat.dateFormat = @"yyyy-MM-dd-HH-mm-ss";
+    NSString    *fileName =[NSString stringWithFormat:@"%@.jpg",[dateFormat stringFromDate:[NSDate date]]];
+    NSString *target = [[NSString alloc] initWithFormat:@"%@test/%@",PCS_STRING_DEFAULT_PATH,fileName];
+    NSData  *data = UIImagePNGRepresentation(image);
+    [self uploadNewFileToServer:data name:fileName path:target];
+    [picker dismissModalViewControllerAnimated:YES];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark -- Baidu Listener Delegate

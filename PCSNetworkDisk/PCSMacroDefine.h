@@ -80,6 +80,10 @@ typedef enum
 #define PCS_NOTIFICATION_UPDATE_OFFLINE_FILE    @"updateOfflineData"
 
 
+//字体
+#define PCS_MAIN_FONT                   [UIFont systemFontOfSize:16.0f]
+#define PCS_DETAIL_FONT                 [UIFont systemFontOfSize:13.5f]
+
 
 //省略字符串
 #define PCS_APP_DELEGATE    ((AppDelegate *)[[UIApplication sharedApplication] delegate])

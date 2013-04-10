@@ -202,13 +202,14 @@
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         cell.textLabel.lineBreakMode = UILineBreakModeMiddleTruncation;
         cell.textLabel.backgroundColor = [UIColor clearColor];
+        cell.textLabel.font = PCS_MAIN_FONT;
         cell.detailTextLabel.backgroundColor = [UIColor clearColor];
         
         UILabel *sizeLable = [[UILabel alloc] initWithFrame:CGRectMake(210, OFFLINE_TABLEVIEW_HEIGHT-23.5f, 90, 20)];
         sizeLable.backgroundColor = [UIColor clearColor];
         sizeLable.textColor = [UIColor grayColor];
         sizeLable.tag = TAG_OFFLINE_FILE_SIZE_LABLE;
-        sizeLable.font = [UIFont systemFontOfSize:15.0f];
+        sizeLable.font = [UIFont systemFontOfSize:14.0f];
         [cell.contentView addSubview:sizeLable];
         PCS_FUNC_SAFELY_RELEASE(sizeLable);
         
