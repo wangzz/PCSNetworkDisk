@@ -569,6 +569,26 @@
     return result;
 }
 
+//从本地数据库获取当前目录下面的文件夹，用于文件移动和文件上传时选择目的文件夹
+- (NSArray *)getSubFolderListFromDB:(NSString *)currentPath
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSMutableArray  *listArray = [NSMutableArray array];
+    NSString    *sql = [NSString stringWithFormat:@"select id, name, serverpath from filelist where parentPath=\"%@\" and accountid=%d and property not in (%d,%d) and format=%d order by name asc",currentPath,accountID,PCSFilePropertyNull,PCSFilePropertyDelete,PCSFileFormatFolder];
+    FMResultSet *rs = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
+    while ([rs next]){
+        PCSFileInfoItem *item = [[PCSFileInfoItem alloc] init];
+        item.fid = [rs intForColumn:@"id"];
+        item.name = [rs stringForColumn:@"name"];
+        item.serverPath = [rs stringForColumn:@"serverpath"];
+        item.format = PCSFileFormatFolder;
+        [listArray addObject:item];
+        PCS_FUNC_SAFELY_RELEASE(item);
+    }
+    
+    return listArray;
+}
+
 //从本地数据库获取当前目录下面的子文件（文件夹）用于我的文档界面展示
 //获取属性为下载和离线两种类型的文件
 //以是否为文件夹降序排序，名字升序排序

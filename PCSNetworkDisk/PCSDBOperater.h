@@ -249,6 +249,15 @@
 
 /*!
  @method
+ @abstract  从本地数据库获取当前目录下面的文件夹，用于文件移动和文件上传时选择目的文件夹
+            按照文件夹的名字升序排序
+ @param     currentPath NSString类型的指针，要获取文件信息的目录
+ @return    NSArray型指针，为PCSFileInfoItem类型对象的集合，用于“我的云盘”界面展示
+ */
+- (NSArray *)getSubFolderListFromDB:(NSString *)currentPath;
+
+/*!
+ @method
  @abstract  从本地数据库获取当前目录下面的子文件（文件夹）用于我的文档界面展示
             获取属性为下载和离线两种类型的文件
             以是否为文件夹降序排序，名字升序排序
