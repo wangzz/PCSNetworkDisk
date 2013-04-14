@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HSDirectoryDelegate.h"
 
-
-@interface PCSUploadViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITableViewDataSource,UITableViewDelegate,BaiduPCSStatusListener>
+@interface PCSUploadViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITableViewDataSource,UITableViewDelegate,BaiduPCSStatusListener,HSDirectoryDelegate>
 
 @end

@@ -90,6 +90,9 @@ typedef enum
 
 //方法
 
+//判断是否是iPhone5
+#define iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
+
 //判断字符串是否为nil
 #define PCS_FUNC_SENTENCED_EMPTY(string)    (string = ((string == nil) ? @"":string))
 

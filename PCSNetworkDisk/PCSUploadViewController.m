@@ -7,6 +7,9 @@
 //
 
 #import "PCSUploadViewController.h"
+#import "HSDirectoryNavigationController.h"
+#import "AGImagePickerController/AGImagePickerController.h"
+#import "AGImagePickerController/AGIPCToolbarItem.h"
 
 @interface PCSUploadViewController ()
 
@@ -14,14 +17,21 @@
 @property (nonatomic,retain) NSDictionary   *uploadFileDictionary;
 @property (nonatomic,retain) NSArray   *sectionTitleArray;
 @property (nonatomic,retain) NSIndexPath *currentUploadFileIndexPath;//当前正在上传的文件index
+@property (nonatomic,retain) NSMutableArray *selectedPhotos;//保存从相册中选中的图片信息
 
 @end
+
+
+#define UPLOAD_TABLEVIEW_HEIGHT         50.0f
+#define TAG_UPLOAD_FILE_SIZE_LABLE      20001
+#define TAG_UPLOAD_PROGRESSVIEW         20002
 
 @implementation PCSUploadViewController
 @synthesize mTableView;
 @synthesize uploadFileDictionary;
 @synthesize sectionTitleArray;
 @synthesize currentUploadFileIndexPath;
+@synthesize selectedPhotos;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -98,21 +108,78 @@
 - (void)getMediaFromSource:(UIImagePickerControllerSourceType)sourceType
 {
     if ([UIImagePickerController isSourceTypeAvailable:sourceType]) {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = self;
-        picker.allowsEditing = YES;
-        picker.videoQuality = UIImagePickerControllerQualityTypeLow;
-        picker.sourceType = sourceType;
-        [self presentModalViewController:picker animated:YES];
-        PCS_FUNC_SAFELY_RELEASE(picker);
-    }else{
+        
+        if (sourceType == UIImagePickerControllerSourceTypePhotoLibrary) {
+            AGImagePickerController *imagePickerController = [[AGImagePickerController alloc] initWithFailureBlock:^(NSError *error) {
+                NSLog(@"Fail. Error: %@", error);
+                
+                if (error == nil) {
+                    [self.selectedPhotos removeAllObjects];
+                    NSLog(@"User has cancelled.");
+                    [self dismissModalViewControllerAnimated:YES];
+                } else {
+                    
+                    // We need to wait for the view controller to appear first.
+                    double delayInSeconds = 0.5;
+                    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                        [self dismissModalViewControllerAnimated:YES];
+                    });
+                }
+                
+                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+                
+            } andSuccessBlock:^(NSString* path,NSArray *info) {
+                [self.selectedPhotos setArray:info];
+
+                [self dismissModalViewControllerAnimated:YES];
+                
+                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+                
+                [self beginUploadFileWith:path info:info];
+                
+            }];
+            
+            // Show saved photos on top
+            imagePickerController.shouldShowSavedPhotosOnTop = YES;
+            imagePickerController.selection = self.selectedPhotos;
+    
+            [self presentModalViewController:imagePickerController animated:YES];
+            [imagePickerController release];
+        } else if (sourceType == UIImagePickerControllerSourceTypeCamera) {
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            picker.delegate = self;
+            picker.allowsEditing = YES;
+            picker.videoQuality = UIImagePickerControllerQualityTypeLow;
+            picker.sourceType = sourceType;
+            [self presentModalViewController:picker animated:YES];
+            PCS_FUNC_SAFELY_RELEASE(picker);
+        }
+    } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                        message:@"您的设备不支持访问多媒体文件目录"
+                                                        message:@"您的设备不支持访问多媒体文件目录！"
                                                        delegate:nil
                                               cancelButtonTitle:@"确定"
                                               otherButtonTitles:nil, nil];
         [alert show];
         [alert release];
+    }
+}
+
+- (void)beginUploadFileWith:(NSString *)path info:(NSArray *)info
+{
+    NSLog(@"path:%@,Info: %@",path,info);
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    dateFormat.dateFormat = @"yyyy-MM-dd_HH-mm-ss";
+    
+    for (NSInteger count = 0; count < info.count; count++) {
+        ALAsset *asset = [info objectAtIndex:count];
+        NSString    *fileName =[NSString stringWithFormat:@"Photo_%@.jpg",[dateFormat stringFromDate:[NSDate date]]];
+        NSString *target = [[NSString alloc] initWithFormat:@"%@test/%@",PCS_STRING_DEFAULT_PATH,fileName];
+        UIImage *image =  [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
+        NSData  *data = UIImagePNGRepresentation(image);
+        [self uploadNewFileToServer:data name:fileName path:target];
+        PCS_FUNC_SAFELY_RELEASE(target);
     }
 }
 
@@ -206,8 +273,21 @@
 {
     if (nil == data || nil == name) {
         PCSLog(@"upload err,the data or name is nil.");
+        BOOL    result = NO;
+        //更新文件状态
+        result = [[PCSDBOperater shareInstance] updateUploadFile:name
+                                                          status:PCSFileUploadStatusFailed];
+        if (result) {
+            [self reloadTableDataSource];
+            //如果有等待上传的文件，则将其上传
+            [self uploadNextWaitingFileToServer];
+        }
         return;
     }
+    
+    UITableViewCell *cell = [self.mTableView cellForRowAtIndexPath:self.currentUploadFileIndexPath];
+    UIProgressView  *progress = (UIProgressView *)[cell.contentView viewWithTag:TAG_UPLOAD_PROGRESSVIEW];
+    progress.progress = 0;
     
     dispatch_queue_t queue = PCS_APP_DELEGATE.gcdQueue;
     dispatch_async(queue, ^{
@@ -262,11 +342,6 @@
 }
 
 #pragma mark - Table view data source
-
-#define UPLOAD_TABLEVIEW_HEIGHT         50.0f
-#define TAG_UPLOAD_FILE_SIZE_LABLE      20001
-#define TAG_UPLOAD_PROGRESSVIEW         20002
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
     return UPLOAD_TABLEVIEW_HEIGHT;
@@ -401,8 +476,11 @@
         NSArray *sectionArray = [self.uploadFileDictionary objectForKey:[self.sectionTitleArray
                                                                          objectAtIndex:indexPath.section]];
         PCSFileInfoItem *fileItem = [sectionArray objectAtIndex:indexPath.row];
+        //删除本地uploadCache文件夹中的缓存
+        [[PCSDBOperater shareInstance] deleteFileFromUploadCache:fileItem.serverPath];
+        //从uploadfilelist表删除记录
         BOOL    result = NO;
-        result = [[PCSDBOperater shareInstance] deleteFromUploadFileList:fileItem.fid];
+        result = [[PCSDBOperater shareInstance] deleteFromUploadFileList:fileItem.fid];         
         if (result) {
             [self reloadTableDataSource];
         }
@@ -418,8 +496,8 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo
 {
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    dateFormat.dateFormat = @"yyyy-MM-dd-HH-mm-ss";
-    NSString    *fileName =[NSString stringWithFormat:@"%@.jpg",[dateFormat stringFromDate:[NSDate date]]];
+    dateFormat.dateFormat = @"yyyy-MM-dd_HH-mm-ss";
+    NSString    *fileName =[NSString stringWithFormat:@"Photo_%@.jpg",[dateFormat stringFromDate:[NSDate date]]];
     NSString *target = [[NSString alloc] initWithFormat:@"%@test/%@",PCS_STRING_DEFAULT_PATH,fileName];
     NSData  *data = UIImagePNGRepresentation(image);
     [self uploadNewFileToServer:data name:fileName path:target];
