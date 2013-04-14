@@ -20,5 +20,6 @@
 
 @property (retain) IBOutlet UITableView *tableView;
 @property (assign) BOOL savedPhotosOnTop;
+@property (assign) PCSImagePickerType   imagePickerType;
 
 @end

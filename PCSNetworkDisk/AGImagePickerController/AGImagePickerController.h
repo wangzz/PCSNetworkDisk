@@ -43,6 +43,7 @@ typedef void (^AGIPCDidFail)(NSError *error);
     NSArray *selection;
 }
 
+@property (assign) PCSImagePickerType   imagePickerType;
 @property (assign) BOOL shouldChangeStatusBarStyle;
 @property (assign) BOOL shouldDisplaySelectionInformation;
 @property (assign) BOOL shouldShowSavedPhotosOnTop;

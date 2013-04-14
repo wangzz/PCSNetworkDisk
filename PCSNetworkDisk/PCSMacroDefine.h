@@ -51,6 +51,13 @@ typedef enum
     PCSFileUploadStatusSuccess,//成功上传的文件
 }PCSFileUploadStatus;
 
+typedef enum
+{
+    PCSImagePickerTypeUnknow,
+    PCSImagePickerTypePhoto,
+    PCSImagePickerTypeVideo,
+    PCSImagePickerTypeCamera
+}PCSImagePickerType;
 
 //文件夹名称
 #define PCS_FOLDER_UPLOAD_CACHE             @"uploadCache"  //本地上传的缓存文件保存文件夹

@@ -11,8 +11,8 @@
 
 #import "AGIPCAlbumsController.h"
 
-#import "AGImagePickerController.h"
 #import "AGIPCAssetsController.h"
+#import "AGImagePickerController.h"
 
 @interface AGIPCAlbumsController ()
 
@@ -40,6 +40,7 @@
 
 @synthesize tableView;
 @synthesize savedPhotosOnTop;
+@synthesize imagePickerType;
 
 - (NSMutableArray *)assetsGroups
 {
@@ -102,7 +103,11 @@
     [self createNotifications];
     
     // Navigation Bar Items
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelAction:)];
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]
+                                     initWithTitle:@"取消"
+                                     style:UIBarButtonItemStylePlain
+                                     target:self
+                                     action:@selector(cancelAction:)];
 	self.navigationItem.leftBarButtonItem = cancelButton;
 	[cancelButton release];
 }
@@ -125,7 +130,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.assetsGroups.count;
-    self.title = NSLocalizedStringWithDefaultValue(@"AGIPC.Loading", nil, [NSBundle mainBundle], @"Loading...", nil);
+    self.title = NSLocalizedStringWithDefaultValue(@"AGIPC.Loading", nil, [NSBundle mainBundle], @"加载中...", nil);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -138,7 +143,12 @@
     }
     
     ALAssetsGroup *group = [self.assetsGroups objectAtIndex:indexPath.row];
-    [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+    if (self.imagePickerType == PCSImagePickerTypeVideo) {
+        [group setAssetsFilter:[ALAssetsFilter allVideos]];
+    } else {
+        [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+    }
+    
     NSUInteger numberOfAssets = group.numberOfAssets;
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@", [group valueForProperty:ALAssetsGroupPropertyName]];
@@ -155,7 +165,7 @@
 {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-	AGIPCAssetsController *controller = [[AGIPCAssetsController alloc] initWithAssetsGroup:[self.assetsGroups objectAtIndex:indexPath.row]];
+	AGIPCAssetsController *controller = [[AGIPCAssetsController alloc] initWithAssetsGroup:[self.assetsGroups objectAtIndex:indexPath.row] type:self.imagePickerType];
 	[self.navigationController pushViewController:controller animated:YES];
 	[controller release];
 }

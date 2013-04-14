@@ -59,6 +59,7 @@
 
 @synthesize tableView, assetsGroup, assets;
 @synthesize uploadPath;
+@synthesize imagePickerType;
 
 - (BOOL)toolbarHidden
 {
@@ -77,7 +78,11 @@
         {
             [assetsGroup release];
             assetsGroup = [theAssetsGroup retain];
-            [assetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
+            if (self.imagePickerType == PCSImagePickerTypeVideo) {
+                [assetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
+            } else {
+                [assetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
+            }
 
             [self reloadData];
         }
@@ -127,7 +132,7 @@
     [super dealloc];
 }
 
-- (id)initWithAssetsGroup:(ALAssetsGroup *)theAssetsGroup
+- (id)initWithAssetsGroup:(ALAssetsGroup *)theAssetsGroup type:(PCSImagePickerType)type
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         self = [super initWithNibName:@"AGIPCAssetsController_iPhone" bundle:nil];
@@ -137,6 +142,7 @@
     if (self)
     {
         assets = [[NSMutableArray alloc] init];
+        imagePickerType = type;
         self.assetsGroup = theAssetsGroup;
         self.title = NSLocalizedStringWithDefaultValue(@"AGIPC.Loading", nil, [NSBundle mainBundle], @"Loading...", nil);
     }
@@ -303,7 +309,7 @@
 {
     if (self.selectedAssets.count <= 0) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                        message:@"请选择要上传的图片！"
+                                                        message:@"请选择要上传的文件！"
                                                        delegate:nil
                                               cancelButtonTitle:@"确定"
                                               otherButtonTitles:nil];

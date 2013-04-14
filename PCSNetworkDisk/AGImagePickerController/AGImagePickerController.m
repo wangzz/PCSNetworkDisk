@@ -35,6 +35,8 @@ static UIInterfaceOrientation currentInterfaceOrientation;
 
 @synthesize toolbarItemsForSelection, selection;
 
+@synthesize imagePickerType;
+
 - (void)setShouldChangeStatusBarStyle:(BOOL)theShouldChangeStatusBarStyle
 {
     @synchronized (self)
@@ -134,6 +136,7 @@ static UIInterfaceOrientation currentInterfaceOrientation;
         self.delegate = theDelegate;
         self.didFailBlock = theFailureBlock;
         self.didFinishBlock = theSuccessBlock;
+        self.imagePickerType = PCSImagePickerTypePhoto;//默认的是相册
     }
     
     return self;
@@ -158,6 +161,7 @@ static UIInterfaceOrientation currentInterfaceOrientation;
     } else {
         rootViewController = [[AGIPCAlbumsController alloc] initWithNibName:@"AGIPCAlbumsController_iPad" bundle:nil];
     }
+    rootViewController.imagePickerType = self.imagePickerType;
     rootViewController.savedPhotosOnTop = shouldShowSavedPhotosOnTop;
     self.viewControllers = [NSArray arrayWithObject:rootViewController];
     [rootViewController release];

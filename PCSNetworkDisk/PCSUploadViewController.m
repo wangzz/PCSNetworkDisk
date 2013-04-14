@@ -84,7 +84,7 @@
     UIButton    *addFileBtn = [[UIButton alloc] initWithFrame:CGRectMake(215, 13, 73, 44)];
     addFileBtn.tag = 1003;
     addFileBtn.titleLabel.font = PCS_MAIN_FONT;
-    [addFileBtn setTitle:@"添加文件" forState:UIControlStateNormal];
+    [addFileBtn setTitle:@"添加视频" forState:UIControlStateNormal];
     addFileBtn.backgroundColor = [UIColor redColor];
     [addFileBtn addTarget:self
                         action:@selector(onButtonAction:)
@@ -105,11 +105,11 @@
 }
 
 #pragma mark - 构建界面
-- (void)getMediaFromSource:(UIImagePickerControllerSourceType)sourceType
+- (void)getMediaFromSource:(PCSImagePickerType)sourceType
 {
     if ([UIImagePickerController isSourceTypeAvailable:sourceType]) {
         
-        if (sourceType == UIImagePickerControllerSourceTypePhotoLibrary) {
+        if (sourceType == PCSImagePickerTypePhoto || sourceType == PCSImagePickerTypeVideo) {
             AGImagePickerController *imagePickerController = [[AGImagePickerController alloc] initWithFailureBlock:^(NSError *error) {
                 NSLog(@"Fail. Error: %@", error);
                 
@@ -136,22 +136,23 @@
                 
                 [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
                 
-                [self beginUploadFileWith:path info:info];
+                [self beginUploadFileWith:path info:info type:sourceType];
                 
             }];
             
             // Show saved photos on top
+            imagePickerController.imagePickerType = sourceType;
             imagePickerController.shouldShowSavedPhotosOnTop = YES;
             imagePickerController.selection = self.selectedPhotos;
     
             [self presentModalViewController:imagePickerController animated:YES];
             [imagePickerController release];
-        } else if (sourceType == UIImagePickerControllerSourceTypeCamera) {
+        } else if (sourceType == PCSImagePickerTypeCamera) {
             UIImagePickerController *picker = [[UIImagePickerController alloc] init];
             picker.delegate = self;
             picker.allowsEditing = YES;
             picker.videoQuality = UIImagePickerControllerQualityTypeLow;
-            picker.sourceType = sourceType;
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
             [self presentModalViewController:picker animated:YES];
             PCS_FUNC_SAFELY_RELEASE(picker);
         }
@@ -166,21 +167,33 @@
     }
 }
 
-- (void)beginUploadFileWith:(NSString *)path info:(NSArray *)info
+- (void)beginUploadFileWith:(NSString *)path info:(NSArray *)info type:(PCSImagePickerType)type
 {
-    NSLog(@"path:%@,Info: %@",path,info);
+    PCSLog(@"path:%@,Info: %@",path,info);
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     dateFormat.dateFormat = @"yyyy-MM-dd_HH-mm-ss";
     
     for (NSInteger count = 0; count < info.count; count++) {
         ALAsset *asset = [info objectAtIndex:count];
-        NSString    *fileName =[NSString stringWithFormat:@"Photo_%@.jpg",[dateFormat stringFromDate:[NSDate date]]];
-        NSString *target = [[NSString alloc] initWithFormat:@"%@test/%@",PCS_STRING_DEFAULT_PATH,fileName];
-        UIImage *image =  [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
-        NSData  *data = UIImagePNGRepresentation(image);
+        NSString    *fileName = nil;
+        NSData  *data = nil;
+        if (type == PCSImagePickerTypePhoto) {
+            [NSString stringWithFormat:@"Photo_%@.jpg",[dateFormat stringFromDate:[NSDate date]]];
+            UIImage *image =  [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
+            data = UIImagePNGRepresentation(image);
+        } else if (type == PCSImagePickerTypeVideo) {
+            fileName =[NSString stringWithFormat:@"Video_%@.mov",[dateFormat stringFromDate:[NSDate date]]];
+        }
+        
+        if (data == nil || fileName == nil) {
+            PCSLog(@"error,data or filename is nil.");
+            return;
+        }
+        NSString *target = [[NSString alloc] initWithFormat:@"%@test/%@",path,fileName];
         [self uploadNewFileToServer:data name:fileName path:target];
         PCS_FUNC_SAFELY_RELEASE(target);
     }
+    PCS_FUNC_SAFELY_RELEASE(dateFormat);
 }
 
 #pragma mark - 数据处理
@@ -333,10 +346,12 @@
 {
     UIButton *button = (UIButton *)sender;
     if (button.tag == 1001) {
-        [self getMediaFromSource:UIImagePickerControllerSourceTypePhotoLibrary];
+        [self getMediaFromSource:PCSImagePickerTypePhoto];
     } else if (button.tag == 1002) {
-        [self getMediaFromSource:UIImagePickerControllerSourceTypeCamera];
+        [self getMediaFromSource:PCSImagePickerTypeCamera];
     } else if (button.tag == 1003) {
+        [self getMediaFromSource:PCSImagePickerTypeVideo];
+    } else {
         [self uploadTest];
     }
 }

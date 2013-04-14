@@ -27,7 +27,8 @@
 @property (retain) IBOutlet UITableView *tableView;
 
 @property (readonly) NSArray *selectedAssets;
+@property (assign) PCSImagePickerType   imagePickerType;
 
-- (id)initWithAssetsGroup:(ALAssetsGroup *)theAssetsGroup;
+- (id)initWithAssetsGroup:(ALAssetsGroup *)theAssetsGroup type:(PCSImagePickerType)type;
 
 @end

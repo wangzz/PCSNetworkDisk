@@ -235,7 +235,7 @@
         cell.detailTextLabel.text = [dateFormatter stringFromDate:date];
         PCS_FUNC_SAFELY_RELEASE(dateFormatter);
     } else if (fileItem.property == PCSFilePropertyOffLineFailed) {
-        cell.detailTextLabel.text = @"下载失败，点击重新上传";
+        cell.detailTextLabel.text = @"下载失败，点击重新下载";
     } else if (fileItem.property == PCSFilePropertyOffLineWaiting) {
         cell.detailTextLabel.text = @"等待下载...";
     } else if (fileItem.property == PCSFilePropertyOffLining) {
