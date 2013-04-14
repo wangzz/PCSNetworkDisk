@@ -22,6 +22,26 @@
 		821A364917144DBC007E0EC5 /* ChineseLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 821A364817144DBC007E0EC5 /* ChineseLocalizable.strings */; };
 		8225CC8D16FA00C8004B3711 /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8225CC8C16FA00C8004B3711 /* NSStringAdditions.m */; };
 		8225CC9016FA0F97004B3711 /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8225CC8F16FA0F97004B3711 /* NSDataAdditions.m */; };
+		8226C390171A6218004F24AC /* HSDirectoryNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8226C38D171A6217004F24AC /* HSDirectoryNavigationController.m */; };
+		8226C391171A6218004F24AC /* HSDirectoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8226C38F171A6217004F24AC /* HSDirectoryViewController.m */; };
+		8226C398171A66D8004F24AC /* PCSNetDiskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8226C397171A66D8004F24AC /* PCSNetDiskViewController.m */; };
+		8226C3BB171AA095004F24AC /* AGImagePickerController+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 8226C3A4171AA095004F24AC /* AGImagePickerController+Constants.m */; };
+		8226C3BC171AA095004F24AC /* AGImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8226C3A6171AA095004F24AC /* AGImagePickerController.m */; };
+		8226C3BD171AA095004F24AC /* AGIPC-Checkmark-iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8226C3A7171AA095004F24AC /* AGIPC-Checkmark-iPad.png */; };
+		8226C3BE171AA095004F24AC /* AGIPC-Checkmark-iPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 8226C3A8171AA095004F24AC /* AGIPC-Checkmark-iPhone.png */; };
+		8226C3BF171AA095004F24AC /* AGIPC-Checkmark-iPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8226C3A9171AA095004F24AC /* AGIPC-Checkmark-iPhone@2x.png */; };
+		8226C3C0171AA095004F24AC /* AGIPCAlbumsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8226C3AB171AA095004F24AC /* AGIPCAlbumsController.m */; };
+		8226C3C1171AA095004F24AC /* AGIPCAlbumsController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8226C3AC171AA095004F24AC /* AGIPCAlbumsController_iPad.xib */; };
+		8226C3C2171AA095004F24AC /* AGIPCAlbumsController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8226C3AD171AA095004F24AC /* AGIPCAlbumsController_iPhone.xib */; };
+		8226C3C3171AA095004F24AC /* AGIPCAssetsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8226C3AF171AA095004F24AC /* AGIPCAssetsController.m */; };
+		8226C3C4171AA095004F24AC /* AGIPCAssetsController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8226C3B0171AA095004F24AC /* AGIPCAssetsController_iPad.xib */; };
+		8226C3C5171AA095004F24AC /* AGIPCAssetsController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8226C3B1171AA095004F24AC /* AGIPCAssetsController_iPhone.xib */; };
+		8226C3C6171AA095004F24AC /* AGIPCGridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8226C3B3171AA095004F24AC /* AGIPCGridCell.m */; };
+		8226C3C7171AA095004F24AC /* AGIPCGridItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8226C3B5171AA095004F24AC /* AGIPCGridItem.m */; };
+		8226C3C8171AA095004F24AC /* AGIPCToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8226C3B7171AA095004F24AC /* AGIPCToolbarItem.m */; };
+		8226C3C9171AA095004F24AC /* ALAsset+AGIPC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8226C3B9171AA095004F24AC /* ALAsset+AGIPC.m */; };
+		8226C3CA171AA095004F24AC /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 8226C3BA171AA095004F24AC /* LICENSE */; };
+		8226C3CC171AA3CE004F24AC /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8226C3CB171AA3CE004F24AC /* AssetsLibrary.framework */; };
 		822C911516EA2D0100F80D00 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 822C911416EA2D0100F80D00 /* MBProgressHUD.m */; };
 		822C911B16EA383700F80D00 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822C911A16EA383700F80D00 /* CFNetwork.framework */; };
 		822C911D16EA384000F80D00 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822C911C16EA384000F80D00 /* SystemConfiguration.framework */; };
@@ -43,7 +63,6 @@
 		822F7B8E16E8DD7000898CA4 /* PCSMainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7B8D16E8DD7000898CA4 /* PCSMainTabBarController.m */; };
 		822F7B9716E8E45F00898CA4 /* PCSLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7B9516E8E45F00898CA4 /* PCSLoginViewController.m */; };
 		822F7B9816E8E45F00898CA4 /* PCSLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822F7B9616E8E45F00898CA4 /* PCSLoginViewController.xib */; };
-		822F7BA616E8E74F00898CA4 /* PCSNetDiskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7BA416E8E74F00898CA4 /* PCSNetDiskViewController.m */; };
 		822F7BA716E8E74F00898CA4 /* PCSNetDiskViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822F7BA516E8E74F00898CA4 /* PCSNetDiskViewController.xib */; };
 		822F7BAB16E8E77000898CA4 /* PCSUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7BA916E8E77000898CA4 /* PCSUploadViewController.m */; };
 		822F7BAC16E8E77000898CA4 /* PCSUploadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 822F7BAA16E8E77000898CA4 /* PCSUploadViewController.xib */; };
@@ -73,6 +92,11 @@
 		82D1673717146BFB0071FF9F /* RIButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 82D1673117146BFB0071FF9F /* RIButtonItem.m */; };
 		82D1673817146BFB0071FF9F /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 82D1673317146BFB0071FF9F /* UIActionSheet+Blocks.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		82D1673917146BFB0071FF9F /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 82D1673517146BFB0071FF9F /* UIAlertView+Blocks.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		82D56294171ABDFE0073E052 /* file_picker_toolbar_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82D56291171ABDFE0073E052 /* file_picker_toolbar_button@2x.png */; };
+		82D56295171ABDFE0073E052 /* file_picker_toolbar_buttoned@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82D56292171ABDFE0073E052 /* file_picker_toolbar_buttoned@2x.png */; };
+		82D56296171ABDFE0073E052 /* file_picker_toolbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82D56293171ABDFE0073E052 /* file_picker_toolbar@2x.png */; };
+		82D56299171AC02B0073E052 /* back_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82D56297171AC02B0073E052 /* back_normal@2x.png */; };
+		82D5629A171AC02B0073E052 /* back_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82D56298171AC02B0073E052 /* back_selected@2x.png */; };
 		82DAA48E16F207D8003FEAF1 /* netdisk_type_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82DAA48516F207D8003FEAF1 /* netdisk_type_default@2x.png */; };
 		82EB9FE41713091D00CCE19D /* netdisk_type_excel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FDA1713091D00CCE19D /* netdisk_type_excel@2x.png */; };
 		82EB9FE51713091D00CCE19D /* netdisk_type_folder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FDB1713091D00CCE19D /* netdisk_type_folder@2x.png */; };
@@ -120,6 +144,37 @@
 		8225CC8C16FA00C8004B3711 /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
 		8225CC8E16FA0F97004B3711 /* NSDataAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataAdditions.h; sourceTree = "<group>"; };
 		8225CC8F16FA0F97004B3711 /* NSDataAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataAdditions.m; sourceTree = "<group>"; };
+		8226C38C171A6217004F24AC /* HSDirectoryNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HSDirectoryNavigationController.h; path = PCSDirectoryPicker/HSDirectoryNavigationController.h; sourceTree = "<group>"; };
+		8226C38D171A6217004F24AC /* HSDirectoryNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HSDirectoryNavigationController.m; path = PCSDirectoryPicker/HSDirectoryNavigationController.m; sourceTree = "<group>"; };
+		8226C38E171A6217004F24AC /* HSDirectoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HSDirectoryViewController.h; path = PCSDirectoryPicker/HSDirectoryViewController.h; sourceTree = "<group>"; };
+		8226C38F171A6217004F24AC /* HSDirectoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HSDirectoryViewController.m; path = PCSDirectoryPicker/HSDirectoryViewController.m; sourceTree = "<group>"; };
+		8226C392171A622C004F24AC /* HSDirectoryDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HSDirectoryDelegate.h; path = PCSDirectoryPicker/HSDirectoryDelegate.h; sourceTree = "<group>"; };
+		8226C397171A66D8004F24AC /* PCSNetDiskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSNetDiskViewController.m; sourceTree = "<group>"; };
+		8226C3A3171AA095004F24AC /* AGImagePickerController+Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AGImagePickerController+Constants.h"; sourceTree = "<group>"; };
+		8226C3A4171AA095004F24AC /* AGImagePickerController+Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AGImagePickerController+Constants.m"; sourceTree = "<group>"; };
+		8226C3A5171AA095004F24AC /* AGImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGImagePickerController.h; sourceTree = "<group>"; };
+		8226C3A6171AA095004F24AC /* AGImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGImagePickerController.m; sourceTree = "<group>"; };
+		8226C3A7171AA095004F24AC /* AGIPC-Checkmark-iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AGIPC-Checkmark-iPad.png"; sourceTree = "<group>"; };
+		8226C3A8171AA095004F24AC /* AGIPC-Checkmark-iPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AGIPC-Checkmark-iPhone.png"; sourceTree = "<group>"; };
+		8226C3A9171AA095004F24AC /* AGIPC-Checkmark-iPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AGIPC-Checkmark-iPhone@2x.png"; sourceTree = "<group>"; };
+		8226C3AA171AA095004F24AC /* AGIPCAlbumsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGIPCAlbumsController.h; sourceTree = "<group>"; };
+		8226C3AB171AA095004F24AC /* AGIPCAlbumsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGIPCAlbumsController.m; sourceTree = "<group>"; };
+		8226C3AC171AA095004F24AC /* AGIPCAlbumsController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AGIPCAlbumsController_iPad.xib; sourceTree = "<group>"; };
+		8226C3AD171AA095004F24AC /* AGIPCAlbumsController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AGIPCAlbumsController_iPhone.xib; sourceTree = "<group>"; };
+		8226C3AE171AA095004F24AC /* AGIPCAssetsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGIPCAssetsController.h; sourceTree = "<group>"; };
+		8226C3AF171AA095004F24AC /* AGIPCAssetsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGIPCAssetsController.m; sourceTree = "<group>"; };
+		8226C3B0171AA095004F24AC /* AGIPCAssetsController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AGIPCAssetsController_iPad.xib; sourceTree = "<group>"; };
+		8226C3B1171AA095004F24AC /* AGIPCAssetsController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AGIPCAssetsController_iPhone.xib; sourceTree = "<group>"; };
+		8226C3B2171AA095004F24AC /* AGIPCGridCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGIPCGridCell.h; sourceTree = "<group>"; };
+		8226C3B3171AA095004F24AC /* AGIPCGridCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGIPCGridCell.m; sourceTree = "<group>"; };
+		8226C3B4171AA095004F24AC /* AGIPCGridItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGIPCGridItem.h; sourceTree = "<group>"; };
+		8226C3B5171AA095004F24AC /* AGIPCGridItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGIPCGridItem.m; sourceTree = "<group>"; };
+		8226C3B6171AA095004F24AC /* AGIPCToolbarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGIPCToolbarItem.h; sourceTree = "<group>"; };
+		8226C3B7171AA095004F24AC /* AGIPCToolbarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGIPCToolbarItem.m; sourceTree = "<group>"; };
+		8226C3B8171AA095004F24AC /* ALAsset+AGIPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAsset+AGIPC.h"; sourceTree = "<group>"; };
+		8226C3B9171AA095004F24AC /* ALAsset+AGIPC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALAsset+AGIPC.m"; sourceTree = "<group>"; };
+		8226C3BA171AA095004F24AC /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		8226C3CB171AA3CE004F24AC /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		822C911316EA2D0100F80D00 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		822C911416EA2D0100F80D00 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		822C911A16EA383700F80D00 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -151,7 +206,6 @@
 		822F7B9516E8E45F00898CA4 /* PCSLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PCSLoginViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		822F7B9616E8E45F00898CA4 /* PCSLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSLoginViewController.xib; sourceTree = "<group>"; };
 		822F7BA316E8E74F00898CA4 /* PCSNetDiskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSNetDiskViewController.h; sourceTree = "<group>"; };
-		822F7BA416E8E74F00898CA4 /* PCSNetDiskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PCSNetDiskViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		822F7BA516E8E74F00898CA4 /* PCSNetDiskViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSNetDiskViewController.xib; sourceTree = "<group>"; };
 		822F7BA816E8E77000898CA4 /* PCSUploadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSUploadViewController.h; sourceTree = "<group>"; };
 		822F7BA916E8E77000898CA4 /* PCSUploadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSUploadViewController.m; sourceTree = "<group>"; };
@@ -211,6 +265,11 @@
 		82D1673317146BFB0071FF9F /* UIActionSheet+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIActionSheet+Blocks.m"; path = "UIAlertView-Blocks/UIActionSheet+Blocks.m"; sourceTree = "<group>"; };
 		82D1673417146BFB0071FF9F /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertView+Blocks.h"; path = "UIAlertView-Blocks/UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		82D1673517146BFB0071FF9F /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIAlertView+Blocks.m"; path = "UIAlertView-Blocks/UIAlertView+Blocks.m"; sourceTree = "<group>"; };
+		82D56291171ABDFE0073E052 /* file_picker_toolbar_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "file_picker_toolbar_button@2x.png"; sourceTree = "<group>"; };
+		82D56292171ABDFE0073E052 /* file_picker_toolbar_buttoned@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "file_picker_toolbar_buttoned@2x.png"; sourceTree = "<group>"; };
+		82D56293171ABDFE0073E052 /* file_picker_toolbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "file_picker_toolbar@2x.png"; sourceTree = "<group>"; };
+		82D56297171AC02B0073E052 /* back_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_normal@2x.png"; sourceTree = "<group>"; };
+		82D56298171AC02B0073E052 /* back_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_selected@2x.png"; sourceTree = "<group>"; };
 		82DAA48516F207D8003FEAF1 /* netdisk_type_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_default@2x.png"; sourceTree = "<group>"; };
 		82EB9FDA1713091D00CCE19D /* netdisk_type_excel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_excel@2x.png"; sourceTree = "<group>"; };
 		82EB9FDB1713091D00CCE19D /* netdisk_type_folder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_folder@2x.png"; sourceTree = "<group>"; };
@@ -243,6 +302,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8226C3CC171AA3CE004F24AC /* AssetsLibrary.framework in Frameworks */,
 				82EBA0091713153E00CCE19D /* AudioToolbox.framework in Frameworks */,
 				82EBA0071713150D00CCE19D /* Security.framework in Frameworks */,
 				822C912516EA386A00F80D00 /* MessageUI.framework in Frameworks */,
@@ -293,6 +353,49 @@
 			name = "NSString+Addition";
 			sourceTree = "<group>";
 		};
+		8226C38A171A60D5004F24AC /* PCSDirectoryPicker */ = {
+			isa = PBXGroup;
+			children = (
+				8226C392171A622C004F24AC /* HSDirectoryDelegate.h */,
+				8226C38C171A6217004F24AC /* HSDirectoryNavigationController.h */,
+				8226C38D171A6217004F24AC /* HSDirectoryNavigationController.m */,
+				8226C38E171A6217004F24AC /* HSDirectoryViewController.h */,
+				8226C38F171A6217004F24AC /* HSDirectoryViewController.m */,
+			);
+			name = PCSDirectoryPicker;
+			sourceTree = "<group>";
+		};
+		8226C3A2171AA095004F24AC /* AGImagePickerController */ = {
+			isa = PBXGroup;
+			children = (
+				8226C3A3171AA095004F24AC /* AGImagePickerController+Constants.h */,
+				8226C3A4171AA095004F24AC /* AGImagePickerController+Constants.m */,
+				8226C3A5171AA095004F24AC /* AGImagePickerController.h */,
+				8226C3A6171AA095004F24AC /* AGImagePickerController.m */,
+				8226C3A7171AA095004F24AC /* AGIPC-Checkmark-iPad.png */,
+				8226C3A8171AA095004F24AC /* AGIPC-Checkmark-iPhone.png */,
+				8226C3A9171AA095004F24AC /* AGIPC-Checkmark-iPhone@2x.png */,
+				8226C3AA171AA095004F24AC /* AGIPCAlbumsController.h */,
+				8226C3AB171AA095004F24AC /* AGIPCAlbumsController.m */,
+				8226C3AC171AA095004F24AC /* AGIPCAlbumsController_iPad.xib */,
+				8226C3AD171AA095004F24AC /* AGIPCAlbumsController_iPhone.xib */,
+				8226C3AE171AA095004F24AC /* AGIPCAssetsController.h */,
+				8226C3AF171AA095004F24AC /* AGIPCAssetsController.m */,
+				8226C3B0171AA095004F24AC /* AGIPCAssetsController_iPad.xib */,
+				8226C3B1171AA095004F24AC /* AGIPCAssetsController_iPhone.xib */,
+				8226C3B2171AA095004F24AC /* AGIPCGridCell.h */,
+				8226C3B3171AA095004F24AC /* AGIPCGridCell.m */,
+				8226C3B4171AA095004F24AC /* AGIPCGridItem.h */,
+				8226C3B5171AA095004F24AC /* AGIPCGridItem.m */,
+				8226C3B6171AA095004F24AC /* AGIPCToolbarItem.h */,
+				8226C3B7171AA095004F24AC /* AGIPCToolbarItem.m */,
+				8226C3B8171AA095004F24AC /* ALAsset+AGIPC.h */,
+				8226C3B9171AA095004F24AC /* ALAsset+AGIPC.m */,
+				8226C3BA171AA095004F24AC /* LICENSE */,
+			);
+			path = AGImagePickerController;
+			sourceTree = "<group>";
+		};
 		822C911116EA2CDE00F80D00 /* MBProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -322,6 +425,7 @@
 		822F7B1E16E8CE5B00898CA4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8226C3CB171AA3CE004F24AC /* AssetsLibrary.framework */,
 				82EBA0081713153D00CCE19D /* AudioToolbox.framework */,
 				82EBA0061713150D00CCE19D /* Security.framework */,
 				822C912616EA387500F80D00 /* libz.dylib */,
@@ -437,7 +541,7 @@
 				822F7B8C16E8DD7000898CA4 /* PCSMainTabBarController.h */,
 				822F7B8D16E8DD7000898CA4 /* PCSMainTabBarController.m */,
 				822F7BA316E8E74F00898CA4 /* PCSNetDiskViewController.h */,
-				822F7BA416E8E74F00898CA4 /* PCSNetDiskViewController.m */,
+				8226C397171A66D8004F24AC /* PCSNetDiskViewController.m */,
 				822F7BA516E8E74F00898CA4 /* PCSNetDiskViewController.xib */,
 				822F7BA816E8E77000898CA4 /* PCSUploadViewController.h */,
 				822F7BA916E8E77000898CA4 /* PCSUploadViewController.m */,
@@ -455,6 +559,8 @@
 		822F7B8316E8D7C600898CA4 /* CustomView */ = {
 			isa = PBXGroup;
 			children = (
+				8226C3A2171AA095004F24AC /* AGImagePickerController */,
+				8226C38A171A60D5004F24AC /* PCSDirectoryPicker */,
 				8271ADDA1709DBD6002DEFB1 /* MWPhotoBrowser */,
 			);
 			name = CustomView;
@@ -546,9 +652,22 @@
 			name = "UIAlertView-Blocks";
 			sourceTree = "<group>";
 		};
+		82D5628F171ABDE80073E052 /* FilePicker */ = {
+			isa = PBXGroup;
+			children = (
+				82D56297171AC02B0073E052 /* back_normal@2x.png */,
+				82D56298171AC02B0073E052 /* back_selected@2x.png */,
+				82D56291171ABDFE0073E052 /* file_picker_toolbar_button@2x.png */,
+				82D56292171ABDFE0073E052 /* file_picker_toolbar_buttoned@2x.png */,
+				82D56293171ABDFE0073E052 /* file_picker_toolbar@2x.png */,
+			);
+			name = FilePicker;
+			sourceTree = "<group>";
+		};
 		82DAA47216F20721003FEAF1 /* 640×960 */ = {
 			isa = PBXGroup;
 			children = (
+				82D5628F171ABDE80073E052 /* FilePicker */,
 				824CFF27170B224D0036AC2D /* More */,
 				82DAA47816F20773003FEAF1 /* NetDisk */,
 				82DAA47716F2076A003FEAF1 /* TabBar */,
@@ -720,6 +839,19 @@
 				82EBA00E17131FD900CCE19D /* PCSClearCacheViewController.xib in Resources */,
 				821A364917144DBC007E0EC5 /* ChineseLocalizable.strings in Resources */,
 				82D1673617146BFB0071FF9F /* README.md in Resources */,
+				8226C3BD171AA095004F24AC /* AGIPC-Checkmark-iPad.png in Resources */,
+				8226C3BE171AA095004F24AC /* AGIPC-Checkmark-iPhone.png in Resources */,
+				8226C3BF171AA095004F24AC /* AGIPC-Checkmark-iPhone@2x.png in Resources */,
+				8226C3C1171AA095004F24AC /* AGIPCAlbumsController_iPad.xib in Resources */,
+				8226C3C2171AA095004F24AC /* AGIPCAlbumsController_iPhone.xib in Resources */,
+				8226C3C4171AA095004F24AC /* AGIPCAssetsController_iPad.xib in Resources */,
+				8226C3C5171AA095004F24AC /* AGIPCAssetsController_iPhone.xib in Resources */,
+				8226C3CA171AA095004F24AC /* LICENSE in Resources */,
+				82D56294171ABDFE0073E052 /* file_picker_toolbar_button@2x.png in Resources */,
+				82D56295171ABDFE0073E052 /* file_picker_toolbar_buttoned@2x.png in Resources */,
+				82D56296171ABDFE0073E052 /* file_picker_toolbar@2x.png in Resources */,
+				82D56299171AC02B0073E052 /* back_normal@2x.png in Resources */,
+				82D5629A171AC02B0073E052 /* back_selected@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -735,7 +867,6 @@
 				822F7B8716E8D8A700898CA4 /* PCSRootViewController.m in Sources */,
 				822F7B8E16E8DD7000898CA4 /* PCSMainTabBarController.m in Sources */,
 				822F7B9716E8E45F00898CA4 /* PCSLoginViewController.m in Sources */,
-				822F7BA616E8E74F00898CA4 /* PCSNetDiskViewController.m in Sources */,
 				822F7BAB16E8E77000898CA4 /* PCSUploadViewController.m in Sources */,
 				822F7BB016E8E78800898CA4 /* PCSMoreViewController.m in Sources */,
 				822F7BB516E8EE0700898CA4 /* PCSOfflineViewController.m in Sources */,
@@ -768,6 +899,17 @@
 				82D1673717146BFB0071FF9F /* RIButtonItem.m in Sources */,
 				82D1673817146BFB0071FF9F /* UIActionSheet+Blocks.m in Sources */,
 				82D1673917146BFB0071FF9F /* UIAlertView+Blocks.m in Sources */,
+				8226C390171A6218004F24AC /* HSDirectoryNavigationController.m in Sources */,
+				8226C391171A6218004F24AC /* HSDirectoryViewController.m in Sources */,
+				8226C398171A66D8004F24AC /* PCSNetDiskViewController.m in Sources */,
+				8226C3BB171AA095004F24AC /* AGImagePickerController+Constants.m in Sources */,
+				8226C3BC171AA095004F24AC /* AGImagePickerController.m in Sources */,
+				8226C3C0171AA095004F24AC /* AGIPCAlbumsController.m in Sources */,
+				8226C3C3171AA095004F24AC /* AGIPCAssetsController.m in Sources */,
+				8226C3C6171AA095004F24AC /* AGIPCGridCell.m in Sources */,
+				8226C3C7171AA095004F24AC /* AGIPCGridItem.m in Sources */,
+				8226C3C8171AA095004F24AC /* AGIPCToolbarItem.m in Sources */,
+				8226C3C9171AA095004F24AC /* ALAsset+AGIPC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -810,6 +952,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -831,6 +974,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};
