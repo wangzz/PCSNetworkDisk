@@ -97,6 +97,7 @@
 		82D56296171ABDFE0073E052 /* file_picker_toolbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82D56293171ABDFE0073E052 /* file_picker_toolbar@2x.png */; };
 		82D56299171AC02B0073E052 /* back_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82D56297171AC02B0073E052 /* back_normal@2x.png */; };
 		82D5629A171AC02B0073E052 /* back_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82D56298171AC02B0073E052 /* back_selected@2x.png */; };
+		82D5649D171C4112001B8B68 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82D5649C171C4112001B8B68 /* AVFoundation.framework */; };
 		82DAA48E16F207D8003FEAF1 /* netdisk_type_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82DAA48516F207D8003FEAF1 /* netdisk_type_default@2x.png */; };
 		82EB9FE41713091D00CCE19D /* netdisk_type_excel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FDA1713091D00CCE19D /* netdisk_type_excel@2x.png */; };
 		82EB9FE51713091D00CCE19D /* netdisk_type_folder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EB9FDB1713091D00CCE19D /* netdisk_type_folder@2x.png */; };
@@ -270,6 +271,7 @@
 		82D56293171ABDFE0073E052 /* file_picker_toolbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "file_picker_toolbar@2x.png"; sourceTree = "<group>"; };
 		82D56297171AC02B0073E052 /* back_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_normal@2x.png"; sourceTree = "<group>"; };
 		82D56298171AC02B0073E052 /* back_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_selected@2x.png"; sourceTree = "<group>"; };
+		82D5649C171C4112001B8B68 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		82DAA48516F207D8003FEAF1 /* netdisk_type_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_default@2x.png"; sourceTree = "<group>"; };
 		82EB9FDA1713091D00CCE19D /* netdisk_type_excel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_excel@2x.png"; sourceTree = "<group>"; };
 		82EB9FDB1713091D00CCE19D /* netdisk_type_folder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_folder@2x.png"; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82D5649D171C4112001B8B68 /* AVFoundation.framework in Frameworks */,
 				8226C3CC171AA3CE004F24AC /* AssetsLibrary.framework in Frameworks */,
 				82EBA0091713153E00CCE19D /* AudioToolbox.framework in Frameworks */,
 				82EBA0071713150D00CCE19D /* Security.framework in Frameworks */,
@@ -408,6 +411,7 @@
 		822F7B1016E8CE5B00898CA4 = {
 			isa = PBXGroup;
 			children = (
+				82D5649C171C4112001B8B68 /* AVFoundation.framework */,
 				822F7B2516E8CE5B00898CA4 /* PCSNetworkDisk */,
 				822F7B1E16E8CE5B00898CA4 /* Frameworks */,
 				822F7B1C16E8CE5B00898CA4 /* Products */,

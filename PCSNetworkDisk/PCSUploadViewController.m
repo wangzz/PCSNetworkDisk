@@ -10,6 +10,8 @@
 #import "HSDirectoryNavigationController.h"
 #import "AGImagePickerController/AGImagePickerController.h"
 #import "AGImagePickerController/AGIPCToolbarItem.h"
+#import <AVFoundation/AVFoundation.h>
+#import "NSStringAdditions.h"
 
 @interface PCSUploadViewController ()
 
@@ -170,30 +172,89 @@
 - (void)beginUploadFileWith:(NSString *)path info:(NSArray *)info type:(PCSImagePickerType)type
 {
     PCSLog(@"path:%@,Info: %@",path,info);
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    dateFormat.dateFormat = @"yyyy-MM-dd_HH-mm-ss";
+    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(globalQueue, ^{
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        dateFormat.dateFormat = @"yyyy-MM-dd_HH-mm-ss";
+        dispatch_apply([info count], globalQueue, ^(size_t index){
+            PCSLog(@"##########index=%zd",index);
+            ALAsset *asset = [info objectAtIndex:index];
+            NSString    *fileName = nil;
+            NSData  *data = nil;
+            NSString *target = nil;
+            NSString    *dateString = [dateFormat stringFromDate:[NSDate date]];
+            if (type == PCSImagePickerTypePhoto) {
+                fileName = [NSString stringWithFormat:@"Photo_%@.jpg",dateString];
+                UIImage *image =  [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
+                data = UIImagePNGRepresentation(image);
+                if (data == nil || fileName == nil) {
+                    PCSLog(@"error,data or filename is nil.");
+                    return;
+                }
+                target = [NSString stringWithFormat:@"%@%@",path,fileName];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    [self uploadNewFileToServer:data
+                                           name:fileName
+                                           path:target
+                                    saveToCache:YES];
+                });
+            } else if (type == PCSImagePickerTypeVideo) {
+                fileName =[NSString stringWithFormat:@"Video_%@.mov",dateString];
+                target = [NSString stringWithFormat:@"%@%@",path,fileName];
+                [self uploadVideoToServer:[asset defaultRepresentation].url
+                                     name:fileName
+                                     path:target];
+            }
+        });
+        PCS_FUNC_SAFELY_RELEASE(dateFormat);
+    });
+}
+
+- (void)uploadVideoToServer:(NSURL *)url name:(NSString *)name path:(NSString *)serverPath
+{
+    AVURLAsset * urlAsset = [[AVURLAsset alloc] initWithURL:url options:nil];
+    AVAssetExportSession * exportSession = [AVAssetExportSession exportSessionWithAsset:urlAsset
+                                                                             presetName:AVAssetExportPresetMediumQuality];
+    //其他值可以查看，根据自己的需求确定
+    exportSession.outputFileType = AVFileTypeQuickTimeMovie;
     
-    for (NSInteger count = 0; count < info.count; count++) {
-        ALAsset *asset = [info objectAtIndex:count];
-        NSString    *fileName = nil;
-        NSData  *data = nil;
-        if (type == PCSImagePickerTypePhoto) {
-            [NSString stringWithFormat:@"Photo_%@.jpg",[dateFormat stringFromDate:[NSDate date]]];
-            UIImage *image =  [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
-            data = UIImagePNGRepresentation(image);
-        } else if (type == PCSImagePickerTypeVideo) {
-            fileName =[NSString stringWithFormat:@"Video_%@.mov",[dateFormat stringFromDate:[NSDate date]]];
+    NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+                      stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE]
+                      stringByAppendingPathComponent:[name md5Hash]];
+    exportSession.outputURL = [NSURL fileURLWithPath:path];//输出的保存路径，文件不能已存在
+    [exportSession exportAsynchronouslyWithCompletionHandler:^{
+        switch (exportSession.status) {
+            case AVAssetExportSessionStatusUnknown:
+                NSLog(@"exportSession.status AVAssetExportSessionStatusUnknown");
+                break;
+            case AVAssetExportSessionStatusWaiting:
+                NSLog(@"exportSession Waiting");
+                break;
+            case AVAssetExportSessionStatusExporting:
+                NSLog(@"exportSession Exporting");
+                break;
+            case AVAssetExportSessionStatusCompleted:
+                NSLog(@"exportSession Completed");
+                NSData  *data = [NSData dataWithContentsOfFile:path];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    [self uploadNewFileToServer:data
+                                           name:name
+                                           path:serverPath
+                                    saveToCache:NO];
+                });
+                break;
+            case AVAssetExportSessionStatusFailed:
+                NSLog(@"exportSession Failed");
+                NSLog(@"error:%@",exportSession.error);
+                break;
+            case AVAssetExportSessionStatusCancelled:
+                NSLog(@"exportSession Cancelled");
+                break;
+            default:
+                break;
         }
         
-        if (data == nil || fileName == nil) {
-            PCSLog(@"error,data or filename is nil.");
-            return;
-        }
-        NSString *target = [[NSString alloc] initWithFormat:@"%@test/%@",path,fileName];
-        [self uploadNewFileToServer:data name:fileName path:target];
-        PCS_FUNC_SAFELY_RELEASE(target);
-    }
-    PCS_FUNC_SAFELY_RELEASE(dateFormat);
+    }];
 }
 
 #pragma mark - 数据处理
@@ -205,16 +266,21 @@
     NSString    *fileName = @"世界真美好.pdf";
     NSString *target = [[NSString alloc] initWithFormat:@"%@%@",PCS_STRING_DEFAULT_PATH,fileName];
     
-    [self uploadNewFileToServer:data name:fileName path:target];
+    [self uploadNewFileToServer:data name:fileName path:target saveToCache:YES];
     PCS_FUNC_SAFELY_RELEASE(target);
 }
 
 //新选取的文件信息入库，文件缓存等操作，并根据操作结果判断是否需要立马上传服务器
-- (void)uploadNewFileToServer:(NSData *)data name:(NSString *)fileName path:(NSString *)filePath
+- (void)uploadNewFileToServer:(NSData *)data
+                         name:(NSString *)fileName
+                         path:(NSString *)filePath
+                  saveToCache:(BOOL)save
 {
-    //先将文件保存到缓存中
-    [[PCSDBOperater shareInstance] saveFileToUploadCache:data name:filePath];
-    
+    if (save) {
+        //先将文件保存到缓存中
+        [[PCSDBOperater shareInstance] saveFileToUploadCache:data name:filePath];
+    }
+
     PCSFileInfoItem *fileItem = [[PCSFileInfoItem alloc] init];
     fileItem.name = fileName;
     fileItem.serverPath = filePath;
@@ -515,7 +581,7 @@
     NSString    *fileName =[NSString stringWithFormat:@"Photo_%@.jpg",[dateFormat stringFromDate:[NSDate date]]];
     NSString *target = [[NSString alloc] initWithFormat:@"%@test/%@",PCS_STRING_DEFAULT_PATH,fileName];
     NSData  *data = UIImagePNGRepresentation(image);
-    [self uploadNewFileToServer:data name:fileName path:target];
+    [self uploadNewFileToServer:data name:fileName path:target saveToCache:YES];
     [picker dismissModalViewControllerAnimated:YES];
 }
 

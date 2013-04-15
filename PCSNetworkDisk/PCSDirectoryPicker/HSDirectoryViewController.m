@@ -78,7 +78,7 @@
     }
     
     // Set the prompt text
-    [[self navigationItem] setPrompt:@"选择文件上传路径"];
+    [[self navigationItem] setPrompt:@"请选择文件上传路径"];
 }
 
 - (BOOL)isFileVaild:(NSString *)fileName

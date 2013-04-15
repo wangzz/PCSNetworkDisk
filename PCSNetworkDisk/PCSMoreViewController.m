@@ -143,7 +143,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         PCS_FUNC_SAFELY_RELEASE(progress);
         
         UILabel *usageLable = [[UILabel alloc] initWithFrame:CGRectMake(10, 23, 250, 15)];
-        usageLable.textAlignment = NSTextAlignmentCenter;
+        usageLable.textAlignment = UITextAlignmentCenter;
         usageLable.tag = PCS_TAG_MORE_USAGE_LABLE;
         usageLable.font = PCS_DETAIL_FONT;
         usageLable.backgroundColor = [UIColor greenColor];
@@ -151,8 +151,8 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         PCS_FUNC_SAFELY_RELEASE(usageLable);
         
         UILabel *rightLable = [[UILabel alloc] initWithFrame:CGRectMake(135, 10, 142, 22)];
-        rightLable.textAlignment = NSTextAlignmentRight;
-        rightLable.lineBreakMode = NSLineBreakByTruncatingMiddle;
+        rightLable.textAlignment = UITextAlignmentRight;
+        rightLable.lineBreakMode = UILineBreakModeMiddleTruncation;
         rightLable.tag = PCS_TAG_MORE_RIGHT_LABLE;
         rightLable.font = PCS_MAIN_FONT;
         rightLable.backgroundColor = [UIColor clearColor];

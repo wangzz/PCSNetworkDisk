@@ -240,18 +240,14 @@
     
     self.uploadPath = PCS_STRING_DEFAULT_PATH;
     
-    // Navigation Bar Items
-    UIButton    *selectAllButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 47, 32)];
-    selectAllButton.backgroundColor = [UIColor redColor];
-    [selectAllButton setTitle:@"全选" forState:UIControlStateNormal];
-    [selectAllButton addTarget:self
-                        action:@selector(doneAction:)
-              forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *doneButtonItem = [[UIBarButtonItem alloc] initWithCustomView:selectAllButton];
+    // Navigation Bar Items    
+    UIBarButtonItem *doneButtonItem = [[UIBarButtonItem alloc]
+                                       initWithTitle:@"全选"
+                                       style:UIBarButtonItemStylePlain
+                                       target:self
+                                       action:@selector(doneAction:)];
 	self.navigationItem.rightBarButtonItem = doneButtonItem;
     [doneButtonItem release];
-    [selectAllButton release];
     
     // Setup toolbar items
 //    [self setupToolbarItems];
@@ -427,7 +423,12 @@
     [self.navigationController setToolbarHidden:[self toolbarHidden] animated:YES];
     
     [self.tableView reloadData];
-    [self setTitle:[self.assetsGroup valueForProperty:ALAssetsGroupPropertyName]];
+    
+    NSString    *albumString = [self.assetsGroup valueForProperty:ALAssetsGroupPropertyName];
+    if ([albumString isEqualToString:@"Camera Roll"]) {
+        albumString = @"相机胶卷";
+    }
+    [self setTitle:albumString];
     [self changeSelectionInformation];
     
     NSInteger totalRows = [self.tableView numberOfRowsInSection:0];
@@ -441,15 +442,15 @@
 
 - (void)doneAction:(id)sender
 {
-    UIButton    *button = (UIButton *)sender;
-    button.selected = !button.selected;
-    if (button.selected) {
-        [button setTitle:@"全不选" forState:UIControlStateNormal];
+    UIBarButtonItem *barItem = (UIBarButtonItem *)sender;
+    selectAllAssets = !selectAllAssets;
+    if (selectAllAssets) {
+        barItem.title = @"全不选";
         for (AGIPCGridItem *gridItem in self.assets) {
             gridItem.selected = YES;
         }
     } else {
-        [button setTitle:@"全选" forState:UIControlStateNormal];
+        barItem.title = @"全选";
         for (AGIPCGridItem *gridItem in self.assets) {
             gridItem.selected = NO;
         }
@@ -501,7 +502,7 @@
 
 - (void)agGridItem:(AGIPCGridItem *)gridItem didChangeNumberOfSelections:(NSNumber *)numberOfSelections
 {
-    self.navigationItem.rightBarButtonItem.enabled = (numberOfSelections.unsignedIntegerValue > 0);
+//    self.navigationItem.rightBarButtonItem.enabled = (numberOfSelections.unsignedIntegerValue > 0);
     [self changeSelectionInformation];
 }
 

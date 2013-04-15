@@ -12,8 +12,13 @@
 #import "KKPasscodeLock.h"
 
 @implementation AppDelegate
+
+@synthesize window = _window;
+@synthesize viewController = _viewController;
 @synthesize pcsClient;
 @synthesize gcdQueue;
+
+
 - (void)dealloc
 {
     dispatch_release(gcdQueue);

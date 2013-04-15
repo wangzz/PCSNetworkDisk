@@ -151,7 +151,11 @@
     
     NSUInteger numberOfAssets = group.numberOfAssets;
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", [group valueForProperty:ALAssetsGroupPropertyName]];
+    NSString    *albumString = [group valueForProperty:ALAssetsGroupPropertyName];
+    if ([albumString isEqualToString:@"Camera Roll"]) {
+        albumString = @"相机胶卷";
+    } 
+    cell.textLabel.text = albumString;
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", numberOfAssets];
     [cell.imageView setImage:[UIImage imageWithCGImage:[(ALAssetsGroup*)[assetsGroups objectAtIndex:indexPath.row] posterImage]]];
 	[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];

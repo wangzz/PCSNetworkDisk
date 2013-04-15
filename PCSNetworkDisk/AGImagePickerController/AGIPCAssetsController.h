@@ -21,6 +21,7 @@
     ALAssetsGroup *assetsGroup;
     
     NSMutableArray *assets;
+    BOOL    selectAllAssets;
 }
 
 @property (retain) ALAssetsGroup *assetsGroup;
