@@ -349,13 +349,14 @@
 {
     NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
     PCSFileInfoItem *item = nil;
-    NSString    *sql = [NSString stringWithFormat:@"select id, name, cachepath,size,status,format,mtime from uploadfilelist where accountid=%d and status=%d order by mtime asc limit 1",accountID,PCSFileUploadStatusWaiting];
+    NSString    *sql = [NSString stringWithFormat:@"select id, name, serverpath, cachepath,size,status,format,mtime from uploadfilelist where accountid=%d and status=%d order by mtime asc limit 1",accountID,PCSFileUploadStatusWaiting];
     FMResultSet *rs = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
     while ([rs next]){
         item = [[[PCSFileInfoItem alloc] init] autorelease];
         item.fid = [rs intForColumn:@"id"];
         item.name = [rs stringForColumn:@"name"];
-        item.serverPath = [rs stringForColumn:@"cachepath"];
+        item.parentPath = [rs stringForColumn:@"cachepath"];
+        item.serverPath = [rs stringForColumn:@"serverpath"];
         item.size = [rs intForColumn:@"size"];
         item.format = [rs intForColumn:@"format"];
         item.property = [rs intForColumn:@"status"];
@@ -364,11 +365,11 @@
     return item;
 }
 
-//判断serverpath值为cachePath的文件是否在在uploadfilelist数据库中
-- (BOOL)isFileInUploadFileList:(NSString *)cachePath
+//判断值为serverpath的文件是否在在uploadfilelist数据库中
+- (BOOL)isFileInUploadFileList:(NSString *)serverPath
 {
     NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
-    NSString    *sql = [NSString stringWithFormat:@"select * from uploadfilelist where accountid=%d and cachepath=\"%@\"",accountID,cachePath];
+    NSString    *sql = [NSString stringWithFormat:@"select * from uploadfilelist where accountid=%d and serverpath=\"%@\"",accountID,serverPath];
     FMResultSet *rt = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
     return rt.next;
 }
@@ -383,15 +384,29 @@
 }
 
 //更新文件的上传状态
-- (BOOL)updateUploadFile:(NSString *)name status:(PCSFileUploadStatus)newStatus
+- (BOOL)updateUploadFile:(NSString *)serverPath status:(PCSFileUploadStatus)newStatus
 {
     NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
-    NSString    *sql = [NSString stringWithFormat:@"update uploadfilelist set status=%d, mtime=%d where cachepath=\"%@\" and accountid=%d",newStatus,(NSInteger)[[NSDate date] timeIntervalSince1970],name,accountID];
+    NSString    *sql = [NSString stringWithFormat:@"update uploadfilelist set status=%d, mtime=%d where serverpath=\"%@\" and accountid=%d",newStatus,(NSInteger)[[NSDate date] timeIntervalSince1970],serverPath,accountID];
     PCSLog(@"sql:%@",sql);
     BOOL result = NO;
     result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
     if (!result) {
         PCSLog(@" update upload file status failed.%@",[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
+    }
+    
+    return result;
+}
+
+- (BOOL)updateUploadFile:(NSString *)serverPath size:(NSInteger)size
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSString    *sql = [NSString stringWithFormat:@"update uploadfilelist set size=%d, mtime=%d where serverpath=\"%@\" and accountid=%d",size,(NSInteger)[[NSDate date] timeIntervalSince1970],serverPath,accountID];
+    PCSLog(@"sql:%@",sql);
+    BOOL result = NO;
+    result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
+    if (!result) {
+        PCSLog(@" update upload file size failed.%@",[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
     }
     
     return result;
@@ -404,7 +419,7 @@
 - (BOOL)saveUploadFileToDB:(PCSFileInfoItem *)item
 {
     NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
-    NSString    *sql = [NSString stringWithFormat:@"replace into uploadfilelist(accountid,name,cachepath,size,status,format,mtime) values(%d,\"%@\",\"%@\",%d,%d,%d,%d)",accountID,PCS_FUNC_SENTENCED_EMPTY(item.name),PCS_FUNC_SENTENCED_EMPTY(item.serverPath),item.size,item.property,item.format,item.mtime];
+    NSString    *sql = [NSString stringWithFormat:@"replace into uploadfilelist(accountid,name,serverpath,cachepath,size,status,format,mtime) values(%d,\"%@\",\"%@\",\"%@\",%d,%d,%d,%d)",accountID,PCS_FUNC_SENTENCED_EMPTY(item.name),PCS_FUNC_SENTENCED_EMPTY(item.serverPath),PCS_FUNC_SENTENCED_EMPTY(item.parentPath),item.size,item.property,item.format,item.mtime];
     PCSLog(@"sql:%@",sql);
     BOOL result = NO;
     result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
@@ -421,13 +436,14 @@
     NSMutableDictionary  *fileDictionary = [NSMutableDictionary dictionary];
     NSMutableArray  *uploadingArray = [NSMutableArray array];
     NSMutableArray  *uploadSuccessArray = [NSMutableArray array];
-    NSString    *sql = [NSString stringWithFormat:@"select id, name, cachepath,size,status,format,mtime from uploadfilelist where accountid=%d order by status desc,mtime desc",accountID];
+    NSString    *sql = [NSString stringWithFormat:@"select id, name, serverpath, cachepath,size,status,format,mtime from uploadfilelist where accountid=%d order by status desc,mtime desc",accountID];
     FMResultSet *rs = [[PCSDBOperater shareInstance].PCSDB executeQuery:sql];
     while ([rs next]){
         PCSFileInfoItem *item = [[PCSFileInfoItem alloc] init];
         item.fid = [rs intForColumn:@"id"];
         item.name = [rs stringForColumn:@"name"];
-        item.serverPath = [rs stringForColumn:@"cachepath"];
+        item.parentPath = [rs stringForColumn:@"cachepath"];
+        item.serverPath = [rs stringForColumn:@"serverpath"];
         item.size = [rs intForColumn:@"size"];
         item.format = [rs intForColumn:@"format"];
         item.property = [rs intForColumn:@"status"];

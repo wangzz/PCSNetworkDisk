@@ -129,16 +129,20 @@
                     });
                 }
                 
-                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault 
+                                                            animated:YES];
                 
             } andSuccessBlock:^(NSString* path,NSArray *info) {
                 [self.selectedPhotos setArray:info];
 
                 [self dismissModalViewControllerAnimated:YES];
                 
-                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault 
+                                                            animated:YES];
                 
-                [self beginUploadFileWith:path info:info type:sourceType];
+                [self imagePickerDidFinishWith:path 
+                                          info:info 
+                                          type:sourceType];
                 
             }];
             
@@ -169,55 +173,42 @@
     }
 }
 
-- (void)beginUploadFileWith:(NSString *)path info:(NSArray *)info type:(PCSImagePickerType)type
+- (void)imagePickerDidFinishWith:(NSString *)path 
+                       info:(NSArray *)info 
+                       type:(PCSImagePickerType)type
 {
     PCSLog(@"path:%@,Info: %@",path,info);
-    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(globalQueue, ^{
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        dateFormat.dateFormat = @"yyyy-MM-dd_HH-mm-ss";
-        dispatch_apply([info count], globalQueue, ^(size_t index){
-            PCSLog(@"##########index=%zd",index);
-            ALAsset *asset = [info objectAtIndex:index];
-            NSString    *fileName = nil;
-            NSData  *data = nil;
-            NSString *target = nil;
-            NSString    *dateString = [dateFormat stringFromDate:[NSDate date]];
-            if (type == PCSImagePickerTypePhoto) {
-                fileName = [NSString stringWithFormat:@"Photo_%@.jpg",dateString];
-                UIImage *image =  [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
-                data = UIImagePNGRepresentation(image);
-                if (data == nil || fileName == nil) {
-                    PCSLog(@"error,data or filename is nil.");
-                    return;
-                }
-                target = [NSString stringWithFormat:@"%@%@",path,fileName];
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    [self uploadNewFileToServer:data
-                                           name:fileName
-                                           path:target
-                                    saveToCache:YES];
-                });
-            } else if (type == PCSImagePickerTypeVideo) {
-                fileName =[NSString stringWithFormat:@"Video_%@.mov",dateString];
-                target = [NSString stringWithFormat:@"%@%@",path,fileName];
-                [self uploadVideoToServer:[asset defaultRepresentation].url
-                                     name:fileName
-                                     path:target];
-            }
-        });
-        PCS_FUNC_SAFELY_RELEASE(dateFormat);
-    });
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    dateFormat.dateFormat = @"yyyy-MM-dd_HH-mm-ss";
+    NSString    *fileName = nil;
+    NSString *target = nil;
+    for (NSInteger index = 0; index < info.count; index++) {
+        ALAsset *asset = [info objectAtIndex:index];
+        NSString    *urlString = [asset defaultRepresentation].url.absoluteString; 
+        NSString    *dateString = [dateFormat stringFromDate:[NSDate date]];
+        if (type == PCSImagePickerTypePhoto) {
+            fileName = [NSString stringWithFormat:@"Photo_%@.jpg",dateString];
+            target = [NSString stringWithFormat:@"%@%@",path,fileName];
+        } else if (type == PCSImagePickerTypeVideo) {
+            fileName =[NSString stringWithFormat:@"Video_%@.mov",dateString];
+            target = [NSString stringWithFormat:@"%@%@",path,fileName];
+        }
+        [self uploadNewFileToServer:fileName 
+                          localPath:urlString
+                         serverPath:target];
+    }
+    PCS_FUNC_SAFELY_RELEASE(dateFormat);
+
 }
 
-- (void)uploadVideoToServer:(NSURL *)url name:(NSString *)name path:(NSString *)serverPath
+- (void)saveVideoToLocal:(NSString *)urlString name:(NSString *)name
 {
+    NSURL   *url = [NSURL URLWithString:urlString];
     AVURLAsset * urlAsset = [[AVURLAsset alloc] initWithURL:url options:nil];
     AVAssetExportSession * exportSession = [AVAssetExportSession exportSessionWithAsset:urlAsset
                                                                              presetName:AVAssetExportPresetMediumQuality];
     //其他值可以查看，根据自己的需求确定
     exportSession.outputFileType = AVFileTypeQuickTimeMovie;
-    
     NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
                       stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE]
                       stringByAppendingPathComponent:[name md5Hash]];
@@ -237,10 +228,8 @@
                 NSLog(@"exportSession Completed");
                 NSData  *data = [NSData dataWithContentsOfFile:path];
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    [self uploadNewFileToServer:data
-                                           name:name
-                                           path:serverPath
-                                    saveToCache:NO];
+                    //真正的上传操作
+                    [self uploadFile:data name:name];
                 });
                 break;
             case AVAssetExportSessionStatusFailed:
@@ -252,8 +241,7 @@
                 break;
             default:
                 break;
-        }
-        
+        } 
     }];
 }
 
@@ -266,25 +254,20 @@
     NSString    *fileName = @"世界真美好.pdf";
     NSString *target = [[NSString alloc] initWithFormat:@"%@%@",PCS_STRING_DEFAULT_PATH,fileName];
     
-    [self uploadNewFileToServer:data name:fileName path:target saveToCache:YES];
+//    [self uploadNewFileToServer:fileName path:target];
     PCS_FUNC_SAFELY_RELEASE(target);
 }
 
 //新选取的文件信息入库，文件缓存等操作，并根据操作结果判断是否需要立马上传服务器
-- (void)uploadNewFileToServer:(NSData *)data
-                         name:(NSString *)fileName
-                         path:(NSString *)filePath
-                  saveToCache:(BOOL)save
+- (void)uploadNewFileToServer:(NSString *)fileName 
+                    localPath:(NSString *)localPath 
+                   serverPath:(NSString *)serverPath
 {
-    if (save) {
-        //先将文件保存到缓存中
-        [[PCSDBOperater shareInstance] saveFileToUploadCache:data name:filePath];
-    }
-
     PCSFileInfoItem *fileItem = [[PCSFileInfoItem alloc] init];
     fileItem.name = fileName;
-    fileItem.serverPath = filePath;
-    fileItem.size = data.length;
+    fileItem.parentPath = localPath;
+    fileItem.serverPath = serverPath;
+    fileItem.size = 0;
     fileItem.format = [[PCSDBOperater shareInstance] getFileTypeWith:fileName];
     fileItem.mtime = [[NSDate date] timeIntervalSince1970];
     
@@ -307,7 +290,10 @@
         
         if (!hasUploadingFile) {
             //当前没有正在上传的文件时，才立马开始上传，否则只是将文件加入到下载队列中
-            [self uploadFile:data name:filePath];
+            [self getFileUploadToServer:fileItem.format
+                                   name:fileItem.name
+                              localPath:fileItem.parentPath 
+                             serverPath:fileItem.serverPath];
         }
     }
     PCS_FUNC_SAFELY_RELEASE(fileItem);
@@ -325,8 +311,10 @@
                                                           status:PCSFileUploadStatusUploading];
         if (result) {
             //更新文件状态成功后，更新界面显示，并开始上传操作
-            NSData  *data = [[PCSDBOperater shareInstance] getFileFromUploadCacheBy:item.serverPath];
-            [self uploadFile:data name:item.serverPath];
+            [self getFileUploadToServer:item.format
+                                   name:item.name
+                              localPath:item.parentPath 
+                             serverPath:item.serverPath];
             [self reloadTableDataSource];
         }
     }
@@ -335,26 +323,30 @@
 //将上传失败的文件重新上传
 - (void)reuploadFileToServer:(PCSFileInfoItem *)item
 {
-    NSData  *data = [[PCSDBOperater shareInstance] getFileFromUploadCacheBy:item.serverPath];
-    
     BOOL    result = NO;
     //更新文件状态为上传中
     result = [[PCSDBOperater shareInstance] updateUploadFile:item.serverPath
                                                       status:PCSFileUploadStatusUploading];
     if (result) {
-        [self uploadFile:data name:item.serverPath];
+        [self getFileUploadToServer:item.format
+                               name:item.name
+                          localPath:item.parentPath 
+                         serverPath:item.serverPath];
         [self reloadTableDataSource];
     }
 }
 
 //进行实际的服务器上传操作
-- (void)uploadFile:(NSData *)data name:(NSString *)name
+- (void)getFileUploadToServer:(PCSFileFormat)format 
+                         name:(NSString *)name 
+                    localPath:(NSString *)localPath
+                   serverPath:(NSString *)serverPath
 {
-    if (nil == data || nil == name) {
-        PCSLog(@"upload err,the data or name is nil.");
+    if (nil == name || nil == localPath || nil == serverPath) {
+        PCSLog(@"upload err,the file info is nil.");
         BOOL    result = NO;
         //更新文件状态
-        result = [[PCSDBOperater shareInstance] updateUploadFile:name
+        result = [[PCSDBOperater shareInstance] updateUploadFile:serverPath
                                                           status:PCSFileUploadStatusFailed];
         if (result) {
             [self reloadTableDataSource];
@@ -368,6 +360,29 @@
     UIProgressView  *progress = (UIProgressView *)[cell.contentView viewWithTag:TAG_UPLOAD_PROGRESSVIEW];
     progress.progress = 0;
     
+    if (format == PCSFileFormatJpg) {
+        __block ALAssetsLibrary *assetLibrary = [[ALAssetsLibrary alloc] init];
+        NSURL *url = [NSURL URLWithString:localPath];
+        __block NSData  *imageData = nil;
+        [assetLibrary assetForURL:url resultBlock:^(ALAsset *asset)  {
+            UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
+            imageData = UIImagePNGRepresentation(image);
+            PCSLog(@"test length:%d",imageData.length);
+            //保存图片到本地
+            [[PCSDBOperater shareInstance] saveFileToUploadCache:imageData name:name];
+            //上传图片到服务器
+            [self uploadFile:imageData name:name];            PCS_FUNC_SAFELY_RELEASE(assetLibrary);
+        }failureBlock:^(NSError *error) {
+            NSLog(@"error=%@",error);
+            PCS_FUNC_SAFELY_RELEASE(assetLibrary);
+        }];
+    } else if (format == PCSFileFormatVideo) {
+        [self saveVideoToLocal:localPath name:name];
+    }
+}
+
+- (void)uploadFile:(NSData *)data name:(NSString *)name
+{
     dispatch_queue_t queue = PCS_APP_DELEGATE.gcdQueue;
     dispatch_async(queue, ^{
         PCSFileInfoResponse *response = [PCS_APP_DELEGATE.pcsClient uploadData:data
@@ -383,11 +398,17 @@
             newStatus = PCSFileUploadStatusSuccess;
         }
         
+        PCSCommonFileInfo   *fileInfo = response.commonFileInfo;
         dispatch_sync(dispatch_get_main_queue(), ^{
             BOOL    result = NO;
+            
+            //更新文件大小
+            [[PCSDBOperater shareInstance] updateUploadFile:fileInfo.path
+                                                       size:fileInfo.size];
             //更新文件状态
-            result = [[PCSDBOperater shareInstance] updateUploadFile:name
+            result = [[PCSDBOperater shareInstance] updateUploadFile:fileInfo.path
                                                               status:newStatus];
+            
             if (result) {
                 [self reloadTableDataSource];
                 //发送开始数据更新操作通知
@@ -500,7 +521,18 @@
     UIProgressView  *progress = (UIProgressView *)[cell.contentView viewWithTag:TAG_UPLOAD_PROGRESSVIEW];
     progress.hidden = YES;
     
+    UILabel *sizeLable = (UILabel *)[cell.contentView viewWithTag:TAG_UPLOAD_FILE_SIZE_LABLE];
+    sizeLable.hidden = YES;
+    
     if (fileItem.property == PCSFileUploadStatusSuccess) {
+        sizeLable.hidden = NO;
+        float   fileSize = (float)fileItem.size/1024;
+        if (fileSize < 1024) {
+            sizeLable.text = [NSString stringWithFormat:@"%.2fKB",fileSize];
+        } else {
+            sizeLable.text = [NSString stringWithFormat:@"%.2fMB",fileSize/1024];
+        }
+        
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"yyyy-MM-dd hh:mm";
         NSDate  *date = [NSDate dateWithTimeIntervalSince1970:fileItem.mtime];
@@ -516,13 +548,7 @@
         self.currentUploadFileIndexPath = indexPath;
     }
     
-    UILabel *sizeLable = (UILabel *)[cell.contentView viewWithTag:TAG_UPLOAD_FILE_SIZE_LABLE];
-    float   fileSize = (float)fileItem.size/1024;
-    if (fileSize < 1024) {
-        sizeLable.text = [NSString stringWithFormat:@"%.2fKB",fileSize];
-    } else {
-        sizeLable.text = [NSString stringWithFormat:@"%.2fMB",fileSize/1024];
-    }
+    
     
     
     return cell;
@@ -581,7 +607,7 @@
     NSString    *fileName =[NSString stringWithFormat:@"Photo_%@.jpg",[dateFormat stringFromDate:[NSDate date]]];
     NSString *target = [[NSString alloc] initWithFormat:@"%@test/%@",PCS_STRING_DEFAULT_PATH,fileName];
     NSData  *data = UIImagePNGRepresentation(image);
-    [self uploadNewFileToServer:data name:fileName path:target saveToCache:YES];
+//    [self uploadNewFileToServer:fileName path:target];
     [picker dismissModalViewControllerAnimated:YES];
 }
 

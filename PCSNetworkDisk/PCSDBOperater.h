@@ -13,9 +13,9 @@
  数据库创建脚本：
  CREATE TABLE "accountlist" ("id" integer primary key  autoincrement  not null ,"account" text COLLATE NOCASE UNIQUE ,timestamp TimeStamp NOT NULL DEFAULT (datetime('now','localtime')));
  CREATE TABLE "filelist" ("id" integer primary key  autoincrement  not null ,accountid integer , "name" text COLLATE NOCASE, "serverpath" text not null COLLATE NOCASE, "parentpath" text COLLATE NOCASE,"thumbnailPath" text COLLATE NOCASE,"size" integer, "property" integer, "hassubfolder" bool, "format" integer,"ctime" datetime, "mtime" datetime, "hascache" bool default 0,timestamp TimeStamp NOT NULL DEFAULT (datetime('now','localtime')), isdir bool default 0);
- CREATE TABLE "uploadfilelist" ("id" integer primary key  autoincrement  not null ,accountid integer , "name" text COLLATE NOCASE, "cachepath" text COLLATE NOCASE,"size" integer, "status" integer, "format" integer,"mtime" datetime, timestamp TimeStamp NOT NULL DEFAULT (datetime('now','localtime')));
+ CREATE TABLE "uploadfilelist" ("id" integer primary key  autoincrement  not null ,accountid integer , "name" text COLLATE NOCASE, "serverpath" text COLLATE NOCASE, "cachepath" text COLLATE NOCASE,"size" integer, "status" integer, "format" integer,"mtime" datetime, timestamp TimeStamp NOT NULL DEFAULT (datetime('now','localtime')));
  CREATE UNIQUE INDEX uk_filelist on filelist(accountid, name ,parentpath);
- CREATE UNIQUE INDEX uk_uploadfilelist on uploadfilelist(accountid, name ,cachepath);
+ CREATE UNIQUE INDEX uk_uploadfilelist on uploadfilelist(accountid, name ,serverpath);
  */
 
 @class PCSFileInfoItem;
@@ -158,6 +158,13 @@
 
 /*!
  @method    
+ @abstract  判断值为serverpath的文件是否在在uploadfilelist数据库中
+ @param     serverpath NSString类型指针，表示文件服务端地址
+ @return    BOOL型，查询结果
+ */
+- (BOOL)isFileInUploadFileList:(NSString *)serverPath;
+/*!
+ @method    
  @abstract  从uploadfilelist表中删除一条上传的历史记录，该上传文件在cache中对应的文件数据
             不用删除，因为上传时保存的cache文件名跟filelist表中对应的cache文件名是一样的
  @param     fid NSInteger型，表示要删除的文件ID
@@ -185,12 +192,20 @@
 /*!
  @method
  @abstract  更新uploadfilelist表中上传文件的上传状态
- @param     name    NSString类型，文件名称，uploadfilelist文件表中对应cachepath字段，能够唯一标识一
-                    个文件记录
+ @param     serverPath    NSString类型指针，文件的服务端地址
  @param     newStatus   PCSFileUploadStatus类型，新的文件状态
  @return    BOOL型，YES表示状态更新成功，NO表示状态更新失败
  */
-- (BOOL)updateUploadFile:(NSString *)name status:(PCSFileUploadStatus)newStatus;
+- (BOOL)updateUploadFile:(NSString *)serverPath status:(PCSFileUploadStatus)newStatus;
+
+/*!
+ @method
+ @abstract  更新uploadfilelist表中上传文件的大小
+ @param     serverPath    NSString类型指针，文件的服务端地址
+ @param     size   NSInteger类型，表示文件大小
+ @return    BOOL型，YES表示状态更新成功，NO表示状态更新失败
+ */
+- (BOOL)updateUploadFile:(NSString *)serverPath size:(NSInteger)size;
 
 /*!
  @method

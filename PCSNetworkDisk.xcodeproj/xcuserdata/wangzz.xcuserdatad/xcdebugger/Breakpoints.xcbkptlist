@@ -8,12 +8,25 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "PCSNetworkDisk/PCSUploadViewController.m"
-         timestampString = "387733773.125849"
+         timestampString = "387819769.443702"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "353"
-         endingLineNumber = "353"
-         landmarkName = "-uploadFile:name:"
+         startingLineNumber = "229"
+         endingLineNumber = "229"
+         landmarkName = "-saveVideoToLocal:name:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "PCSNetworkDisk/PCSUploadViewController.m"
+         timestampString = "387821605.08857"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "380"
+         endingLineNumber = "380"
+         landmarkName = "-getFileUploadToServer:name:localPath:serverPath:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
