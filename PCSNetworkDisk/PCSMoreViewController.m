@@ -130,6 +130,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
                                       reuseIdentifier:cellid];
         cell.selectionStyle = UITableViewCellSelectionStyleBlue;
         cell.textLabel.font = PCS_MAIN_FONT;
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         
         UIProgressView  *progress = [[UIProgressView alloc] initWithFrame:CGRectMake(10, 27, 250, 7.5f)];
         progress.backgroundColor = [UIColor redColor];

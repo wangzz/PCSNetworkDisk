@@ -173,35 +173,81 @@
     }
 }
 
+unsigned int ELFHash(char *str)
+{
+    unsigned int hash = 0;
+    unsigned int x  = 0;
+    
+    while (*str)
+    {
+        hash = (hash << 4) + (*str++);
+        if ((x = hash & 0xF0000000L) != 0)
+        {
+            hash ^= (x >> 24);
+            hash &= ~x;
+        }
+    }
+    
+    return (hash & 0x7FFFFFFF);
+}
+
 - (void)imagePickerDidFinishWith:(NSString *)path 
                        info:(NSArray *)info 
                        type:(PCSImagePickerType)type
 {
-    PCSLog(@"path:%@,Info: %@",path,info);
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    dateFormat.dateFormat = @"yyyy-MM-dd_HH-mm-ss";
-    NSString    *fileName = nil;
-    NSString *target = nil;
-    for (NSInteger index = 0; index < info.count; index++) {
-        ALAsset *asset = [info objectAtIndex:index];
-        NSString    *urlString = [asset defaultRepresentation].url.absoluteString; 
-        NSString    *dateString = [dateFormat stringFromDate:[NSDate date]];
-        if (type == PCSImagePickerTypePhoto) {
-            fileName = [NSString stringWithFormat:@"Photo_%@.jpg",dateString];
-            target = [NSString stringWithFormat:@"%@%@",path,fileName];
-        } else if (type == PCSImagePickerTypeVideo) {
-            fileName =[NSString stringWithFormat:@"Video_%@.mov",dateString];
-            target = [NSString stringWithFormat:@"%@%@",path,fileName];
-        }
-        [self uploadNewFileToServer:fileName 
-                          localPath:urlString
-                         serverPath:target];
-    }
-    PCS_FUNC_SAFELY_RELEASE(dateFormat);
+    dispatch_queue_t    queue = dispatch_queue_create("com.wangzz.image", NULL);
+    dispatch_async(queue, ^{
+        PCSLog(@"upload path:%@",path);
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        dateFormat.dateFormat = @"yyyy-MM-dd";
+        NSString    *fileName = nil;
+        NSString    *target = nil;
+        NSString    *dateString = nil;
+        for (NSInteger index = 0; index < info.count; index++) {
+            ALAsset *asset = [info objectAtIndex:index];
+            NSString    *urlString = [asset defaultRepresentation].url.absoluteString;
+            char    *urlChar = (char *)[urlString cStringUsingEncoding:NSUTF8StringEncoding];
+            NSInteger hashValue = ELFHash(urlChar);
+            dateString = [NSString stringWithFormat:@"%@_%d",[dateFormat stringFromDate:[NSDate date]],hashValue];            
+            if (type == PCSImagePickerTypePhoto) {
+                fileName = [NSString stringWithFormat:@"Photo_%@.jpg",dateString];
+                target = [NSString stringWithFormat:@"%@%@",path,fileName];
+            } else if (type == PCSImagePickerTypeVideo) {
+                fileName =[NSString stringWithFormat:@"Video_%@.mov",dateString];
+                target = [NSString stringWithFormat:@"%@%@",path,fileName];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self uploadNewFileToServer:fileName
+                                  localPath:urlString
+                                 serverPath:target];
 
+            });
+        }
+        PCS_FUNC_SAFELY_RELEASE(dateFormat);
+    });
+    dispatch_release(queue);
 }
 
-- (void)saveVideoToLocal:(NSString *)urlString name:(NSString *)name
+- (void)saveImageToLocal:(NSString *)urlString serverPath:(NSString *)serverPath
+{
+    __block ALAssetsLibrary *assetLibrary = [[ALAssetsLibrary alloc] init];
+    NSURL *url = [NSURL URLWithString:urlString];
+    __block NSData  *imageData = nil;
+    [assetLibrary assetForURL:url resultBlock:^(ALAsset *asset)  {
+        UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
+        imageData = UIImagePNGRepresentation(image);
+        PCSLog(@"image url:%@",urlString);
+        //保存图片到本地
+        [[PCSDBOperater shareInstance] saveFileToUploadCache:imageData name:serverPath];
+        //上传图片到服务器
+        [self uploadFile:imageData name:serverPath];            PCS_FUNC_SAFELY_RELEASE(assetLibrary);
+    }failureBlock:^(NSError *error) {
+        PCSLog(@"error=%@",error);
+        PCS_FUNC_SAFELY_RELEASE(assetLibrary);
+    }];
+}
+
+- (void)saveVideoToLocal:(NSString *)urlString serverPath:(NSString *)serverPath
 {
     NSURL   *url = [NSURL URLWithString:urlString];
     AVURLAsset * urlAsset = [[AVURLAsset alloc] initWithURL:url options:nil];
@@ -211,33 +257,33 @@
     exportSession.outputFileType = AVFileTypeQuickTimeMovie;
     NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
                       stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE]
-                      stringByAppendingPathComponent:[name md5Hash]];
+                      stringByAppendingPathComponent:[serverPath md5Hash]];
     exportSession.outputURL = [NSURL fileURLWithPath:path];//输出的保存路径，文件不能已存在
     [exportSession exportAsynchronouslyWithCompletionHandler:^{
         switch (exportSession.status) {
             case AVAssetExportSessionStatusUnknown:
-                NSLog(@"exportSession.status AVAssetExportSessionStatusUnknown");
+                PCSLog(@"exportSession.status AVAssetExportSessionStatusUnknown");
                 break;
             case AVAssetExportSessionStatusWaiting:
-                NSLog(@"exportSession Waiting");
+                PCSLog(@"exportSession Waiting");
                 break;
             case AVAssetExportSessionStatusExporting:
-                NSLog(@"exportSession Exporting");
+                PCSLog(@"exportSession Exporting");
                 break;
             case AVAssetExportSessionStatusCompleted:
-                NSLog(@"exportSession Completed");
+                PCSLog(@"exportSession Completed");
                 NSData  *data = [NSData dataWithContentsOfFile:path];
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     //真正的上传操作
-                    [self uploadFile:data name:name];
+                    [self uploadFile:data name:serverPath];
                 });
                 break;
             case AVAssetExportSessionStatusFailed:
-                NSLog(@"exportSession Failed");
-                NSLog(@"error:%@",exportSession.error);
+                PCSLog(@"exportSession Failed");
+                PCSLog(@"error:%@",exportSession.error);
                 break;
             case AVAssetExportSessionStatusCancelled:
-                NSLog(@"exportSession Cancelled");
+                PCSLog(@"exportSession Cancelled");
                 break;
             default:
                 break;
@@ -291,7 +337,6 @@
         if (!hasUploadingFile) {
             //当前没有正在上传的文件时，才立马开始上传，否则只是将文件加入到下载队列中
             [self getFileUploadToServer:fileItem.format
-                                   name:fileItem.name
                               localPath:fileItem.parentPath 
                              serverPath:fileItem.serverPath];
         }
@@ -312,7 +357,6 @@
         if (result) {
             //更新文件状态成功后，更新界面显示，并开始上传操作
             [self getFileUploadToServer:item.format
-                                   name:item.name
                               localPath:item.parentPath 
                              serverPath:item.serverPath];
             [self reloadTableDataSource];
@@ -329,7 +373,6 @@
                                                       status:PCSFileUploadStatusUploading];
     if (result) {
         [self getFileUploadToServer:item.format
-                               name:item.name
                           localPath:item.parentPath 
                          serverPath:item.serverPath];
         [self reloadTableDataSource];
@@ -337,12 +380,11 @@
 }
 
 //进行实际的服务器上传操作
-- (void)getFileUploadToServer:(PCSFileFormat)format 
-                         name:(NSString *)name 
+- (void)getFileUploadToServer:(PCSFileFormat)format
                     localPath:(NSString *)localPath
                    serverPath:(NSString *)serverPath
 {
-    if (nil == name || nil == localPath || nil == serverPath) {
+    if (nil == localPath || nil == serverPath) {
         PCSLog(@"upload err,the file info is nil.");
         BOOL    result = NO;
         //更新文件状态
@@ -361,23 +403,9 @@
     progress.progress = 0;
     
     if (format == PCSFileFormatJpg) {
-        __block ALAssetsLibrary *assetLibrary = [[ALAssetsLibrary alloc] init];
-        NSURL *url = [NSURL URLWithString:localPath];
-        __block NSData  *imageData = nil;
-        [assetLibrary assetForURL:url resultBlock:^(ALAsset *asset)  {
-            UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
-            imageData = UIImagePNGRepresentation(image);
-            PCSLog(@"test length:%d",imageData.length);
-            //保存图片到本地
-            [[PCSDBOperater shareInstance] saveFileToUploadCache:imageData name:name];
-            //上传图片到服务器
-            [self uploadFile:imageData name:name];            PCS_FUNC_SAFELY_RELEASE(assetLibrary);
-        }failureBlock:^(NSError *error) {
-            NSLog(@"error=%@",error);
-            PCS_FUNC_SAFELY_RELEASE(assetLibrary);
-        }];
+        [self saveImageToLocal:localPath serverPath:serverPath];
     } else if (format == PCSFileFormatVideo) {
-        [self saveVideoToLocal:localPath name:name];
+        [self saveVideoToLocal:localPath serverPath:serverPath];
     }
 }
 
@@ -548,9 +576,6 @@
         self.currentUploadFileIndexPath = indexPath;
     }
     
-    
-    
-    
     return cell;
 }
 
@@ -589,6 +614,10 @@
         BOOL    result = NO;
         result = [[PCSDBOperater shareInstance] deleteFromUploadFileList:fileItem.fid];         
         if (result) {
+            if ([self.currentUploadFileIndexPath isEqual:indexPath]) {
+                //当前是上传中的文件，且如果有处于等待上传状态的，则继续上传
+                [self uploadNextWaitingFileToServer];
+            }
             [self reloadTableDataSource];
         }
     }
