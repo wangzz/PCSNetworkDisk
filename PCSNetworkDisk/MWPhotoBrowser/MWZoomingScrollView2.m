@@ -6,7 +6,7 @@
 //  Copyright 2010 d3i. All rights reserved.
 //
 
-#import "MWZoomingScrollView.h"
+#import "MWZoomingScrollView2.h"
 #import "MWPhotoBrowser.h"
 #import "MWPhoto.h"
 
@@ -18,13 +18,13 @@
 @end
 
 // Private methods and properties
-@interface MWZoomingScrollView ()
+@interface MWZoomingScrollView2 ()
 @property (nonatomic, assign) MWPhotoBrowser *photoBrowser;
 - (void)handleSingleTap:(CGPoint)touchPoint;
 - (void)handleDoubleTap:(CGPoint)touchPoint;
 @end
 
-@implementation MWZoomingScrollView
+@implementation MWZoomingScrollView2
 
 @synthesize photoBrowser = _photoBrowser, photo = _photo, captionView = _captionView;
 

@@ -13,7 +13,7 @@
 
 @class MWPhotoBrowser, MWPhoto, MWCaptionView;
 
-@interface MWZoomingScrollView : UIScrollView <UIScrollViewDelegate, MWTapDetectingImageViewDelegate, MWTapDetectingViewDelegate> {
+@interface MWZoomingScrollView2 : UIScrollView <UIScrollViewDelegate, MWTapDetectingImageViewDelegate, MWTapDetectingViewDelegate> {
 	
 	MWPhotoBrowser *_photoBrowser;
     id<MWPhoto> _photo;

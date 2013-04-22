@@ -120,7 +120,7 @@
 		82EBA00E17131FD900CCE19D /* PCSClearCacheViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82EBA00C17131FD900CCE19D /* PCSClearCacheViewController.xib */; };
 		82FD788217258BEF00D18381 /* MWTapDetectingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FD787D17258BEF00D18381 /* MWTapDetectingImageView.m */; };
 		82FD788317258BEF00D18381 /* MWTapDetectingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FD787F17258BEF00D18381 /* MWTapDetectingView.m */; };
-		82FD788617258D8000D18381 /* MWZoomingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FD788517258D7F00D18381 /* MWZoomingScrollView.m */; };
+		82FD788617258D8000D18381 /* MWZoomingScrollView2.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FD788517258D7F00D18381 /* MWZoomingScrollView2.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -304,8 +304,8 @@
 		82FD787D17258BEF00D18381 /* MWTapDetectingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWTapDetectingImageView.m; path = MWPhotoBrowser/MWTapDetectingImageView.m; sourceTree = "<group>"; };
 		82FD787E17258BEF00D18381 /* MWTapDetectingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWTapDetectingView.h; path = MWPhotoBrowser/MWTapDetectingView.h; sourceTree = "<group>"; };
 		82FD787F17258BEF00D18381 /* MWTapDetectingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWTapDetectingView.m; path = MWPhotoBrowser/MWTapDetectingView.m; sourceTree = "<group>"; };
-		82FD788517258D7F00D18381 /* MWZoomingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MWZoomingScrollView.m; path = MWPhotoBrowser/MWZoomingScrollView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		82FD788717258DD800D18381 /* MWZoomingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = MWZoomingScrollView.h; path = MWPhotoBrowser/MWZoomingScrollView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		82FD788517258D7F00D18381 /* MWZoomingScrollView2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MWZoomingScrollView2.m; path = MWPhotoBrowser/MWZoomingScrollView2.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		82FD788717258DD800D18381 /* MWZoomingScrollView2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = MWZoomingScrollView2.h; path = MWPhotoBrowser/MWZoomingScrollView2.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -771,8 +771,8 @@
 		82FD787A17258BDB00D18381 /* other */ = {
 			isa = PBXGroup;
 			children = (
-				82FD788717258DD800D18381 /* MWZoomingScrollView.h */,
-				82FD788517258D7F00D18381 /* MWZoomingScrollView.m */,
+				82FD788717258DD800D18381 /* MWZoomingScrollView2.h */,
+				82FD788517258D7F00D18381 /* MWZoomingScrollView2.m */,
 				82FD787C17258BEF00D18381 /* MWTapDetectingImageView.h */,
 				82FD787D17258BEF00D18381 /* MWTapDetectingImageView.m */,
 				82FD787E17258BEF00D18381 /* MWTapDetectingView.h */,
@@ -939,7 +939,7 @@
 				8226C3C9171AA095004F24AC /* ALAsset+AGIPC.m in Sources */,
 				82FD788217258BEF00D18381 /* MWTapDetectingImageView.m in Sources */,
 				82FD788317258BEF00D18381 /* MWTapDetectingView.m in Sources */,
-				82FD788617258D8000D18381 /* MWZoomingScrollView.m in Sources */,
+				82FD788617258D8000D18381 /* MWZoomingScrollView2.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
