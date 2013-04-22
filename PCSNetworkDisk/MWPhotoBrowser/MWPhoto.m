@@ -150,7 +150,7 @@ caption = _caption;
 
 - (void)downloadFileFromServer:(NSString *)serverPath
 {
-    dispatch_queue_t queue = PCS_APP_DELEGATE.gcdQueue;
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
         NSData *data = nil;
         PCSSimplefiedResponse *response = [PCS_APP_DELEGATE.pcsClient downloadFile:serverPath:&data:self];

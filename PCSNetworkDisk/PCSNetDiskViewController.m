@@ -761,7 +761,7 @@
         //进入文件预览界面
         switch (item.format) {
             case PCSFileFormatJpg:
-                [self showPhotoPreviewController:indexPath.row];
+                [self showPhotoPreviewController:item.serverPath];
                 break;
             case PCSFileFormatPdf:
                 break;
@@ -772,10 +772,12 @@
     }
 }
 
-- (void)showPhotoPreviewController:(NSInteger)pageIndex
+- (void)showPhotoPreviewController:(NSString *)currentServerPath
 {
     NSMutableArray *photoArray = [[NSMutableArray alloc] init];
     MWPhoto *photo;
+    NSInteger   pageIndex = 0;
+    NSInteger   jpgCount = 0;
     for (NSInteger count = 0; count < self.files.count; count++) {
         PCSFileInfoItem *item = [self.files objectAtIndex:count];
         if (item.format == PCSFileFormatJpg) {
@@ -783,6 +785,10 @@
             if (photo != nil) {
                 [photoArray addObject:photo];
                 photo.caption = item.name;
+                if ([item.serverPath isEqualToString:currentServerPath]) {
+                    pageIndex = jpgCount;
+                }
+                jpgCount++;
             }
         }
     }
