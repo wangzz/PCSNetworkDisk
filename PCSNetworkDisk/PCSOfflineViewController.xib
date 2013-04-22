@@ -37,7 +37,7 @@
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUITableView" id="913040484">
 						<reference key="NSNextResponder" ref="191373211"/>
-						<int key="NSvFlags">274</int>
+						<int key="NSvFlags">308</int>
 						<string key="NSFrameSize">{320, 367}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -66,7 +66,6 @@
 						<int key="NSID">2</int>
 					</object>
 				</object>
-				<bool key="IBUIAutoresizesSubviews">NO</bool>
 				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics"/>
 				<object class="IBUIScreenMetrics" key="IBUISimulatedDestinationMetrics">
 					<string key="IBUISimulatedSizeMetricsClass">IBUIScreenMetrics</string>

@@ -48,6 +48,9 @@
            forControlEvents:UIControlEventTouchUpInside];
     self.mTableView.tableFooterView = logoffButton;
     PCS_FUNC_SAFELY_RELEASE(logoffButton);
+    
+    CGRect  rect = self.mTableView.frame;
+    self.mTableView.frame = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height+(iPhone5?88:0));
 }
 
 - (void)didReceiveMemoryWarning
@@ -238,13 +241,23 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
             [self goToAppStoreGiveAMark];
         } else if (indexPath.row == 1) {
             //意见反馈
-            MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
-            picker.mailComposeDelegate = self;
-            [picker setToRecipients:[NSArray arrayWithObject:@"wzzvictory_tjsd@163.com"]];            
-            [picker setSubject:@"意见反馈"];
-            [picker setMessageBody:@"it is a test." isHTML:NO];
-            [self presentModalViewController:picker animated:YES];
-            PCS_FUNC_SAFELY_RELEASE(picker);
+            if ([MFMailComposeViewController canSendMail]) {
+                MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+                picker.mailComposeDelegate = self;
+                [picker setToRecipients:[NSArray arrayWithObject:@"wzzvictory_tjsd@163.com"]];
+                [picker setSubject:@"意见反馈"];
+                [picker setMessageBody:@"it is a test." isHTML:NO];
+                [self presentModalViewController:picker animated:YES];
+                PCS_FUNC_SAFELY_RELEASE(picker);
+            } else {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                message:@"您的手机不支持邮件发送，请到设置中添加邮箱账号！"
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"取消"
+                                                      otherButtonTitles:@"确定", nil];
+                [alert show];
+                PCS_FUNC_SAFELY_RELEASE(alert);
+            }
         } else if (indexPath.row == 2) {
             //关于
             PCSAboutViewController  *about = [[PCSAboutViewController alloc] init];

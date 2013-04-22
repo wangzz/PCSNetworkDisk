@@ -56,6 +56,8 @@
     // Do any additional setup after loading the view from its nib.
     [self createTableViewHeaderView];
     [self reloadTableDataSource];
+    CGRect  rect = self.mTableView.frame;
+    self.mTableView.frame = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height+(iPhone5?88:0));
 }
 
 - (void)createTableViewHeaderView
@@ -352,6 +354,7 @@ unsigned int ELFHash(char *str)
     if (item != nil) {
         BOOL    result = NO;
         //更新文件状态为上传中
+        PCSLog(@"******************update %@ status to uploading",item.serverPath);
         result = [[PCSDBOperater shareInstance] updateUploadFile:item.serverPath
                                                           status:PCSFileUploadStatusUploading];
         if (result) {

@@ -87,7 +87,7 @@
 {
     [super viewDidLoad];
     
-    mTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 342)];
+    mTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 342+(iPhone5?88:0))];
     mTableView.delegate = self;
     mTableView.dataSource = self;
     

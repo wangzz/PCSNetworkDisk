@@ -65,6 +65,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    CGRect  rect = self.mTableView.frame;
+    self.mTableView.frame = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height+(iPhone5?88:0));
     [self reloadOfflineTableViewData];
 }
 
