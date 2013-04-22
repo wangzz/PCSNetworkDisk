@@ -14,6 +14,7 @@
 
     // Image Sources
     NSString *_photoPath;
+    NSString *_photoServerPath;
     NSURL *_photoURL;
 
     // Image
@@ -55,6 +56,10 @@ caption = _caption;
 	return [[[MWPhoto alloc] initWithURL:url] autorelease];
 }
 
++ (MWPhoto *)photoWithServerPath:(NSString *)path {
+	return [[[MWPhoto alloc] initWithServerPath:path] autorelease];
+}
+
 #pragma mark NSObject
 
 - (id)initWithImage:(UIImage *)image {
@@ -78,11 +83,19 @@ caption = _caption;
 	return self;
 }
 
+- (id)initWithServerPath:(NSString *)path {
+	if ((self = [super init])) {
+		_photoServerPath = [path copy];
+	}
+	return self;
+}
+
 - (void)dealloc {
     [_caption release];
     [[SDWebImageManager sharedManager] cancelForDelegate:self];
 	[_photoPath release];
 	[_photoURL release];
+    [_photoServerPath release];
 	[_underlyingImage release];
 	[super dealloc];
 }
@@ -103,6 +116,18 @@ caption = _caption;
         if (_photoPath) {
             // Load async from file
             [self performSelectorInBackground:@selector(loadImageFromFileAsync) withObject:nil];
+        } else if (_photoServerPath) {
+            //从PCS服务器加载图片资源
+            NSData  *cachedData = [[PCSDBOperater shareInstance] getFileFromNetCacheBy:_photoServerPath];
+            UIImage *cachedImage = [UIImage imageWithData:cachedData];
+            if (cachedImage) {
+                // Use the cached image immediatly
+                self.underlyingImage = cachedImage;
+                [self imageDidFinishLoadingSoDecompress];
+            } else {
+                //从服务器下载文件
+                [self downloadFileFromServer:_photoServerPath];
+            }
         } else if (_photoURL) {
             // Load async from web (using SDWebImage)
             SDWebImageManager *manager = [SDWebImageManager sharedManager];
@@ -123,11 +148,32 @@ caption = _caption;
     }
 }
 
+- (void)downloadFileFromServer:(NSString *)serverPath
+{
+    dispatch_queue_t queue = PCS_APP_DELEGATE.gcdQueue;
+    dispatch_async(queue, ^{
+        NSData *data = nil;
+        PCSSimplefiedResponse *response = [PCS_APP_DELEGATE.pcsClient downloadFile:serverPath:&data:self];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            if (response.errorCode == 0) {
+                PCSLog(@"download file :%@ from server success.",serverPath);
+                [[PCSDBOperater shareInstance] saveFileToNetCache:data name:serverPath];
+                self.underlyingImage = [UIImage imageWithData:data];
+                [self imageDidFinishLoadingSoDecompress];
+            } else {
+                self.underlyingImage = nil;
+                [self imageDidFinishLoadingSoDecompress];
+                PCSLog(@"download file :%@ from server failed.",serverPath);
+            }
+        });
+    });
+}
+
 // Release if we can get it again from path or url
 - (void)unloadUnderlyingImage {
     _loadingInProgress = NO;
     [[SDWebImageManager sharedManager] cancelForDelegate:self];
-	if (self.underlyingImage && (_photoPath || _photoURL)) {
+	if (self.underlyingImage && (_photoPath || _photoURL || _photoServerPath)) {
 		self.underlyingImage = nil;
 	}
 }
@@ -194,6 +240,25 @@ caption = _caption;
     // Finished compression so we're complete
     self.underlyingImage = image;
     [self imageLoadingComplete];
+}
+
+#pragma mark -- Baidu Listener Delegate
+-(void)onProgress:(long)bytes :(long)total
+{
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        //主线程中更新进度条的显示
+        
+    });
+}
+
+-(long)progressInterval
+{
+    return 1.0f;
+}
+
+-(BOOL)toContinue
+{
+    return YES;
 }
 
 @end

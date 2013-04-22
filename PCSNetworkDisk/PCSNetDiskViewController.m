@@ -11,6 +11,7 @@
 
 @interface PCSNetDiskViewController ()
 @property (nonatomic, retain) NSArray *files;
+@property (nonatomic, retain) NSMutableArray    *photos;
 @property (nonatomic, retain) UITableView   *mTableView;
 @property (nonatomic, retain) NSIndexPath *selectCellIndexPath;
 
@@ -32,6 +33,7 @@
 @implementation PCSNetDiskViewController
 @synthesize path;
 @synthesize files;
+@synthesize photos = _photos;
 @synthesize mTableView;
 @synthesize selectCellIndexPath;
 
@@ -757,8 +759,105 @@
         [detailViewController release];
     } else {
         //进入文件预览界面
+        switch (item.format) {
+            case PCSFileFormatJpg:
+                [self showPhotoPreviewController:indexPath.row];
+                break;
+            case PCSFileFormatPdf:
+                break;
+            default:
+                break;
+        }
         
     }
+}
+
+- (void)showPhotoPreviewController:(NSInteger)pageIndex
+{
+    NSMutableArray *photoArray = [[NSMutableArray alloc] init];
+    MWPhoto *photo;
+    for (NSInteger count = 0; count < self.files.count; count++) {
+        PCSFileInfoItem *item = [self.files objectAtIndex:count];
+        if (item.format == PCSFileFormatJpg) {
+            photo = [MWPhoto photoWithServerPath:item.serverPath];
+            if (photo != nil) {
+                [photoArray addObject:photo];
+                photo.caption = item.name;
+            }
+        }
+    }
+    
+    self.photos = photoArray;
+	
+	// Create browser
+	MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+    browser.displayActionButton = YES;
+    //browser.wantsFullScreenLayout = NO;
+    [browser setInitialPageIndex:pageIndex];
+    
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:browser];
+    nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentModalViewController:nc animated:YES];
+
+    PCS_FUNC_SAFELY_RELEASE(nc);
+    PCS_FUNC_SAFELY_RELEASE(browser);
+    PCS_FUNC_SAFELY_RELEASE(photoArray);
+}
+
+- (void)downloadFileFromServer:(NSString *)serverPath Block:(void (^)())action
+{
+    dispatch_queue_t queue = PCS_APP_DELEGATE.gcdQueue;
+    dispatch_async(queue, ^{
+        NSData *data = nil;
+        PCSSimplefiedResponse *response = [PCS_APP_DELEGATE.pcsClient downloadFile:serverPath:&data:self];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            if (response.errorCode == 0) {
+                PCSLog(@"download file :%@ from server success.",serverPath);
+                [[PCSDBOperater shareInstance] saveFileToNetCache:data name:serverPath];
+            } else {
+                PCSLog(@"download file :%@ from server failed.",serverPath);
+            }
+            
+          action();
+            
+        });
+    });
+}
+
+#pragma mark - MWPhotoBrowserDelegate
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return _photos.count;
+}
+
+- (MWPhoto *)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    if (index < _photos.count)
+        return [_photos objectAtIndex:index];
+    return nil;
+}
+
+//- (MWCaptionView *)photoBrowser:(MWPhotoBrowser *)photoBrowser captionViewForPhotoAtIndex:(NSUInteger)index {
+//    MWPhoto *photo = [self.photos objectAtIndex:index];
+//    MWCaptionView *captionView = [[MWCaptionView alloc] initWithPhoto:photo];
+//    return [captionView autorelease];
+//}
+
+#pragma mark -- Baidu Listener Delegate
+-(void)onProgress:(long)bytes :(long)total
+{
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        //主线程中更新进度条的显示
+        
+    });
+}
+
+-(long)progressInterval
+{
+    return 1.0f;
+}
+
+-(BOOL)toContinue
+{
+    return YES;
 }
 
 #pragma mark - MobBanner View Delegate

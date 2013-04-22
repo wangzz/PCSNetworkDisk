@@ -15,7 +15,7 @@
 // If you want to handle photos, caching, decompression
 // yourself then you can simply ensure your custom data model
 // conforms to MWPhotoProtocol
-@interface MWPhoto : NSObject <MWPhoto, SDWebImageManagerDelegate, SDWebImageDecoderDelegate>
+@interface MWPhoto : NSObject <MWPhoto, SDWebImageManagerDelegate, SDWebImageDecoderDelegate,BaiduPCSStatusListener>
 
 // Properties
 @property (nonatomic, retain) NSString *caption;
@@ -24,6 +24,7 @@
 + (MWPhoto *)photoWithImage:(UIImage *)image;
 + (MWPhoto *)photoWithFilePath:(NSString *)path;
 + (MWPhoto *)photoWithURL:(NSURL *)url;
++ (MWPhoto *)photoWithServerPath:(NSString *)path;
 
 // Init
 - (id)initWithImage:(UIImage *)image;

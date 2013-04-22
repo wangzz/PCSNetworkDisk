@@ -7,12 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MWPhotoBrowser/MWPhotoBrowser.h"
 
-@interface PCSNetDiskViewController : UIViewController<MobWinBannerViewDelegate,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>
+@interface PCSNetDiskViewController : UIViewController<MobWinBannerViewDelegate,MWPhotoBrowserDelegate,BaiduPCSStatusListener,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>
 {
     MobWinBannerView *adBanner;
 }
 
 @property (nonatomic, copy) NSString    *path;
+
+- (void)downloadFileFromServer:(NSString *)serverPath Block:(void (^)())action;
 
 @end

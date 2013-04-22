@@ -118,6 +118,9 @@
 		82EBA0091713153E00CCE19D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82EBA0081713153D00CCE19D /* AudioToolbox.framework */; };
 		82EBA00D17131FD900CCE19D /* PCSClearCacheViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82EBA00B17131FD900CCE19D /* PCSClearCacheViewController.m */; };
 		82EBA00E17131FD900CCE19D /* PCSClearCacheViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82EBA00C17131FD900CCE19D /* PCSClearCacheViewController.xib */; };
+		82FD788217258BEF00D18381 /* MWTapDetectingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FD787D17258BEF00D18381 /* MWTapDetectingImageView.m */; };
+		82FD788317258BEF00D18381 /* MWTapDetectingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FD787F17258BEF00D18381 /* MWTapDetectingView.m */; };
+		82FD788617258D8000D18381 /* MWZoomingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FD788517258D7F00D18381 /* MWZoomingScrollView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -235,7 +238,7 @@
 		8271ADDD1709DC02002DEFB1 /* MWPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWPhoto.h; path = MWPhotoBrowser/MWPhoto.h; sourceTree = "<group>"; };
 		8271ADDE1709DC02002DEFB1 /* MWPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWPhoto.m; path = MWPhotoBrowser/MWPhoto.m; sourceTree = "<group>"; };
 		8271ADDF1709DC02002DEFB1 /* MWPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWPhotoBrowser.h; path = MWPhotoBrowser/MWPhotoBrowser.h; sourceTree = "<group>"; };
-		8271ADE01709DC02002DEFB1 /* MWPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWPhotoBrowser.m; path = MWPhotoBrowser/MWPhotoBrowser.m; sourceTree = "<group>"; };
+		8271ADE01709DC02002DEFB1 /* MWPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MWPhotoBrowser.m; path = MWPhotoBrowser/MWPhotoBrowser.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		8271ADE11709DC02002DEFB1 /* MWPhotoProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWPhotoProtocol.h; path = MWPhotoBrowser/MWPhotoProtocol.h; sourceTree = "<group>"; };
 		8271ADEF1709DD6C002DEFB1 /* SDImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDImageCache.h; path = SDWebImage/SDImageCache.h; sourceTree = "<group>"; };
 		8271ADF01709DD6C002DEFB1 /* SDImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDImageCache.m; path = SDWebImage/SDImageCache.m; sourceTree = "<group>"; };
@@ -297,6 +300,12 @@
 		82EBA00A17131FD900CCE19D /* PCSClearCacheViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSClearCacheViewController.h; sourceTree = "<group>"; };
 		82EBA00B17131FD900CCE19D /* PCSClearCacheViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSClearCacheViewController.m; sourceTree = "<group>"; };
 		82EBA00C17131FD900CCE19D /* PCSClearCacheViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSClearCacheViewController.xib; sourceTree = "<group>"; };
+		82FD787C17258BEF00D18381 /* MWTapDetectingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWTapDetectingImageView.h; path = MWPhotoBrowser/MWTapDetectingImageView.h; sourceTree = "<group>"; };
+		82FD787D17258BEF00D18381 /* MWTapDetectingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWTapDetectingImageView.m; path = MWPhotoBrowser/MWTapDetectingImageView.m; sourceTree = "<group>"; };
+		82FD787E17258BEF00D18381 /* MWTapDetectingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWTapDetectingView.h; path = MWPhotoBrowser/MWTapDetectingView.h; sourceTree = "<group>"; };
+		82FD787F17258BEF00D18381 /* MWTapDetectingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWTapDetectingView.m; path = MWPhotoBrowser/MWTapDetectingView.m; sourceTree = "<group>"; };
+		82FD788517258D7F00D18381 /* MWZoomingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MWZoomingScrollView.m; path = MWPhotoBrowser/MWZoomingScrollView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		82FD788717258DD800D18381 /* MWZoomingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = MWZoomingScrollView.h; path = MWPhotoBrowser/MWZoomingScrollView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -606,6 +615,7 @@
 		8271ADDA1709DBD6002DEFB1 /* MWPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
+				82FD787A17258BDB00D18381 /* other */,
 				8271ADDB1709DC02002DEFB1 /* MWCaptionView.h */,
 				8271ADDC1709DC02002DEFB1 /* MWCaptionView.m */,
 				8271ADDD1709DC02002DEFB1 /* MWPhoto.h */,
@@ -757,6 +767,19 @@
 			name = KKPasscodeLock;
 			path = /Users/wangzz/Desktop/PCSNetworkDisk/PCSNetworkDisk/KKPasscodeLock;
 			sourceTree = "<absolute>";
+		};
+		82FD787A17258BDB00D18381 /* other */ = {
+			isa = PBXGroup;
+			children = (
+				82FD788717258DD800D18381 /* MWZoomingScrollView.h */,
+				82FD788517258D7F00D18381 /* MWZoomingScrollView.m */,
+				82FD787C17258BEF00D18381 /* MWTapDetectingImageView.h */,
+				82FD787D17258BEF00D18381 /* MWTapDetectingImageView.m */,
+				82FD787E17258BEF00D18381 /* MWTapDetectingView.h */,
+				82FD787F17258BEF00D18381 /* MWTapDetectingView.m */,
+			);
+			name = other;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -914,6 +937,9 @@
 				8226C3C7171AA095004F24AC /* AGIPCGridItem.m in Sources */,
 				8226C3C8171AA095004F24AC /* AGIPCToolbarItem.m in Sources */,
 				8226C3C9171AA095004F24AC /* ALAsset+AGIPC.m in Sources */,
+				82FD788217258BEF00D18381 /* MWTapDetectingImageView.m in Sources */,
+				82FD788317258BEF00D18381 /* MWTapDetectingView.m in Sources */,
+				82FD788617258D8000D18381 /* MWZoomingScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
