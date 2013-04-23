@@ -175,22 +175,11 @@
     }
 }
 
-unsigned int ELFHash(char *str)
+- (NSInteger)getRandomNumber
 {
-    unsigned int hash = 0;
-    unsigned int x  = 0;
-    
-    while (*str)
-    {
-        hash = (hash << 4) + (*str++);
-        if ((x = hash & 0xF0000000L) != 0)
-        {
-            hash ^= (x >> 24);
-            hash &= ~x;
-        }
-    }
-    
-    return (hash & 0x7FFFFFFF);
+    //获得六位随机整数
+    NSInteger   random = (arc4random() % 999999) + 100000;
+    return random;
 }
 
 - (void)imagePickerDidFinishWith:(NSString *)path 
@@ -208,9 +197,7 @@ unsigned int ELFHash(char *str)
         for (NSInteger index = 0; index < info.count; index++) {
             ALAsset *asset = [info objectAtIndex:index];
             NSString    *urlString = [asset defaultRepresentation].url.absoluteString;
-            char    *urlChar = (char *)[urlString cStringUsingEncoding:NSUTF8StringEncoding];
-            NSInteger hashValue = ELFHash(urlChar);
-            dateString = [NSString stringWithFormat:@"%@_%d",[dateFormat stringFromDate:[NSDate date]],hashValue];            
+            dateString = [NSString stringWithFormat:@"%@_%d",[dateFormat stringFromDate:[NSDate date]],[self getRandomNumber]];
             if (type == PCSImagePickerTypePhoto) {
                 fileName = [NSString stringWithFormat:@"Photo_%@.jpg",dateString];
                 target = [NSString stringWithFormat:@"%@%@",path,fileName];
