@@ -59,6 +59,14 @@ typedef enum
     PCSImagePickerTypeCamera
 }PCSImagePickerType;
 
+typedef enum
+{
+    PCSFolderTypeUnknow = -1,
+    PCSFolderTypeNetDisk,
+    PCSFolderTypeUpload,
+    PCSFolderTypeTypeOffline
+}PCSFolderType;
+
 //文件夹名称
 #define PCS_FOLDER_UPLOAD_CACHE             @"uploadCache"  //本地上传的缓存文件保存文件夹
 #define PCS_FOLDER_OFFLINE_CACHE            @"offlineCache" //离线文件的缓存文件夹

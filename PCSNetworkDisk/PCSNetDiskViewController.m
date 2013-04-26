@@ -8,6 +8,8 @@
 
 #import "PCSNetDiskViewController.h"
 #import "PCSFileInfoItem.h"
+#import "PCSPreviewController.h"
+
 
 @interface PCSNetDiskViewController ()
 @property (nonatomic, retain) NSArray *files;
@@ -750,6 +752,10 @@
 #pragma mark - Table view delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ([indexPath isEqual:self.selectCellIndexPath]) {
+        return;
+    }
+    
     PCSFileInfoItem *item = [self.files objectAtIndex:[indexPath row]];
     
     if (item.format == PCSFileFormatFolder) {
@@ -764,12 +770,31 @@
                 [self showPhotoPreviewController:item.serverPath];
                 break;
             case PCSFileFormatPdf:
+                [self showDocumentPreviewController:item.serverPath];
                 break;
             default:
                 break;
         }
         
     }
+}
+
+- (void)showDocumentPreviewController:(NSString *)currentServerPath
+{
+    PCSPreviewController *previewController = [[PCSPreviewController alloc] init];
+    previewController.filePath = currentServerPath;
+    previewController.folderType = PCSFolderTypeNetDisk;
+    previewController.delegate = previewController;
+    previewController.dataSource = previewController;
+    previewController.currentPreviewItemIndex = 0;
+
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:previewController];
+    nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    nc.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    [self presentModalViewController:nc animated:YES];
+    
+    PCS_FUNC_SAFELY_RELEASE(nc);
+    PCS_FUNC_SAFELY_RELEASE(previewController);
 }
 
 - (void)showPhotoPreviewController:(NSString *)currentServerPath
@@ -783,6 +808,7 @@
         if (item.format == PCSFileFormatJpg) {
             photo = [MWPhoto photoWithServerPath:item.serverPath];
             if (photo != nil) {
+                photo.folderType = PCSFolderTypeNetDisk;
                 [photoArray addObject:photo];
                 photo.caption = item.name;
                 if ([item.serverPath isEqualToString:currentServerPath]) {

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MWPhotoBrowser/MWPhotoBrowser.h"
+#import <QuickLook/QuickLook.h>
 
 @interface PCSNetDiskViewController : UIViewController<MobWinBannerViewDelegate,MWPhotoBrowserDelegate,BaiduPCSStatusListener,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>
 {

@@ -11,7 +11,6 @@
 #import "AGImagePickerController/AGImagePickerController.h"
 #import "AGImagePickerController/AGIPCToolbarItem.h"
 #import <AVFoundation/AVFoundation.h>
-#import "NSStringAdditions.h"
 
 @interface PCSUploadViewController ()
 
@@ -178,7 +177,7 @@
 - (NSInteger)getRandomNumber
 {
     //获得六位随机整数
-    NSInteger   random = (arc4random() % 999999) + 100000;
+    NSInteger   random = (arc4random() % 89999) + 100000;
     return random;
 }
 
@@ -244,9 +243,11 @@
                                                                              presetName:AVAssetExportPresetMediumQuality];
     //其他值可以查看，根据自己的需求确定
     exportSession.outputFileType = AVFileTypeQuickTimeMovie;
+    NSString    *extension = [serverPath pathExtension];
+    NSString    *nameString = [[serverPath md5Hash] stringByAppendingFormat:@".%@",PCS_FUNC_SENTENCED_EMPTY(extension)];
     NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
                       stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE]
-                      stringByAppendingPathComponent:[serverPath md5Hash]];
+                      stringByAppendingPathComponent:nameString];
     exportSession.outputURL = [NSURL fileURLWithPath:path];//输出的保存路径，文件不能已存在
     [exportSession exportAsynchronouslyWithCompletionHandler:^{
         switch (exportSession.status) {

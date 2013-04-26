@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuickLook/QuickLook.h>
 
-@interface PCSOfflineViewController : UIViewController<BaiduPCSStatusListener>
+@interface PCSOfflineViewController : UIViewController<BaiduPCSStatusListener,QLPreviewControllerDelegate,QLPreviewControllerDataSource>
 
 @end

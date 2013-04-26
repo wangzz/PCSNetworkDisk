@@ -265,6 +265,7 @@
     if (fileItem.property == PCSFilePropertyOffLineSuccess) {
         //上传成功的文件点击进入文件预览
         //从cache中获取文件数据失败时，可以从服务端直接下载
+        [self showDocumentPreviewController:indexPath];
         
         PCSLog(@"preview file:%@",fileItem);
     } else if (fileItem.property == PCSFilePropertyOffLineFailed) {
@@ -272,6 +273,43 @@
         PCSLog(@"redownload file:%@",fileItem);
         [self downloadFileFromServer:fileItem];
     }
+}
+
+- (void)showDocumentPreviewController:(NSIndexPath *)indexPath
+{
+    QLPreviewController *previewController = [[QLPreviewController alloc] init];
+    previewController.dataSource = self;
+    previewController.delegate = self;
+    previewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self.navigationController presentModalViewController:previewController animated:YES];
+    [previewController release];
+}
+
+#pragma mark QLPreviewControllerDataSource
+// Returns the number of items that the preview controller should preview
+- (NSInteger)numberOfPreviewItemsInPreviewController:(QLPreviewController *)previewController
+{
+    return 1;
+}
+
+- (void)previewControllerDidDismiss:(QLPreviewController *)controller
+{
+    // if the preview dismissed (done button touched), use this method to post-process previews
+}
+
+// returns the item that the preview controller should preview
+- (id)previewController:(QLPreviewController *)previewController previewItemAtIndex:(NSInteger)index
+{
+    NSArray *sectionArray = [self.offlineFileDictionary objectForKey:[self.sectionTitleArray
+                                                                      objectAtIndex:0]];
+    PCSFileInfoItem *item = [sectionArray objectAtIndex:index];
+    NSString    *extension = [item.serverPath pathExtension];
+    NSString    *nameString = [[item.serverPath md5Hash] stringByAppendingFormat:@".%@",PCS_FUNC_SENTENCED_EMPTY(extension)];
+    NSString *filePath = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+                           stringByAppendingPathComponent:PCS_FOLDER_OFFLINE_CACHE]
+                          stringByAppendingPathComponent:nameString];
+    NSURL   *fileURL = [NSURL fileURLWithPath:filePath];
+    return fileURL;
 }
 
 #pragma mark - Table view delegate

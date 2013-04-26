@@ -9,7 +9,6 @@
 #import "PCSDBOperater.h"
 #import "PCSFileInfoItem.h"
 #import "BaiduOAuth.h"
-#import "NSStringAdditions.h" 
 #include <sys/stat.h>
 
 @implementation PCSDBOperater
@@ -55,12 +54,48 @@
 }
 
 #pragma mark - 文件的本地缓存操作
+- (NSString *)absolutePathBy:(NSString *)path folderType:(PCSFolderType)folderType
+{
+    NSString    *absolutePath = nil;
+    NSString    *folderPath = nil;
+    NSString    *extension = [path pathExtension];
+    NSString    *nameString = [[path md5Hash] stringByAppendingFormat:@".%@",PCS_FUNC_SENTENCED_EMPTY(extension)];
+    
+    switch (folderType) {
+        case PCSFolderTypeUnknow:
+            break;
+        case PCSFolderTypeNetDisk:
+            folderPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+             stringByAppendingPathComponent:PCS_FOLDER_NET_CACHE];
+            break;
+        case PCSFolderTypeUpload:
+            folderPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+                          stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE];
+            break;
+        case PCSFolderTypeTypeOffline:
+            folderPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+                          stringByAppendingPathComponent:PCS_FOLDER_OFFLINE_CACHE];
+            break;
+        default:
+            break;
+    }
+    
+    if (folderPath.length > 0) {
+        absolutePath = [folderPath stringByAppendingPathComponent:nameString];
+    }
+    
+    return absolutePath;
+}
+
+
 //从本地缓存uploadCache目录下的文件
 - (BOOL)deleteFileFromUploadCache:(NSString *)name
 {
+    NSString    *extension = [name pathExtension];
+    NSString    *nameString = [[name md5Hash] stringByAppendingFormat:@".%@",PCS_FUNC_SENTENCED_EMPTY(extension)];
     NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
                        stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE]
-                      stringByAppendingPathComponent:[name md5Hash]];
+                      stringByAppendingPathComponent:nameString];
     BOOL    result = NO;
     NSError *err = nil;
     result = [[NSFileManager defaultManager] removeItemAtPath:path error:&err];
@@ -76,9 +111,11 @@
 //从本地缓存offlineCache目录下的文件
 - (BOOL)deleteFileFromOfflineCache:(NSString *)name
 {
+    NSString    *extension = [name pathExtension];
+    NSString    *nameString = [[name md5Hash] stringByAppendingFormat:@".%@",PCS_FUNC_SENTENCED_EMPTY(extension)];
     NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
                        stringByAppendingPathComponent:PCS_FOLDER_OFFLINE_CACHE]
-                      stringByAppendingPathComponent:[name md5Hash]];
+                      stringByAppendingPathComponent:nameString];
     BOOL    result = NO;
     NSError *err = nil;
     result = [[NSFileManager defaultManager] removeItemAtPath:path error:&err];
@@ -94,9 +131,11 @@
 //从本地缓存netCache目录下的文件
 - (BOOL)deleteFileFromNetCache:(NSString *)name
 {
+    NSString    *extension = [name pathExtension];
+    NSString    *nameString = [[name md5Hash] stringByAppendingFormat:@".%@",PCS_FUNC_SENTENCED_EMPTY(extension)];
     NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
                        stringByAppendingPathComponent:PCS_FOLDER_NET_CACHE]
-                      stringByAppendingPathComponent:[name md5Hash]];
+                      stringByAppendingPathComponent:nameString];
     BOOL    result = NO;
     NSError *err = nil;
     result = [[NSFileManager defaultManager] removeItemAtPath:path error:&err];
@@ -112,9 +151,11 @@
 //根据文件名从Documents/uploadCache文件夹获取文件的二进制数据
 - (NSData *)getFileFromUploadCacheBy:(NSString *)name
 {
+    NSString    *extension = [name pathExtension];
+    NSString    *nameString = [[name md5Hash] stringByAppendingFormat:@".%@",PCS_FUNC_SENTENCED_EMPTY(extension)];
     NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
                        stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE]
-                      stringByAppendingPathComponent:[name md5Hash]];
+                      stringByAppendingPathComponent:nameString];
     NSData  *fileData = [NSData dataWithContentsOfFile:path];
     return fileData;
 }
@@ -122,9 +163,11 @@
 //根据文件名从Documents/offlineCache文件夹获取文件的二进制数据
 - (NSData *)getFileFromOfflineCacheBy:(NSString *)name
 {
+    NSString    *extension = [name pathExtension];
+    NSString    *nameString = [[name md5Hash] stringByAppendingFormat:@".%@",PCS_FUNC_SENTENCED_EMPTY(extension)];
     NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
                        stringByAppendingPathComponent:PCS_FOLDER_OFFLINE_CACHE]
-                      stringByAppendingPathComponent:[name md5Hash]];
+                      stringByAppendingPathComponent:nameString];
     NSData  *fileData = [NSData dataWithContentsOfFile:path];
     return fileData;
 }
@@ -132,9 +175,11 @@
 //根据文件名从Documents/netCache文件夹获取文件的二进制数据
 - (NSData *)getFileFromNetCacheBy:(NSString *)name
 {
+    NSString    *extension = [name pathExtension];
+    NSString    *nameString = [[name md5Hash] stringByAppendingFormat:@".%@",PCS_FUNC_SENTENCED_EMPTY(extension)];
     NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
                        stringByAppendingPathComponent:PCS_FOLDER_NET_CACHE]
-                      stringByAppendingPathComponent:[name md5Hash]];
+                      stringByAppendingPathComponent:nameString];
     NSData  *fileData = [NSData dataWithContentsOfFile:path];
     return fileData;
 }
@@ -178,7 +223,8 @@
         }
     }
     
-    NSString    *picPath = [path stringByAppendingFormat:@"/%@",[name md5Hash]];
+    NSString    *extension = [name pathExtension];
+    NSString    *picPath = [path stringByAppendingFormat:@"/%@.%@",[name md5Hash],PCS_FUNC_SENTENCED_EMPTY(extension)];
     BOOL    result = [value writeToFile:picPath atomically:YES];
     if (!result) {
         PCSLog(@"write file :%@ to cache failed.",name);

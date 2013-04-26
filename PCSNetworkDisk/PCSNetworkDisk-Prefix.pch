@@ -21,4 +21,5 @@
     #import "AppDelegate.h"
     #import "PCSDBOperater.h"
     #import "PCSFileInfoItem.h"
+    #import "NSStringAdditions.h"
 #endif

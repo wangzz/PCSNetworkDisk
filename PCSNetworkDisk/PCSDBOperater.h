@@ -34,6 +34,16 @@
 + (PCSDBOperater *)shareInstance;
 
 #pragma mark - 本地文件操作方法
+
+/*!
+ @method
+ @abstract  根据文件在服务端的路径，和文件夹类型，获取文件所在的绝对路径
+ @param     path    NSString类型的指针，指向文件在服务端的路径
+ @param     folderType  PCSFilderType型，文件所在的文件夹类型
+ @return    NSString型，文件在本地的绝对路径
+ */
+- (NSString *)absolutePathBy:(NSString *)path folderType:(PCSFolderType)folderType;
+
 /*****************************本地文件操作*****************************/
 /*!
  @method
