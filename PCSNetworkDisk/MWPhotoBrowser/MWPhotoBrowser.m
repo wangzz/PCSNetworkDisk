@@ -11,6 +11,7 @@
 #import "MWZoomingScrollView2.h"
 #import "MBProgressHUD.h"
 #import "SDImageCache.h"
+#import <MobileCoreServices/MobileCoreServices.h> // For UTI
 
 #define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
 #define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
@@ -43,6 +44,7 @@
 	UIToolbar *_toolbar;
 	NSTimer *_controlVisibilityTimer;
 	UIBarButtonItem *_previousButton, *_nextButton, *_actionButton;
+    UIBarButtonItem *_shareButton, *_saveToAlbumButton, *_deleteButton, *_openButton;
     UIActionSheet *_actionsSheet;
     MBProgressHUD *_progressHUD;
     
@@ -248,17 +250,113 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     _toolbar.barStyle = UIBarStyleBlackTranslucent;
     _toolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
     
+  /*
     // Toolbar Items
     _previousButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"MWPhotoBrowser.bundle/images/UIBarButtonItemArrowLeft.png"] style:UIBarButtonItemStylePlain target:self action:@selector(gotoPreviousPage)];
     _nextButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"MWPhotoBrowser.bundle/images/UIBarButtonItemArrowRight.png"] style:UIBarButtonItemStylePlain target:self action:@selector(gotoNextPage)];
     _actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonPressed:)];
+   */ 
+    _shareButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""]
+                                                    style:UIBarButtonItemStylePlain
+                                                   target:self
+                                                   action:@selector(onShareButtonAction)];
+    _shareButton.title = @"分享";
+    _saveToAlbumButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""]
+                                                          style:UIBarButtonItemStylePlain
+                                                         target:self
+                                                         action:@selector(onSaveButtonAction)];
+    _saveToAlbumButton.title = @"保存";
+    _deleteButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""]
+                                                     style:UIBarButtonItemStylePlain
+                                                    target:self
+                                                    action:@selector(onDeleteButtonAction)];
+    _deleteButton.title = @"删除";
+    _openButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""]
+                                                   style:UIBarButtonItemStylePlain
+                                                  target:self
+                                                  action:@selector(onOpenButtonAction)];
+    _openButton.title = @"打开";
     
+    UIBarButtonItem *flexSpace = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil] autorelease];
+    NSMutableArray *items = [[NSMutableArray alloc] init];
+    [items addObject:flexSpace];
+    [items addObject:_openButton];
+    [items addObject:flexSpace];
+    [items addObject:_shareButton];
+    [items addObject:flexSpace];
+    [items addObject:_saveToAlbumButton];
+    [items addObject:flexSpace];
+    [items addObject:_deleteButton];
+    [_toolbar setItems:items];
+    [items release];
+
     // Update
     [self reloadData];
     
 	// Super
     [super viewDidLoad];
 	
+}
+
+#pragma mark - Button Action
+- (void)onShareButtonAction
+{
+    
+}
+
+- (void)onSaveButtonAction
+{
+    
+}
+
+- (void)onDeleteButtonAction
+{
+    
+}
+
+- (NSString *)applicationDocumentsDirectory
+{
+	return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+}
+
+- (void)onOpenButtonAction
+{
+    MWPhoto *photo = [_photos objectAtIndex:_currentPageIndex];
+//    NSString    *extension = [photo.photoServerPath pathExtension];
+//    NSString    *nameString = [[photo.photoServerPath md5Hash] stringByAppendingFormat:@".%@",PCS_FUNC_SENTENCED_EMPTY(extension)];
+//    NSString *filePath = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+//                            stringByAppendingPathComponent:PCS_FOLDER_NET_CACHE]
+//                          stringByAppendingPathComponent:nameString];
+    
+//    NSURL   *url = [NSURL fileURLWithPath:filePath];
+    NSString *documentsDirectoryPath = [[NSBundle mainBundle] pathForResource:@"PDFtext" ofType:@"pdf"];
+    NSURL *fileURL = [NSURL fileURLWithPath:documentsDirectoryPath];
+    UIDocumentInteractionController    *controller = [UIDocumentInteractionController interactionControllerWithURL:fileURL];
+    controller.delegate = self;
+    [controller presentOpenInMenuFromRect:CGRectZero inView:self.view animated:YES];
+}
+
+- (NSString *)UTIForURL:(NSURL *)url
+{
+    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (CFStringRef)url.pathExtension, NULL);
+    return (NSString *)UTI; 
+}
+
+#pragma mark -
+#pragma mark UIDocumentInteractionControllerDelegate
+
+- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)interactionController
+{
+    return self;
+}
+
+- (void)documentInteractionController:(UIDocumentInteractionController *)controller willBeginSendingToApplication:(NSString *)application
+{
+    NSLog(@"Send to App %@  ...", application);   
+}
+- (void)documentInteractionController:(UIDocumentInteractionController *)controller didEndSendingToApplication:(NSString *)application
+{
+    NSLog(@"Finished sending to app %@  ...", application);    
 }
 
 - (void)performLayout {
@@ -277,7 +375,8 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     } else {
         [_toolbar removeFromSuperview];
     }
-    
+ 
+    /*
     // Toolbar items & navigation
     UIBarButtonItem *fixedLeftSpace = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil] autorelease];
     fixedLeftSpace.width = 32; // To balance action button
@@ -292,6 +391,8 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     if (_displayActionButton) [items addObject:_actionButton];
     [_toolbar setItems:items];
     [items release];
+     */
+    
 	[self updateNavigation];
     
     // Navigation buttons

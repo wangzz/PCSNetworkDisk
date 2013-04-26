@@ -19,6 +19,8 @@
 
 // Properties
 @property (nonatomic, retain) NSString *caption;
+@property (nonatomic, retain) NSString  *photoServerPath;
+@property (nonatomic, assign) PCSFolderType folderType;
 
 // Class
 + (MWPhoto *)photoWithImage:(UIImage *)image;

@@ -40,7 +40,10 @@
 
 // Properties
 @synthesize underlyingImage = _underlyingImage, 
-caption = _caption;
+caption = _caption,
+photoServerPath = _photoServerPath,
+folderType = _folderType;
+
 
 #pragma mark Class Methods
 
@@ -118,7 +121,20 @@ caption = _caption;
             [self performSelectorInBackground:@selector(loadImageFromFileAsync) withObject:nil];
         } else if (_photoServerPath) {
             //从PCS服务器加载图片资源
-            NSData  *cachedData = [[PCSDBOperater shareInstance] getFileFromNetCacheBy:_photoServerPath];
+            NSData  *cachedData = nil;
+            switch (_folderType) {
+                case PCSFolderTypeNetDisk:
+                    cachedData = [[PCSDBOperater shareInstance] getFileFromNetCacheBy:_photoServerPath];
+                    break;
+                case PCSFolderTypeUpload:
+                    cachedData = [[PCSDBOperater shareInstance] getFileFromUploadCacheBy:_photoServerPath];
+                    break;
+                case PCSFolderTypeTypeOffline:
+                    cachedData = [[PCSDBOperater shareInstance] getFileFromOfflineCacheBy:_photoServerPath];
+                    break;
+                default:
+                    break;
+            }
             UIImage *cachedImage = [UIImage imageWithData:cachedData];
             if (cachedImage) {
                 // Use the cached image immediatly
@@ -157,7 +173,20 @@ caption = _caption;
         dispatch_sync(dispatch_get_main_queue(), ^{
             if (response.errorCode == 0) {
                 PCSLog(@"download file :%@ from server success.",serverPath);
-                [[PCSDBOperater shareInstance] saveFileToNetCache:data name:serverPath];
+                
+                switch (_folderType) {
+                    case PCSFolderTypeNetDisk:
+                        [[PCSDBOperater shareInstance] saveFileToNetCache:data name:serverPath];
+                        break;
+                    case PCSFolderTypeUpload:
+                        [[PCSDBOperater shareInstance] saveFileToUploadCache:data name:serverPath];
+                        break;
+                    case PCSFolderTypeTypeOffline:
+                        [[PCSDBOperater shareInstance] saveFileToOfflineCache:data name:serverPath];
+                        break;
+                    default:
+                        break;
+                }
                 self.underlyingImage = [UIImage imageWithData:data];
                 [self imageDidFinishLoadingSoDecompress];
             } else {
