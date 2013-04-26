@@ -11,6 +11,9 @@
 		82019716170317C600541518 /* tab_more@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82019712170317C600541518 /* tab_more@2x.png */; };
 		82019717170317C600541518 /* tab_netdisk@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82019713170317C600541518 /* tab_netdisk@2x.png */; };
 		82019718170317C600541518 /* tab_offline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82019714170317C600541518 /* tab_offline@2x.png */; };
+		82037CC5172AD204009DFAB8 /* PCSPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82037CC4172AD204009DFAB8 /* PCSPreviewController.m */; };
+		820A23F5172818B70081658A /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 820A23F2172818B70081658A /* NSData+Base64.m */; };
+		820A23F6172818B70081658A /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 820A23F4172818B70081658A /* NSString+Base64.m */; };
 		8214A29216F0AA2E00BEA785 /* PCSDBOperater.m in Sources */ = {isa = PBXBuildFile; fileRef = 8214A29116F0AA2E00BEA785 /* PCSDBOperater.m */; };
 		8214A29F16F0AAA000BEA785 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8214A29A16F0AAA000BEA785 /* FMDatabase.m */; };
 		8214A2A016F0AAA000BEA785 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8214A29B16F0AAA000BEA785 /* FMDatabaseAdditions.m */; };
@@ -75,6 +78,7 @@
 		822F7BCD16E8F94A00898CA4 /* MobWin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 822F7BC916E8F94900898CA4 /* MobWin.a */; };
 		824CFF2B170B22740036AC2D /* fax_list_progress_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 824CFF29170B22740036AC2D /* fax_list_progress_image@2x.png */; };
 		824CFF2C170B22740036AC2D /* fax_list_progress_track_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 824CFF2A170B22740036AC2D /* fax_list_progress_track_image@2x.png */; };
+		8250334A172979E500B4C6C6 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82503349172979E500B4C6C6 /* QuickLook.framework */; };
 		825E417F16F20F16003604A2 /* PcsNetDisk.db in Resources */ = {isa = PBXBuildFile; fileRef = 825E417E16F20F16003604A2 /* PcsNetDisk.db */; };
 		8271ADE21709DC02002DEFB1 /* MWCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8271ADDC1709DC02002DEFB1 /* MWCaptionView.m */; };
 		8271ADE31709DC02002DEFB1 /* MWPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 8271ADDE1709DC02002DEFB1 /* MWPhoto.m */; };
@@ -128,6 +132,12 @@
 		82019712170317C600541518 /* tab_more@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_more@2x.png"; sourceTree = "<group>"; };
 		82019713170317C600541518 /* tab_netdisk@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_netdisk@2x.png"; sourceTree = "<group>"; };
 		82019714170317C600541518 /* tab_offline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_offline@2x.png"; sourceTree = "<group>"; };
+		82037CC3172AD204009DFAB8 /* PCSPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSPreviewController.h; sourceTree = "<group>"; };
+		82037CC4172AD204009DFAB8 /* PCSPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSPreviewController.m; sourceTree = "<group>"; };
+		820A23F1172818B70081658A /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "base64/NSData+Base64.h"; sourceTree = "<group>"; };
+		820A23F2172818B70081658A /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "base64/NSData+Base64.m"; sourceTree = "<group>"; };
+		820A23F3172818B70081658A /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Base64.h"; path = "base64/NSString+Base64.h"; sourceTree = "<group>"; };
+		820A23F4172818B70081658A /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Base64.m"; path = "base64/NSString+Base64.m"; sourceTree = "<group>"; };
 		8214A29016F0AA2E00BEA785 /* PCSDBOperater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSDBOperater.h; sourceTree = "<group>"; };
 		8214A29116F0AA2E00BEA785 /* PCSDBOperater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PCSDBOperater.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		8214A29516F0AAA000BEA785 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
@@ -232,6 +242,7 @@
 		822F7BCB16E8F94900898CA4 /* MobWinBannerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobWinBannerViewDelegate.h; sourceTree = "<group>"; };
 		824CFF29170B22740036AC2D /* fax_list_progress_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fax_list_progress_image@2x.png"; sourceTree = "<group>"; };
 		824CFF2A170B22740036AC2D /* fax_list_progress_track_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fax_list_progress_track_image@2x.png"; sourceTree = "<group>"; };
+		82503349172979E500B4C6C6 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		825E417E16F20F16003604A2 /* PcsNetDisk.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = PcsNetDisk.db; sourceTree = "<group>"; };
 		8271ADDB1709DC02002DEFB1 /* MWCaptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWCaptionView.h; path = MWPhotoBrowser/MWCaptionView.h; sourceTree = "<group>"; };
 		8271ADDC1709DC02002DEFB1 /* MWCaptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWCaptionView.m; path = MWPhotoBrowser/MWCaptionView.m; sourceTree = "<group>"; };
@@ -313,6 +324,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8250334A172979E500B4C6C6 /* QuickLook.framework in Frameworks */,
+				822C911F16EA384E00F80D00 /* MobileCoreServices.framework in Frameworks */,
 				82D5649D171C4112001B8B68 /* AVFoundation.framework in Frameworks */,
 				8226C3CC171AA3CE004F24AC /* AssetsLibrary.framework in Frameworks */,
 				82EBA0091713153E00CCE19D /* AudioToolbox.framework in Frameworks */,
@@ -322,7 +335,6 @@
 				822C912716EA387500F80D00 /* libz.dylib in Frameworks */,
 				822C912316EA386200F80D00 /* QuartzCore.framework in Frameworks */,
 				822C912116EA385700F80D00 /* CoreLocation.framework in Frameworks */,
-				822C911F16EA384E00F80D00 /* MobileCoreServices.framework in Frameworks */,
 				822C911D16EA384000F80D00 /* SystemConfiguration.framework in Frameworks */,
 				822C911B16EA383700F80D00 /* CFNetwork.framework in Frameworks */,
 				822F7B2016E8CE5B00898CA4 /* UIKit.framework in Frameworks */,
@@ -337,6 +349,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		82037CC1172AD19F009DFAB8 /* PCSPreviewController */ = {
+			isa = PBXGroup;
+			children = (
+				82037CC3172AD204009DFAB8 /* PCSPreviewController.h */,
+				82037CC4172AD204009DFAB8 /* PCSPreviewController.m */,
+			);
+			name = PCSPreviewController;
+			path = /Users/wangzz/Desktop/PCSNetworkDisk/PCSNetworkDisk/PCSPreviewController;
+			sourceTree = "<absolute>";
+		};
+		820A23F0172818650081658A /* base64 */ = {
+			isa = PBXGroup;
+			children = (
+				820A23F1172818B70081658A /* NSData+Base64.h */,
+				820A23F2172818B70081658A /* NSData+Base64.m */,
+				820A23F3172818B70081658A /* NSString+Base64.h */,
+				820A23F4172818B70081658A /* NSString+Base64.m */,
+			);
+			name = base64;
+			sourceTree = "<group>";
+		};
 		8214A29416F0AA5E00BEA785 /* FMDB */ = {
 			isa = PBXGroup;
 			children = (
@@ -420,6 +453,7 @@
 		822F7B1016E8CE5B00898CA4 = {
 			isa = PBXGroup;
 			children = (
+				82503349172979E500B4C6C6 /* QuickLook.framework */,
 				82D5649C171C4112001B8B68 /* AVFoundation.framework */,
 				822F7B2516E8CE5B00898CA4 /* PCSNetworkDisk */,
 				822F7B1E16E8CE5B00898CA4 /* Frameworks */,
@@ -487,6 +521,7 @@
 		822F7B7D16E8D73600898CA4 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				820A23F0172818650081658A /* base64 */,
 				82D1672E17146BE00071FF9F /* UIAlertView-Blocks */,
 				82EB9FF71713119100CCE19D /* KKPasscodeLock */,
 				8271ADEE1709DD29002DEFB1 /* SDWebImage */,
@@ -572,6 +607,7 @@
 		822F7B8316E8D7C600898CA4 /* CustomView */ = {
 			isa = PBXGroup;
 			children = (
+				82037CC1172AD19F009DFAB8 /* PCSPreviewController */,
 				8226C3A2171AA095004F24AC /* AGImagePickerController */,
 				8226C38A171A60D5004F24AC /* PCSDirectoryPicker */,
 				8271ADDA1709DBD6002DEFB1 /* MWPhotoBrowser */,
@@ -940,6 +976,9 @@
 				82FD788217258BEF00D18381 /* MWTapDetectingImageView.m in Sources */,
 				82FD788317258BEF00D18381 /* MWTapDetectingView.m in Sources */,
 				82FD788617258D8000D18381 /* MWZoomingScrollView2.m in Sources */,
+				820A23F5172818B70081658A /* NSData+Base64.m in Sources */,
+				820A23F6172818B70081658A /* NSString+Base64.m in Sources */,
+				82037CC5172AD204009DFAB8 /* PCSPreviewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
