@@ -23,6 +23,7 @@
 		8214A2A616F0C64600BEA785 /* PCSFileInfoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8214A2A516F0C64600BEA785 /* PCSFileInfoItem.m */; };
 		8214A2A816F0D2E500BEA785 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8214A2A716F0D2E500BEA785 /* libsqlite3.0.dylib */; };
 		821A364917144DBC007E0EC5 /* ChineseLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 821A364817144DBC007E0EC5 /* ChineseLocalizable.strings */; };
+		82251039172C205300F95C8F /* PCSPreviewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 82251038172C205300F95C8F /* PCSPreviewItem.m */; };
 		8225CC8D16FA00C8004B3711 /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8225CC8C16FA00C8004B3711 /* NSStringAdditions.m */; };
 		8225CC9016FA0F97004B3711 /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8225CC8F16FA0F97004B3711 /* NSDataAdditions.m */; };
 		8226C390171A6218004F24AC /* HSDirectoryNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8226C38D171A6217004F24AC /* HSDirectoryNavigationController.m */; };
@@ -154,6 +155,8 @@
 		8214A2A516F0C64600BEA785 /* PCSFileInfoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSFileInfoItem.m; sourceTree = "<group>"; };
 		8214A2A716F0D2E500BEA785 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		821A364817144DBC007E0EC5 /* ChineseLocalizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ChineseLocalizable.strings; path = /Users/wangzz/Desktop/PCSNetworkDisk/PCSNetworkDisk/KKPasscodeLock/ChineseLocalizable.strings; sourceTree = "<absolute>"; };
+		82251037172C205300F95C8F /* PCSPreviewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSPreviewItem.h; sourceTree = "<group>"; };
+		82251038172C205300F95C8F /* PCSPreviewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSPreviewItem.m; sourceTree = "<group>"; };
 		8225CC8B16FA00C8004B3711 /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
 		8225CC8C16FA00C8004B3711 /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
 		8225CC8E16FA0F97004B3711 /* NSDataAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataAdditions.h; sourceTree = "<group>"; };
@@ -354,6 +357,8 @@
 			children = (
 				82037CC3172AD204009DFAB8 /* PCSPreviewController.h */,
 				82037CC4172AD204009DFAB8 /* PCSPreviewController.m */,
+				82251037172C205300F95C8F /* PCSPreviewItem.h */,
+				82251038172C205300F95C8F /* PCSPreviewItem.m */,
 			);
 			name = PCSPreviewController;
 			path = /Users/wangzz/Desktop/PCSNetworkDisk/PCSNetworkDisk/PCSPreviewController;
@@ -979,6 +984,7 @@
 				820A23F5172818B70081658A /* NSData+Base64.m in Sources */,
 				820A23F6172818B70081658A /* NSString+Base64.m in Sources */,
 				82037CC5172AD204009DFAB8 /* PCSPreviewController.m in Sources */,
+				82251039172C205300F95C8F /* PCSPreviewItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -60,12 +60,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "PCSNetworkDisk/PCSPreviewController/PCSPreviewController.m"
-         timestampString = "388689021.255234"
+         timestampString = "388769159.266029"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "158"
-         endingLineNumber = "158"
-         landmarkName = "-numberOfPreviewItemsInPreviewController:"
+         startingLineNumber = "38"
+         endingLineNumber = "38"
+         landmarkName = "-dealloc"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -73,12 +73,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "PCSNetworkDisk/PCSPreviewController/PCSPreviewController.m"
-         timestampString = "388689021.255234"
+         timestampString = "388770596.819801"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "168"
-         endingLineNumber = "168"
-         landmarkName = "-previewController:previewItemAtIndex:"
+         startingLineNumber = "107"
+         endingLineNumber = "107"
+         landmarkName = "-onShareButtonAction"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -86,12 +86,38 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "PCSNetworkDisk/PCSPreviewController/PCSPreviewController.m"
-         timestampString = "388689021.255234"
+         timestampString = "388770597.672704"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "147"
-         endingLineNumber = "147"
-         landmarkName = "-previewController:shouldOpenURL:forPreviewItem:"
+         startingLineNumber = "112"
+         endingLineNumber = "112"
+         landmarkName = "-onSaveButtonAction"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "PCSNetworkDisk/PCSPreviewController/PCSPreviewController.m"
+         timestampString = "388770602.376975"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "117"
+         endingLineNumber = "117"
+         landmarkName = "-onDeleteButtonAction"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "PCSNetworkDisk/PCSPreviewController/PCSPreviewController.m"
+         timestampString = "388770603.781293"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "122"
+         endingLineNumber = "122"
+         landmarkName = "-onOpenButtonAction"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
