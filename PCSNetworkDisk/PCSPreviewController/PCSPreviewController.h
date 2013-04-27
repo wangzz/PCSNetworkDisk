@@ -11,6 +11,7 @@
 @interface PCSPreviewController : QLPreviewController<BaiduPCSStatusListener,QLPreviewControllerDataSource,QLPreviewControllerDelegate>
 
 @property(nonatomic,retain) NSString    *filePath;
+@property(nonatomic,retain) NSString    *title;
 @property(nonatomic,assign) PCSFolderType  folderType;
 
 @end

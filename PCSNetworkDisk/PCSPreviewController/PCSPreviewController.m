@@ -7,9 +7,11 @@
 //
 
 #import "PCSPreviewController.h"
+#import "PCSPreviewItem.h"
 
 @interface PCSPreviewController ()
 @property(nonatomic,retain) NSURL   *fileUrl;
+@property(nonatomic,retain) UIProgressView  *progress;
 
 @end
 
@@ -18,6 +20,8 @@
 @synthesize filePath;
 @synthesize folderType;
 @synthesize fileUrl;
+@synthesize progress;
+@synthesize title;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -42,9 +46,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self customNavgationBar];
-
-	// Do any additional setup after loading the view.
+    [self showToolBar];
     NSString    *absolutePath = [[PCSDBOperater shareInstance] absolutePathBy:self.filePath
                                                                    folderType:self.folderType];
     BOOL    fileExit = NO;
@@ -60,16 +62,83 @@
     }
 }
 
+- (void)showToolBar
+{
+    self.navigationController.toolbarHidden = NO;
+    self.navigationController.toolbar.barStyle = UIBarStyleBlackTranslucent;
+    UIBarButtonItem* _shareButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""]
+                                                    style:UIBarButtonItemStylePlain
+                                                   target:self
+                                                   action:@selector(onShareButtonAction)];
+    _shareButton.title = @"分享";
+    UIBarButtonItem* _saveToAlbumButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""]
+                                                          style:UIBarButtonItemStylePlain
+                                                         target:self
+                                                         action:@selector(onSaveButtonAction)];
+    _saveToAlbumButton.title = @"保存";
+    UIBarButtonItem* _deleteButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""]
+                                                     style:UIBarButtonItemStylePlain
+                                                    target:self
+                                                    action:@selector(onDeleteButtonAction)];
+    _deleteButton.title = @"删除";
+    UIBarButtonItem* _openButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""]
+                                                   style:UIBarButtonItemStylePlain
+                                                  target:self
+                                                  action:@selector(onOpenButtonAction)];
+    _openButton.title = @"打开";
+    
+    UIBarButtonItem *flexSpace = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil] autorelease];
+    NSMutableArray *items = [[NSMutableArray alloc] init];
+    [items addObject:flexSpace];
+    [items addObject:_openButton];
+    [items addObject:flexSpace];
+    [items addObject:_shareButton];
+    [items addObject:flexSpace];
+    [items addObject:_saveToAlbumButton];
+    [items addObject:flexSpace];
+    [items addObject:_deleteButton];
+    self.navigationController.toolbar.items = items;
+    [items release];
+    
+}
+
+- (void)onShareButtonAction
+{
+    
+}
+
+- (void)onSaveButtonAction
+{
+    
+}
+
+- (void)onDeleteButtonAction
+{
+    
+}
+
+- (void)onOpenButtonAction
+{
+    
+}
+
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self customNavgationBar];
+}
+
 - (void)customNavgationBar
 {
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc]initWithTitle:@"返回"
+    self.navigationItem.hidesBackButton = NO;
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"返回"
                                                                   style:UIBarButtonItemStylePlain
                                                                  target:self
                                                                  action:@selector(closeQuickLookAction:)];
-    self.navigationController.navigationItem.leftBarButtonItem = backButton;
+    self.navigationItem.backBarButtonItem = backButton;
     [backButton release];
 }
-
 
 - (void)closeQuickLookAction:(id)sender
 {
@@ -84,12 +153,21 @@
 
 - (void)showFileDownloadingView
 {
-    
+    progress = [[UIProgressView alloc] initWithFrame:CGRectMake(50, 250, 220, 50)];
+    if ([progress respondsToSelector:@selector(progressImage)]) {
+        //由于IOS5以下系统不支持自定义背景图片和进度图片，这里做了匹配处理
+        progress.progressImage = [[UIImage imageNamed:@"fax_list_progress_image"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
+        progress.trackImage = [[UIImage imageNamed:@"fax_list_progress_track_image"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
+    }
+    [self.view addSubview:progress];
+    PCS_FUNC_SAFELY_RELEASE(progress);
 }
 
 - (void)hideFileDownloadingView
 {
-    
+    if (self.progress) {
+        [self.progress removeFromSuperview];
+    }
 }
 
 - (void)showFileDownloadFailedView
@@ -129,7 +207,7 @@
                     fileUrl = [NSURL fileURLWithPath:absolutePath];
                     //文件下载成功，重新加载界面数据
                     self.currentPreviewItemIndex = 0;
-                    [self refreshCurrentPreviewItem];
+                    [self reloadData];
                 }
                 
             } else {
@@ -155,17 +233,15 @@
 // Returns the number of items that the preview controller should preview
 - (NSInteger)numberOfPreviewItemsInPreviewController:(QLPreviewController *)previewController
 {
-    if (self.fileUrl != nil) {
-        return 1;
-    } else {
-        return 0;
-    }
+    return 1;
 }
 
 // returns the item that the preview controller should preview
-- (id)previewController:(QLPreviewController *)previewController previewItemAtIndex:(NSInteger)index
+- (id <QLPreviewItem>)previewController:(QLPreviewController *)controller previewItemAtIndex:(NSInteger)index
 {
-    return self.fileUrl;
+    // Do any additional setup after loading the view.
+    PCSPreviewItem  *item = [PCSPreviewItem previewItemWithURL:self.fileUrl title:self.title];
+    return item;
 }
 
 #pragma mark -- Baidu Listener Delegate
@@ -173,7 +249,7 @@
 {
     dispatch_sync(dispatch_get_main_queue(), ^{
         //主线程中更新进度条的显示
-        
+        progress.progress = (float)bytes/(float)total;
     });
 }
 

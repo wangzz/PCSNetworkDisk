@@ -770,7 +770,7 @@
                 [self showPhotoPreviewController:item.serverPath];
                 break;
             case PCSFileFormatPdf:
-                [self showDocumentPreviewController:item.serverPath];
+                [self showDocumentPreviewController:item];
                 break;
             default:
                 break;
@@ -779,14 +779,14 @@
     }
 }
 
-- (void)showDocumentPreviewController:(NSString *)currentServerPath
+- (void)showDocumentPreviewController:(PCSFileInfoItem *)item
 {
     PCSPreviewController *previewController = [[PCSPreviewController alloc] init];
-    previewController.filePath = currentServerPath;
+    previewController.filePath = item.serverPath;
     previewController.folderType = PCSFolderTypeNetDisk;
     previewController.delegate = previewController;
     previewController.dataSource = previewController;
-    previewController.currentPreviewItemIndex = 0;
+    previewController.title = item.name;
 
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:previewController];
     nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
