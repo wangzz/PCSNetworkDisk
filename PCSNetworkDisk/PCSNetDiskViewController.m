@@ -9,6 +9,8 @@
 #import "PCSNetDiskViewController.h"
 #import "PCSFileInfoItem.h"
 #import "PCSPreviewController.h"
+#import "MDAudioFile.h"
+#import "MDAudioPlayerController.h"
 
 
 @interface PCSNetDiskViewController ()
@@ -779,10 +781,31 @@
             case PCSFileFormatPpt:
                 [self showDocumentPreviewController:item];
                 break;
+            case PCSFileFormatAudio:
+                [self showAudioPlayerController:item];
+                break;
             default:
                 break;
         }
     }
+}
+
+- (void)showAudioPlayerController:(PCSFileInfoItem *)item
+{
+    NSMutableArray *songArray = [[NSMutableArray alloc] init];
+    MDAudioFile *audioFile = [[MDAudioFile alloc] initWithServerPath:item.serverPath folderType:PCSFolderTypeOffline];
+    [songArray addObject:audioFile];
+    
+	MDAudioPlayerController *audioPlayer = [[MDAudioPlayerController alloc] initWithSoundFiles:songArray atPath:[[NSBundle mainBundle] bundlePath] andSelectedIndex:0];
+    audioPlayer.title = item.name;
+	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:audioPlayer];;
+    nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    nc.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    nc.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentModalViewController:nc animated:YES];
+    PCS_FUNC_SAFELY_RELEASE(nc);
+    PCS_FUNC_SAFELY_RELEASE(audioPlayer);
+    PCS_FUNC_SAFELY_RELEASE(songArray);
 }
 
 - (void)showDocumentPreviewController:(PCSFileInfoItem *)item

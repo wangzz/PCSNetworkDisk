@@ -8,6 +8,8 @@
 
 #import "PCSOfflineViewController.h"
 #import "PCSPreviewController.h"
+#import "MDAudioFile.h"
+#import "MDAudioPlayerController.h"
 
 @interface PCSOfflineViewController ()
 @property(nonatomic,retain) IBOutlet    UITableView *mTableView;
