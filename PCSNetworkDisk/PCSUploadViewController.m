@@ -12,6 +12,7 @@
 #import "AGImagePickerController/AGIPCToolbarItem.h"
 #import <AVFoundation/AVFoundation.h>
 
+
 @interface PCSUploadViewController ()
 
 @property (nonatomic,retain) IBOutlet   UITableView *mTableView;
@@ -19,6 +20,7 @@
 @property (nonatomic,retain) NSArray   *sectionTitleArray;
 @property (nonatomic,retain) NSIndexPath *currentUploadFileIndexPath;//当前正在上传的文件index
 @property (nonatomic,retain) NSMutableArray *selectedPhotos;//保存从相册中选中的图片信息
+@property (nonatomic, retain) NSMutableArray    *photos;
 
 @end
 
@@ -33,6 +35,7 @@
 @synthesize sectionTitleArray;
 @synthesize currentUploadFileIndexPath;
 @synthesize selectedPhotos;
+@synthesize photos = _photos;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -578,6 +581,20 @@
     if (fileItem.property == PCSFileUploadStatusSuccess) {
         //上传成功的文件点击进入文件预览
         //从cache中获取文件数据失败时，可以从服务端直接下载
+        switch (fileItem.format) {
+            case PCSFileFormatJpg:
+                [self showPhotoPreviewController:sectionArray
+                               currentServerPath:fileItem.serverPath];
+                break;
+            case PCSFileFormatVideo:
+                
+                break;
+            default:
+                break;
+        }
+        
+        
+        
         
         PCSLog(@"preview file:%@",fileItem);
     } else if (fileItem.property == PCSFileUploadStatusFailed) {
@@ -585,6 +602,57 @@
         PCSLog(@"reupload file:%@",fileItem);
         [self reuploadFileToServer:fileItem];
     }
+}
+
+- (void)showPhotoPreviewController:(NSArray *)files
+                 currentServerPath:(NSString *)currentServerPath
+{
+    NSMutableArray *photoArray = [[NSMutableArray alloc] init];
+    MWPhoto *photo;
+    NSInteger   pageIndex = 0;
+    NSInteger   jpgCount = 0;
+    for (NSInteger count = 0; count < files.count; count++) {
+        PCSFileInfoItem *item = [files objectAtIndex:count];
+        if (item.format == PCSFileFormatJpg) {
+            photo = [MWPhoto photoWithServerPath:item.serverPath];
+            if (photo != nil) {
+                photo.folderType = PCSFolderTypeUpload;
+                [photoArray addObject:photo];
+                photo.caption = item.name;
+                if ([item.serverPath isEqualToString:currentServerPath]) {
+                    pageIndex = jpgCount;
+                }
+                jpgCount++;
+            }
+        }
+    }
+    
+    self.photos = photoArray;
+	
+	// Create browser
+	MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+    browser.displayActionButton = YES;
+    //browser.wantsFullScreenLayout = NO;
+    [browser setInitialPageIndex:pageIndex];
+    
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:browser];
+    nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentModalViewController:nc animated:YES];
+    
+    PCS_FUNC_SAFELY_RELEASE(nc);
+    PCS_FUNC_SAFELY_RELEASE(browser);
+    PCS_FUNC_SAFELY_RELEASE(photoArray);
+}
+
+#pragma mark - MWPhotoBrowserDelegate
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return _photos.count;
+}
+
+- (MWPhoto *)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    if (index < _photos.count)
+        return [_photos objectAtIndex:index];
+    return nil;
 }
 
 #pragma mark - Table view delegate

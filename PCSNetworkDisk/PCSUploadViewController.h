@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "HSDirectoryDelegate.h"
+#import "MWPhotoBrowser/MWPhotoBrowser.h"
 
-@interface PCSUploadViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITableViewDataSource,UITableViewDelegate,BaiduPCSStatusListener,HSDirectoryDelegate>
+@interface PCSUploadViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITableViewDataSource,UITableViewDelegate,BaiduPCSStatusListener,HSDirectoryDelegate,MWPhotoBrowserDelegate>
 
 @end

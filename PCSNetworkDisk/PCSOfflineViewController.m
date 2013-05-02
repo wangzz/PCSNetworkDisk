@@ -7,12 +7,14 @@
 //
 
 #import "PCSOfflineViewController.h"
+#import "PCSPreviewController.h"
 
 @interface PCSOfflineViewController ()
 @property(nonatomic,retain) IBOutlet    UITableView *mTableView;
 @property(nonatomic,retain) NSDictionary  *offlineFileDictionary;
 @property(nonatomic,retain) NSArray *sectionTitleArray;
 @property(nonatomic,retain) NSIndexPath *currentOfflineFileIndexPath;
+@property (nonatomic, retain) NSMutableArray    *photos;
 
 @end
 
@@ -21,6 +23,7 @@
 @synthesize offlineFileDictionary;
 @synthesize sectionTitleArray;
 @synthesize currentOfflineFileIndexPath;
+@synthesize photos = _photos;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -265,7 +268,21 @@
     if (fileItem.property == PCSFilePropertyOffLineSuccess) {
         //上传成功的文件点击进入文件预览
         //从cache中获取文件数据失败时，可以从服务端直接下载
-        [self showDocumentPreviewController:indexPath];
+        switch (fileItem.format) {
+            case PCSFileFormatJpg:
+                [self showPhotoPreviewController:sectionArray
+                               currentServerPath:fileItem.serverPath];
+                break;
+            case PCSFileFormatPdf:
+            case PCSFileFormatDoc:
+            case PCSFileFormatExcel:
+            case PCSFileFormatTxt:
+            case PCSFileFormatPpt:
+                [self showDocumentPreviewController:fileItem];
+                break;
+            default:
+                break;
+        }
         
         PCSLog(@"preview file:%@",fileItem);
     } else if (fileItem.property == PCSFilePropertyOffLineFailed) {
@@ -275,14 +292,71 @@
     }
 }
 
-- (void)showDocumentPreviewController:(NSIndexPath *)indexPath
+- (void)showDocumentPreviewController:(PCSFileInfoItem *)item
 {
-    QLPreviewController *previewController = [[QLPreviewController alloc] init];
-    previewController.dataSource = self;
-    previewController.delegate = self;
-    previewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [self.navigationController presentModalViewController:previewController animated:YES];
-    [previewController release];
+    PCSPreviewController *previewController = [[PCSPreviewController alloc] init];
+    previewController.filePath = item.serverPath;
+    previewController.folderType = PCSFolderTypeOffline;
+    previewController.title = item.name;
+    
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:previewController];;
+    nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    nc.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    nc.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentModalViewController:nc animated:YES];
+    PCS_FUNC_SAFELY_RELEASE(nc);
+    PCS_FUNC_SAFELY_RELEASE(previewController);
+}
+
+- (void)showPhotoPreviewController:(NSArray *)files
+                 currentServerPath:(NSString *)currentServerPath
+{
+    NSMutableArray *photoArray = [[NSMutableArray alloc] init];
+    MWPhoto *photo;
+    NSInteger   pageIndex = 0;
+    NSInteger   jpgCount = 0;
+    for (NSInteger count = 0; count < files.count; count++) {
+        PCSFileInfoItem *item = [files objectAtIndex:count];
+        if (item.format == PCSFileFormatJpg) {
+            photo = [MWPhoto photoWithServerPath:item.serverPath];
+            if (photo != nil) {
+                photo.folderType = PCSFolderTypeOffline;
+                [photoArray addObject:photo];
+                photo.caption = item.name;
+                if ([item.serverPath isEqualToString:currentServerPath]) {
+                    pageIndex = jpgCount;
+                }
+                jpgCount++;
+            }
+        }
+    }
+    
+    self.photos = photoArray;
+	
+	// Create browser
+	MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+    browser.displayActionButton = YES;
+    //browser.wantsFullScreenLayout = NO;
+    [browser setInitialPageIndex:pageIndex];
+    
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:browser];
+    nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentModalViewController:nc animated:YES];
+    
+    PCS_FUNC_SAFELY_RELEASE(nc);
+    PCS_FUNC_SAFELY_RELEASE(browser);
+    PCS_FUNC_SAFELY_RELEASE(photoArray);
+}
+
+#pragma mark - MWPhotoBrowserDelegate
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return _photos.count;
+}
+
+- (MWPhoto *)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    if (index < _photos.count)
+        return [_photos objectAtIndex:index];
+    return nil;
 }
 
 #pragma mark QLPreviewControllerDataSource

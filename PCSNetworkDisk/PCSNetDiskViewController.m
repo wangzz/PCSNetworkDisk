@@ -320,6 +320,9 @@
         case PCSFileFormatPdf:
             image = [UIImage imageNamed:@"netdisk_type_pdf"];
             break;
+        case PCSFileFormatExcel:
+            image = [UIImage imageNamed:@"netdisk_type_excel"];
+        break;
         case PCSFileFormatZip:
             image = [UIImage imageNamed:@"netdisk_type_zip"];
             break;
@@ -770,12 +773,15 @@
                 [self showPhotoPreviewController:item.serverPath];
                 break;
             case PCSFileFormatPdf:
+            case PCSFileFormatDoc:
+            case PCSFileFormatExcel:
+            case PCSFileFormatTxt:
+            case PCSFileFormatPpt:
                 [self showDocumentPreviewController:item];
                 break;
             default:
                 break;
         }
-        
     }
 }
 
@@ -784,15 +790,13 @@
     PCSPreviewController *previewController = [[PCSPreviewController alloc] init];
     previewController.filePath = item.serverPath;
     previewController.folderType = PCSFolderTypeNetDisk;
-    previewController.delegate = previewController;
-    previewController.dataSource = previewController;
     previewController.title = item.name;
 
-    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:previewController];
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:previewController];;
     nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     nc.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    nc.modalPresentationStyle = UIModalPresentationCurrentContext;
     [self presentModalViewController:nc animated:YES];
-    
     PCS_FUNC_SAFELY_RELEASE(nc);
     PCS_FUNC_SAFELY_RELEASE(previewController);
 }
