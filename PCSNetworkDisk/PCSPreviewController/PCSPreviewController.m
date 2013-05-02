@@ -29,6 +29,10 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(customNavgationBar)
+                                                     name:PCS_NOTIFICATION_SHOW_PREVIEW_BUTTON
+                                                   object:nil];
     }
     return self;
 }
@@ -39,14 +43,18 @@
         [fileUrl release];
         fileUrl = nil;
     }
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:PCS_NOTIFICATION_SHOW_PREVIEW_BUTTON
+                                                  object:nil];
     [super dealloc];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self showToolBar];
+    self.delegate = self;
+    self.dataSource = self;
+    
     NSString    *absolutePath = [[PCSDBOperater shareInstance] absolutePathBy:self.filePath
                                                                    folderType:self.folderType];
     BOOL    fileExit = NO;
@@ -97,7 +105,7 @@
     [items addObject:_saveToAlbumButton];
     [items addObject:flexSpace];
     [items addObject:_deleteButton];
-    self.navigationController.toolbar.items = items;
+    self.toolbarItems = items;
     [items release];
     
 }
@@ -131,12 +139,11 @@
 
 - (void)customNavgationBar
 {
-    self.navigationItem.hidesBackButton = NO;
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"返回"
                                                                   style:UIBarButtonItemStylePlain
                                                                  target:self
                                                                  action:@selector(closeQuickLookAction:)];
-    self.navigationItem.backBarButtonItem = backButton;
+    self.navigationItem.leftBarButtonItem = backButton;
     [backButton release];
 }
 
@@ -194,7 +201,7 @@
                     case PCSFolderTypeUpload:
                         result = [[PCSDBOperater shareInstance] saveFileToUploadCache:data name:serverPath];
                         break;
-                    case PCSFolderTypeTypeOffline:
+                    case PCSFolderTypeOffline:
                         result = [[PCSDBOperater shareInstance] saveFileToOfflineCache:data name:serverPath];
                         break;
                     default:
@@ -208,6 +215,7 @@
                     //文件下载成功，重新加载界面数据
                     self.currentPreviewItemIndex = 0;
                     [self reloadData];
+                    [self customNavgationBar];
                 }
                 
             } else {

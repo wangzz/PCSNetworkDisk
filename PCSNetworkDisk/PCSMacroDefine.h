@@ -64,7 +64,7 @@ typedef enum
     PCSFolderTypeUnknow = -1,
     PCSFolderTypeNetDisk,
     PCSFolderTypeUpload,
-    PCSFolderTypeTypeOffline
+    PCSFolderTypeOffline
 }PCSFolderType;
 
 //文件夹名称
@@ -93,6 +93,7 @@ typedef enum
 #define PCS_NOTIFICATION_RELOAD_NETDISK_DATA    @"reloadNetDiskData"
 #define PCS_NOTIFICATION_RELOAD_OFFLINE_DATA    @"reloadOfflineData"
 #define PCS_NOTIFICATION_UPDATE_OFFLINE_FILE    @"updateOfflineData"
+#define PCS_NOTIFICATION_SHOW_PREVIEW_BUTTON    @"showQLPreviewNavButton"
 
 
 //字体

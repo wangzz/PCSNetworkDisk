@@ -72,7 +72,7 @@
             folderPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
                           stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE];
             break;
-        case PCSFolderTypeTypeOffline:
+        case PCSFolderTypeOffline:
             folderPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
                           stringByAppendingPathComponent:PCS_FOLDER_OFFLINE_CACHE];
             break;
