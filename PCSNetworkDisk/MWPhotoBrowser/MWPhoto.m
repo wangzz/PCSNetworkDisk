@@ -129,7 +129,7 @@ folderType = _folderType;
                 case PCSFolderTypeUpload:
                     cachedData = [[PCSDBOperater shareInstance] getFileFromUploadCacheBy:_photoServerPath];
                     break;
-                case PCSFolderTypeTypeOffline:
+                case PCSFolderTypeOffline:
                     cachedData = [[PCSDBOperater shareInstance] getFileFromOfflineCacheBy:_photoServerPath];
                     break;
                 default:
@@ -181,7 +181,7 @@ folderType = _folderType;
                     case PCSFolderTypeUpload:
                         [[PCSDBOperater shareInstance] saveFileToUploadCache:data name:serverPath];
                         break;
-                    case PCSFolderTypeTypeOffline:
+                    case PCSFolderTypeOffline:
                         [[PCSDBOperater shareInstance] saveFileToOfflineCache:data name:serverPath];
                         break;
                     default:
