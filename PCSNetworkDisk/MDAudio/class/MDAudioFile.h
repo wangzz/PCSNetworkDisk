@@ -10,7 +10,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 
 
-@interface MDAudioFile : NSObject 
+@interface MDAudioFile : NSObject
 {
 	NSURL			*filePath;
 	NSDictionary	*fileInfoDict;
@@ -19,8 +19,6 @@
 @property (nonatomic, retain) NSURL *filePath;
 @property (nonatomic, retain) NSDictionary *fileInfoDict;
 
-- (MDAudioFile *)initWithServerPath:(NSString *)serverPath
-                         folderType:(PCSFolderType)folderType;
 - (MDAudioFile *)initWithPath:(NSURL *)path;
 - (NSDictionary *)songID3Tags;
 - (NSString *)title;

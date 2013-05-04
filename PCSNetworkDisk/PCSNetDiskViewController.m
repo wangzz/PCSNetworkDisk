@@ -791,12 +791,9 @@
 }
 
 - (void)showAudioPlayerController:(PCSFileInfoItem *)item
-{
-    NSMutableArray *songArray = [[NSMutableArray alloc] init];
-    MDAudioFile *audioFile = [[MDAudioFile alloc] initWithServerPath:item.serverPath folderType:PCSFolderTypeOffline];
-    [songArray addObject:audioFile];
-    
-	MDAudioPlayerController *audioPlayer = [[MDAudioPlayerController alloc] initWithSoundFiles:songArray atPath:[[NSBundle mainBundle] bundlePath] andSelectedIndex:0];
+{    
+    MDAudioPlayerController *audioPlayer = [[MDAudioPlayerController alloc] initWithServerPath:item.serverPath
+                                                                                    folderType:PCSFolderTypeNetDisk];
     audioPlayer.title = item.name;
 	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:audioPlayer];;
     nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
@@ -805,7 +802,6 @@
     [self presentModalViewController:nc animated:YES];
     PCS_FUNC_SAFELY_RELEASE(nc);
     PCS_FUNC_SAFELY_RELEASE(audioPlayer);
-    PCS_FUNC_SAFELY_RELEASE(songArray);
 }
 
 - (void)showDocumentPreviewController:(PCSFileInfoItem *)item

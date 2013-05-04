@@ -14,20 +14,6 @@
 @synthesize filePath;
 @synthesize fileInfoDict;
 
-- (MDAudioFile *)initWithServerPath:(NSString *)serverPath
-                         folderType:(PCSFolderType)folderType
-{
-	if (self = [super init])
-	{
-        NSString    *absolutePath = [[PCSDBOperater shareInstance] absolutePathBy:serverPath
-                                                                       folderType:folderType];
-		self.filePath = [NSURL fileURLWithPath:absolutePath isDirectory:NO];
-		self.fileInfoDict = [self songID3Tags];
-	}
-	
-	return self;
-}
-
 - (MDAudioFile *)initWithPath:(NSURL *)path
 {
 	if (self = [super init]) 

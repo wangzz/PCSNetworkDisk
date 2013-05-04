@@ -9,8 +9,13 @@
 #import "MDAudioPlayerController.h"
 #import "MDAudioFile.h"
 #import "MDAudioPlayerTableViewCell.h"
+#import "MBProgressHUD.h"
+
 
 @interface MDAudioPlayerController ()
+@property (nonatomic,retain) MBProgressHUD  *HUD;
+@property (nonatomic,retain) NSString   *serverPath;
+@property (nonatomic,assign) PCSFolderType  folderType;
 - (UIImage *)reflectedImage:(UIButton *)fromImage withHeight:(NSUInteger)height;
 @end
 
@@ -57,6 +62,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.40;
 @synthesize repeatOne;
 @synthesize shuffle;
 
+@synthesize HUD;
+@synthesize serverPath;
+@synthesize folderType;
 
 void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 {
@@ -107,7 +115,12 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 	
 	if (![songTableView superview]) 
 	{
-		[artworkView setImage:[[soundFiles objectAtIndex:selectedIndex] coverImage] forState:UIControlStateNormal];
+        UIImage *artImage = [[soundFiles objectAtIndex:selectedIndex] coverImage];
+        if (artImage == nil) {
+            artImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerNoArtwork" ofType:@"png"]];
+        }
+
+		[artworkView setImage:artImage forState:UIControlStateNormal];
 		reflectionView.image = [self reflectedImage:artworkView withHeight:artworkView.bounds.size.height * kDefaultReflectionFraction];
 	}
 	
@@ -153,6 +166,135 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 	return self;
 }
 
+#pragma mark - PCSNetDisk
+- (MDAudioPlayerController *)initWithServerPath:(NSString *)path
+                                     folderType:(PCSFolderType)type
+{
+    if (self = [super init]){
+        serverPath = path;
+        folderType = type;
+    }
+    return self;
+}
+
+- (void)hideFileDownloadingView
+{
+    PCSLog(@"dissmiss downloading notice view.");
+    self.navigationItem.leftBarButtonItem.enabled = YES;
+    self.playButton.enabled = YES;
+    [HUD hide:YES];
+    [HUD release];
+}
+
+- (void)showFileDownloadFailedView
+{
+    PCSLog(@"file download failed.");
+    self.navigationItem.leftBarButtonItem.enabled = YES;
+    [HUD hide:YES];
+    [HUD release];
+}
+
+- (void)showFileBeginDownloadView
+{
+    PCSLog(@"file download begin.");
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+    HUD.mode = MBProgressHUDModeDeterminate;
+	HUD.dimBackground = YES;
+	HUD.labelText = @"下载中...";
+    [HUD show:YES];
+    self.navigationItem.leftBarButtonItem.enabled = NO;
+    self.playButton.enabled = NO;
+}
+
+- (void)initMusicPlayerWithPath:(NSString *)path
+{
+    NSMutableArray *songArray = [[NSMutableArray alloc] init];
+    MDAudioFile *audioFile = [[MDAudioFile alloc] initWithPath:[NSURL fileURLWithPath:path]];
+    [songArray addObject:audioFile];
+    self.soundFiles = songArray;
+    [songArray release];
+    [audioFile release];
+    
+    self.soundFilesPath = path;
+    
+    NSError *error = nil;
+    
+    self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[(MDAudioFile *)[soundFiles objectAtIndex:selectedIndex] filePath] error:&error];
+    [player setNumberOfLoops:0];
+    player.delegate = self;
+    
+    [self updateViewForPlayerInfo:player];
+    [self updateViewForPlayerState:player];
+    [player play];
+    
+    if (error)
+        NSLog(@"%@", error);
+}
+
+- (void)downloadFileFromServer:(NSString *)path folderType:(PCSFolderType)type
+{
+    [self showFileBeginDownloadView];
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        NSData *data = nil;
+        PCSSimplefiedResponse *response = [PCS_APP_DELEGATE.pcsClient downloadFile:path:&data:self];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            //让文件下载中界面消失
+            [self hideFileDownloadingView];
+            if (response.errorCode == 0) {
+                PCSLog(@"download file :%@ from server success.",path);
+                BOOL result = NO;
+                switch (folderType) {
+                    case PCSFolderTypeNetDisk:
+                        result = [[PCSDBOperater shareInstance] saveFileToNetCache:data name:path];
+                        break;
+                    case PCSFolderTypeUpload:
+                        result = [[PCSDBOperater shareInstance] saveFileToUploadCache:data name:path];
+                        break;
+                    case PCSFolderTypeOffline:
+                        result = [[PCSDBOperater shareInstance] saveFileToOfflineCache:data name:path];
+                        break;
+                    default:
+                        break;
+                }
+                
+                if (result) {
+                    NSString    *absolutePath = [[PCSDBOperater shareInstance] absolutePathBy:path
+                                                                                   folderType:type];
+                    [self initMusicPlayerWithPath:absolutePath];
+                }
+                
+            } else {
+                //显示文件下载失败界面
+                [self showFileDownloadFailedView];
+                PCSLog(@"download file :%@ from server failed.",path);
+            }
+        });
+    });
+}
+
+#pragma mark -- Baidu Listener Delegate
+-(void)onProgress:(long)bytes :(long)total
+{
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        //主线程中更新进度条的显示
+        float progress = (float)bytes/(float)total;
+        HUD.progress = progress;
+        PCSLog(@"current download progress:%f",progress);
+    });
+}
+
+-(long)progressInterval
+{
+    return 1.0f;
+}
+
+-(BOOL)toContinue
+{
+    return YES;
+}
+
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
@@ -163,32 +305,37 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 	
 	updateTimer = nil;
 	
-	UINavigationBar *navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
-	navigationBar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
-	navigationBar.barStyle = UIBarStyleBlackOpaque;
-	[self.view addSubview:navigationBar];
-	
-	UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:@""];
-	[navigationBar pushNavigationItem:navItem animated:NO];
-	
-	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissAudioPlayer)];
+//	UINavigationBar *navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+//	navigationBar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
+//	navigationBar.barStyle = UIBarStyleBlackOpaque;
+//	[self.view addSubview:navigationBar];
+//	
+//	UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:@""];
+//	[navigationBar pushNavigationItem:navItem animated:NO];
+//	
+//	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissAudioPlayer)];
+    UIBarButtonItem *returnButton = [[UIBarButtonItem alloc] initWithTitle:@"返回"
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(dismissAudioPlayer)];
+    self.navigationItem.leftBarButtonItem = returnButton;
 	
 	self.toggleButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
 	[toggleButton setImage:[UIImage imageNamed:@"AudioPlayerAlbumInfo.png"] forState:UIControlStateNormal];
 	[toggleButton addTarget:self action:@selector(showSongFiles) forControlEvents:UIControlEventTouchUpInside];
 	
-	UIBarButtonItem *songsListBarButton = [[UIBarButtonItem alloc] initWithCustomView:toggleButton];
-	
-	navItem.leftBarButtonItem = doneButton;
-	[doneButton release];
-	doneButton = nil;
-	
-	navItem.rightBarButtonItem = songsListBarButton;
-	[songsListBarButton release];
-	songsListBarButton = nil;
-	
-	[navItem release];
-	navItem = nil;
+//	UIBarButtonItem *songsListBarButton = [[UIBarButtonItem alloc] initWithCustomView:toggleButton];
+//	
+//	navItem.leftBarButtonItem = doneButton;
+//	[doneButton release];
+//	doneButton = nil;
+//	
+//	navItem.rightBarButtonItem = songsListBarButton;
+//	[songsListBarButton release];
+//	songsListBarButton = nil;
+//	
+//	[navItem release];
+//	navItem = nil;
 	
 	AudioSessionInitialize(NULL, NULL, interruptionListenerCallback, self);
 	AudioSessionSetActive(true);
@@ -197,41 +344,41 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 	
 	MDAudioFile *selectedSong = [self.soundFiles objectAtIndex:selectedIndex];
 	
-	self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 14, 195, 12)];
-	titleLabel.text = [selectedSong title];
-	titleLabel.font = [UIFont boldSystemFontOfSize:12];
-	titleLabel.backgroundColor = [UIColor clearColor];
-	titleLabel.textColor = [UIColor whiteColor];
-	titleLabel.shadowColor = [UIColor blackColor];
-	titleLabel.shadowOffset = CGSizeMake(0, -1);
-	titleLabel.textAlignment = UITextAlignmentCenter;
-	titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
-	[self.view addSubview:titleLabel];
+//	self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 14, 195, 12)];
+//	titleLabel.text = [selectedSong title];
+//	titleLabel.font = [UIFont boldSystemFontOfSize:12];
+//	titleLabel.backgroundColor = [UIColor clearColor];
+//	titleLabel.textColor = [UIColor whiteColor];
+//	titleLabel.shadowColor = [UIColor blackColor];
+//	titleLabel.shadowOffset = CGSizeMake(0, -1);
+//	titleLabel.textAlignment = UITextAlignmentCenter;
+//	titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
+//	[self.view addSubview:titleLabel];
 	
-	self.artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 2, 195, 12)];
-	artistLabel.text = [selectedSong artist];
-	artistLabel.font = [UIFont boldSystemFontOfSize:12];
-	artistLabel.backgroundColor = [UIColor clearColor];
-	artistLabel.textColor = [UIColor lightGrayColor];
-	artistLabel.shadowColor = [UIColor blackColor];
-	artistLabel.shadowOffset = CGSizeMake(0, -1);
-	artistLabel.textAlignment = UITextAlignmentCenter;
-	artistLabel.lineBreakMode = UILineBreakModeTailTruncation;
-	[self.view addSubview:artistLabel];
+//	self.artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 2, 195, 12)];
+//	artistLabel.text = [selectedSong artist];
+//	artistLabel.font = [UIFont boldSystemFontOfSize:12];
+//	artistLabel.backgroundColor = [UIColor clearColor];
+//	artistLabel.textColor = [UIColor lightGrayColor];
+//	artistLabel.shadowColor = [UIColor blackColor];
+//	artistLabel.shadowOffset = CGSizeMake(0, -1);
+//	artistLabel.textAlignment = UITextAlignmentCenter;
+//	artistLabel.lineBreakMode = UILineBreakModeTailTruncation;
+//	[self.view addSubview:artistLabel];
 	
-	self.albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 27, 195, 12)];
-	albumLabel.text = [selectedSong album];
-	albumLabel.backgroundColor = [UIColor clearColor];
-	albumLabel.font = [UIFont boldSystemFontOfSize:12];
-	albumLabel.textColor = [UIColor lightGrayColor];
-	albumLabel.shadowColor = [UIColor blackColor];
-	albumLabel.shadowOffset = CGSizeMake(0, -1);
-	albumLabel.textAlignment = UITextAlignmentCenter;
-	albumLabel.lineBreakMode = UILineBreakModeTailTruncation;
-	[self.view addSubview:albumLabel];
+//	self.albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 27, 195, 12)];
+//	albumLabel.text = [selectedSong album];
+//	albumLabel.backgroundColor = [UIColor clearColor];
+//	albumLabel.font = [UIFont boldSystemFontOfSize:12];
+//	albumLabel.textColor = [UIColor lightGrayColor];
+//	albumLabel.shadowColor = [UIColor blackColor];
+//	albumLabel.shadowOffset = CGSizeMake(0, -1);
+//	albumLabel.textAlignment = UITextAlignmentCenter;
+//	albumLabel.lineBreakMode = UILineBreakModeTailTruncation;
+//	[self.view addSubview:albumLabel];
 
-	[navigationBar release];
-	navigationBar = nil;
+//	[navigationBar release];
+//	navigationBar = nil;
 	
 	duration.adjustsFontSizeToFitWidth = YES;
 	currentTime.adjustsFontSizeToFitWidth = YES;
@@ -241,7 +388,12 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 	[self.view addSubview:containerView];
 	
 	self.artworkView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
-	[artworkView setImage:[selectedSong coverImage] forState:UIControlStateNormal];
+    UIImage *artImage = [selectedSong coverImage];
+    if (artImage == nil) {
+        artImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerNoArtwork" ofType:@"png"]];
+    }
+        
+	[artworkView setImage:artImage forState:UIControlStateNormal];
 	[artworkView addTarget:self action:@selector(showOverlayView) forControlEvents:UIControlEventTouchUpInside];
 	artworkView.showsTouchWhenHighlighted = NO;
 	artworkView.adjustsImageWhenHighlighted = NO;
@@ -323,6 +475,20 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 		
 	[self.view addSubview:volumeSlider];
 	
+    
+    NSString    *absolutePath = [[PCSDBOperater shareInstance] absolutePathBy:serverPath
+                                                                   folderType:folderType];
+    BOOL    fileExit = NO;
+    fileExit = [[NSFileManager defaultManager] fileExistsAtPath:absolutePath];
+    if (fileExit) {
+        //文件存在，直接播放
+        [self initMusicPlayerWithPath:absolutePath];
+    } else {
+        //文件不存在，下载后播放
+        [self downloadFileFromServer:serverPath folderType:folderType];
+    }
+
+    
 	[self updateViewForPlayerInfo:player];
 	[self updateViewForPlayerState:player];
 }
@@ -371,7 +537,11 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 	if ([songTableView superview])
 	{
 		[self.songTableView removeFromSuperview];
-		[self.artworkView setImage:[[soundFiles objectAtIndex:selectedIndex] coverImage] forState:UIControlStateNormal];
+        UIImage *artImage = [[soundFiles objectAtIndex:selectedIndex] coverImage];
+        if (artImage == nil) {
+            artImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerNoArtwork" ofType:@"png"]];
+        }
+		[self.artworkView setImage:artImage forState:UIControlStateNormal];
 		[self.containerView addSubview:reflectionView];
 		
 		[gradientLayer removeFromSuperlayer];

@@ -10,7 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <QuartzCore/QuartzCore.h>
 
-@interface MDAudioPlayerController : UIViewController <AVAudioPlayerDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface MDAudioPlayerController : UIViewController <AVAudioPlayerDelegate, UITableViewDelegate, UITableViewDataSource,BaiduPCSStatusListener>
 {
 	NSMutableArray		*soundFiles;
 	NSString			*soundFilesPath;
@@ -90,6 +90,8 @@
 @property (nonatomic, assign) BOOL repeatOne;
 @property (nonatomic, assign) BOOL shuffle;
 
+- (MDAudioPlayerController *)initWithServerPath:(NSString *)path
+                                     folderType:(PCSFolderType)type;
 - (MDAudioPlayerController *)initWithSoundFiles:(NSMutableArray *)songs atPath:(NSString *)path andSelectedIndex:(int)index;
 - (void)dismissAudioPlayer;
 - (void)showSongFiles;
