@@ -226,7 +226,6 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
     
     [self updateViewForPlayerInfo:player];
     [self updateViewForPlayerState:player];
-    [player play];
     
     if (error)
         NSLog(@"%@", error);
@@ -683,7 +682,8 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 
 - (BOOL)canGoToNextTrack
 {
-	if (selectedIndex + 1 == [self.soundFiles count]) 
+	if ([self.soundFiles count] == 0 ||
+        selectedIndex + 1 == [self.soundFiles count])
 		return NO;
 	else
 		return YES;

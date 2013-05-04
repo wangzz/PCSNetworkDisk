@@ -282,6 +282,9 @@
             case PCSFileFormatPpt:
                 [self showDocumentPreviewController:fileItem];
                 break;
+            case PCSFileFormatAudio:
+                [self showAudioPlayerController:fileItem];
+                break;
             default:
                 break;
         }
@@ -292,6 +295,20 @@
         PCSLog(@"redownload file:%@",fileItem);
         [self downloadFileFromServer:fileItem];
     }
+}
+
+- (void)showAudioPlayerController:(PCSFileInfoItem *)item
+{
+    MDAudioPlayerController *audioPlayer = [[MDAudioPlayerController alloc] initWithServerPath:item.serverPath
+                                                                                    folderType:PCSFolderTypeOffline];
+    audioPlayer.title = item.name;
+	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:audioPlayer];;
+    nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    nc.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    nc.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentModalViewController:nc animated:YES];
+    PCS_FUNC_SAFELY_RELEASE(nc);
+    PCS_FUNC_SAFELY_RELEASE(audioPlayer);
 }
 
 - (void)showDocumentPreviewController:(PCSFileInfoItem *)item
