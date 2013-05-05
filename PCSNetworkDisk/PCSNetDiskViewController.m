@@ -112,9 +112,10 @@
     
     self.files = [[PCSDBOperater shareInstance] getSubFolderFileListFromDB:self.path];
     
-    [self creatNavigationBar];
-//    [self addADBanner];
+    [self addADBanner];
+    
 //    [self loadFileListFromServer];
+//    [self creatNavigationBar];
     
 }
 
@@ -152,9 +153,9 @@
 
 - (void)addADBanner
 {
-    adBanner = [[MobWinBannerView alloc] initMobWinBannerSizeIdentifier:MobWINBannerSizeIdentifier320x50];
+    adBanner = [[MobWinBannerView alloc] initMobWinBannerSizeIdentifier:MobWINBannerSizeIdentifier320x25];
 	adBanner.rootViewController = self;
-    adBanner.frame = CGRectMake(0, 317, 320, 10);
+    adBanner.frame = CGRectMake(0, 342+(iPhone5?88:0), 320, 10);
 	[adBanner setAdUnitID:PCS_STRING_MOBWIN_UNIT_ID];
 	[self.view addSubview:adBanner];
     
@@ -934,23 +935,23 @@
 
 #pragma mark - MobBanner View Delegate
 - (void)bannerViewDidReceived {
-    NSLog(@"MobWIN %s", __FUNCTION__);
+    PCSLog(@"MobWIN %s", __FUNCTION__);
 }
 
 - (void)bannerViewFailToReceived {
-    NSLog(@"MobWIN %s", __FUNCTION__);
+    PCSLog(@"MobWIN %s", __FUNCTION__);
 }
 
 - (void)bannerViewDidPresentScreen {
-    NSLog(@"MobWIN %s", __FUNCTION__);
+    PCSLog(@"MobWIN %s", __FUNCTION__);
 }
 
 - (void)bannerViewDidDismissScreen {
-    NSLog(@"MobWIN %s", __FUNCTION__);
+    PCSLog(@"MobWIN %s", __FUNCTION__);
 }
 
 - (void)bannerViewWillLeaveApplication {
-    NSLog(@"MobWIN %s", __FUNCTION__);
+    PCSLog(@"MobWIN %s", __FUNCTION__);
 }
 
 @end

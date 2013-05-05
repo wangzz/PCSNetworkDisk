@@ -41,6 +41,7 @@
 
 - (void)dealloc
 {
+//    PCS_FUNC_SAFELY_RELEASE(adBanner);
     [self removeLocalNotification];
     [super dealloc];
 }
@@ -73,7 +74,41 @@
     // Do any additional setup after loading the view from its nib.
     CGRect  rect = self.mTableView.frame;
     self.mTableView.frame = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height+(iPhone5?88:0));
+
+//    [self addADBanner];
+    
     [self reloadOfflineTableViewData];
+}
+
+- (void)addADBanner
+{
+    adBanner = [[MobWinBannerView alloc] initMobWinBannerSizeIdentifier:MobWINBannerSizeIdentifier320x25];
+	adBanner.rootViewController = self;
+    adBanner.frame = CGRectMake(0, 342+(iPhone5?88:0), 320, 10);
+	[adBanner setAdUnitID:PCS_STRING_MOBWIN_UNIT_ID];
+	[self.view addSubview:adBanner];
+    
+    //
+	// 腾讯MobWIN提示：开发者可选调用
+	// 获取MobWinBannerViewDelegate回调消息
+	//
+    adBanner.delegate = self;
+    //
+	// 腾讯MobWIN提示：开发者可选调用
+	//
+	adBanner.adGpsMode = NO;
+	// adBanner.adTextColor = [UIColor whiteColor];
+	// adBanner.adSubtextColor = [UIColor colorWithRed:255.0/255.0 green:162.0/255.0 blue:0.0/255.0 alpha:1];
+	// adBanner.adBackgroundColor = [UIColor colorWithRed:2.0/255.0 green:12.0/255.0 blue:15.0/255.0 alpha:1];
+	//
+	
+	//
+	// 腾讯MobWIN提示：开发者必须调用
+	//
+	// 发起广告请求方法
+	//
+	[adBanner startRequest];
+	[adBanner release];
 }
 
 - (void)didReceiveMemoryWarning
@@ -472,5 +507,25 @@
     return YES;
 }
 
+#pragma mark - MobBanner View Delegate
+- (void)bannerViewDidReceived {
+    PCSLog(@"MobWIN %s", __FUNCTION__);
+}
+
+- (void)bannerViewFailToReceived {
+    PCSLog(@"MobWIN %s", __FUNCTION__);
+}
+
+- (void)bannerViewDidPresentScreen {
+    PCSLog(@"MobWIN %s", __FUNCTION__);
+}
+
+- (void)bannerViewDidDismissScreen {
+    PCSLog(@"MobWIN %s", __FUNCTION__);
+}
+
+- (void)bannerViewWillLeaveApplication {
+    PCSLog(@"MobWIN %s", __FUNCTION__);
+}
 
 @end
