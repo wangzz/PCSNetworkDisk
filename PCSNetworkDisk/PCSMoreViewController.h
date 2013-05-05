@@ -10,8 +10,5 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "KKPasscodeSettingsViewController.h"
 
-@interface PCSMoreViewController : UIViewController<KKPasscodeSettingsViewControllerDelegate,MFMailComposeViewControllerDelegate,MobWinBannerViewDelegate>
-{
-    MobWinBannerView *adBanner;
-}
+@interface PCSMoreViewController : UIViewController<KKPasscodeSettingsViewControllerDelegate,MFMailComposeViewControllerDelegate>
 @end

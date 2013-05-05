@@ -10,8 +10,6 @@
 #import <QuickLook/QuickLook.h>
 #import "MWPhotoBrowser/MWPhotoBrowser.h"
 
-@interface PCSOfflineViewController : UIViewController<BaiduPCSStatusListener,QLPreviewControllerDelegate,QLPreviewControllerDataSource,MWPhotoBrowserDelegate,MobWinBannerViewDelegate>
-{
-    MobWinBannerView *adBanner;
-}
+@interface PCSOfflineViewController : UIViewController<BaiduPCSStatusListener,QLPreviewControllerDelegate,QLPreviewControllerDataSource,MWPhotoBrowserDelegate>
+
 @end

@@ -10,8 +10,6 @@
 #import "HSDirectoryDelegate.h"
 #import "MWPhotoBrowser/MWPhotoBrowser.h"
 
-@interface PCSUploadViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITableViewDataSource,UITableViewDelegate,BaiduPCSStatusListener,HSDirectoryDelegate,MWPhotoBrowserDelegate,MobWinBannerViewDelegate>
-{
-    MobWinBannerView *adBanner;
-}
+@interface PCSUploadViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITableViewDataSource,UITableViewDelegate,BaiduPCSStatusListener,HSDirectoryDelegate,MWPhotoBrowserDelegate>
+
 @end

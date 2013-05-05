@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PCSMainTabBarController : UITabBarController
+@interface PCSMainTabBarController : UITabBarController<MobWinBannerViewDelegate>
+{
+    MobWinBannerView *adBanner;
+}
 
 @property (nonatomic,retain) UINavigationController     *netDiskNavController;
 @property (nonatomic,retain) UINavigationController     *uploadNavController;

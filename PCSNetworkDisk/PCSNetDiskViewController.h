@@ -10,10 +10,7 @@
 #import "MWPhotoBrowser/MWPhotoBrowser.h"
 #import <QuickLook/QuickLook.h>
 
-@interface PCSNetDiskViewController : UIViewController<MobWinBannerViewDelegate,MWPhotoBrowserDelegate,BaiduPCSStatusListener,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>
-{
-    MobWinBannerView *adBanner;
-}
+@interface PCSNetDiskViewController : UIViewController<MWPhotoBrowserDelegate,BaiduPCSStatusListener,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, copy) NSString    *path;
 

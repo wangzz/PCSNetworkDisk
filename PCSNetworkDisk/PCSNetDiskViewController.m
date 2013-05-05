@@ -82,13 +82,10 @@
 	// 可在viewDidUnload调用或者在应用页面返回时调用或者在dealloc中调用
 	// 目前已在viewWillDisappear中调用
 	//
-    [adBanner stopRequest];
-	[adBanner removeFromSuperview];
     [path release];
     [self removeNetDiskLocalNotification];
     [super dealloc];
 }
-
 
 - (void)viewDidLoad
 {
@@ -111,8 +108,6 @@
     [mTableView release];
     
     self.files = [[PCSDBOperater shareInstance] getSubFolderFileListFromDB:self.path];
-    
-    [self addADBanner];
     
 //    [self loadFileListFromServer];
 //    [self creatNavigationBar];
@@ -149,37 +144,6 @@
                                                                       action:@selector(onRightBarButtonAction:)];
     self.navigationItem.rightBarButtonItem = rightBarButton;
     PCS_FUNC_SAFELY_RELEASE(rightBarButton);
-}
-
-- (void)addADBanner
-{
-    adBanner = [[MobWinBannerView alloc] initMobWinBannerSizeIdentifier:MobWINBannerSizeIdentifier320x25];
-	adBanner.rootViewController = self;
-    adBanner.frame = CGRectMake(0, 342+(iPhone5?88:0), 320, 10);
-	[adBanner setAdUnitID:PCS_STRING_MOBWIN_UNIT_ID];
-	[self.view addSubview:adBanner];
-    
-    //
-	// 腾讯MobWIN提示：开发者可选调用
-	// 获取MobWinBannerViewDelegate回调消息
-	//
-    adBanner.delegate = self;
-    //
-	// 腾讯MobWIN提示：开发者可选调用
-	//
-	adBanner.adGpsMode = NO;
-	// adBanner.adTextColor = [UIColor whiteColor];
-	// adBanner.adSubtextColor = [UIColor colorWithRed:255.0/255.0 green:162.0/255.0 blue:0.0/255.0 alpha:1];
-	// adBanner.adBackgroundColor = [UIColor colorWithRed:2.0/255.0 green:12.0/255.0 blue:15.0/255.0 alpha:1];
-	//
-	
-	//
-	// 腾讯MobWIN提示：开发者必须调用
-	//
-	// 发起广告请求方法
-	//
-	[adBanner startRequest];
-	[adBanner release];
 }
 
 #pragma mark - 增量更新界面数据
@@ -525,9 +489,36 @@
     }
 }
 
-- (void)onMoveButtonAction
+- (void)onPreviewButtonAction
 {
-    
+    PCSFileInfoItem *item = [self.files objectAtIndex:self.selectCellIndexPath.row];
+    if (item.format == PCSFileFormatFolder) {
+        PCSNetDiskViewController *detailViewController = [[PCSNetDiskViewController alloc] init];
+        detailViewController.path = [item.serverPath stringByAppendingString:@"/"];
+        [[self navigationController] pushViewController:detailViewController animated:YES];
+        [detailViewController release];
+    } else {
+        //进入文件预览界面
+        switch (item.format) {
+            case PCSFileFormatJpg:
+                [self showPhotoPreviewController:item.serverPath];
+                break;
+            case PCSFileFormatAudio:
+                [self showAudioPlayerController:item];
+                break;
+            case PCSFileFormatVideo:
+                [self showVideoPlayerController:item];
+                break;
+            case PCSFileFormatPdf:
+            case PCSFileFormatDoc:
+            case PCSFileFormatExcel:
+            case PCSFileFormatTxt:
+            case PCSFileFormatPpt:
+            default:
+                [self showDocumentPreviewController:item];
+                break;
+        }
+    }
 }
 
 - (void)onDeleteButtonAction:(id)sender
@@ -676,7 +667,7 @@
             UIButton    *favoritButton = [[UIButton alloc] initWithFrame:CGRectMake(15, PCS_TABLEVIEW_CELL_HEIGHT+5, 90, 40)];
             favoritButton.backgroundColor = [UIColor redColor];
             [favoritButton addTarget:self
-                              action:@selector(onFavoritButtonAction)
+                              action:@selector(onPreviewButtonAction)
                     forControlEvents:UIControlEventTouchUpInside];
             favoritButton.tag = PCS_TAG_EXPAND_FAVORIT_BUTTON;
             [cell.contentView addSubview:favoritButton];
@@ -685,10 +676,9 @@
             UIButton    *moveButton = [[UIButton alloc] initWithFrame:CGRectMake(115, PCS_TABLEVIEW_CELL_HEIGHT+5, 90, 40)];
             moveButton.backgroundColor = [UIColor redColor];
             [moveButton addTarget:self
-                           action:@selector(onMoveButtonAction)
+                           action:@selector(onFavoritButtonAction)
                  forControlEvents:UIControlEventTouchUpInside];
             moveButton.tag = PCS_TAG_EXPAND_MOVE_BUTTON;
-            [moveButton setTitle:@"移动" forState:UIControlStateNormal];
             [cell.contentView addSubview:moveButton];
             PCS_FUNC_SAFELY_RELEASE(moveButton);
             
@@ -734,7 +724,7 @@
     }
     
     if ([CellIdentifier isEqualToString:TABLEVIEW_EXPAND_CELL]) {
-        UIButton    *favoritButton = (UIButton *)[cell.contentView viewWithTag:PCS_TAG_EXPAND_FAVORIT_BUTTON];
+        UIButton    *favoritButton = (UIButton *)[cell.contentView viewWithTag:PCS_TAG_EXPAND_MOVE_BUTTON];
         if (item.property == PCSFilePropertyDownLoad ||
             item.property == PCSFilePropertyOffLineFailed) {
             [favoritButton setTitle:@"收藏" forState:UIControlStateNormal];
@@ -742,7 +732,14 @@
                    item.property == PCSFilePropertyOffLineWaiting ||
                    item.property == PCSFilePropertyOffLining) {
             [favoritButton setTitle:@"取消收藏" forState:UIControlStateNormal];
-        }  
+        }
+
+        UIButton    *checkButton = (UIButton *)[cell.contentView viewWithTag:PCS_TAG_EXPAND_FAVORIT_BUTTON];
+        if (item.format == PCSFileFormatFolder) {
+            [checkButton setTitle:@"打开" forState:UIControlStateNormal];
+        } else {
+            [checkButton setTitle:@"预览" forState:UIControlStateNormal];
+        }
     }
     
     //展开按钮的处理逻辑
@@ -931,27 +928,6 @@
 -(BOOL)toContinue
 {
     return YES;
-}
-
-#pragma mark - MobBanner View Delegate
-- (void)bannerViewDidReceived {
-    PCSLog(@"MobWIN %s", __FUNCTION__);
-}
-
-- (void)bannerViewFailToReceived {
-    PCSLog(@"MobWIN %s", __FUNCTION__);
-}
-
-- (void)bannerViewDidPresentScreen {
-    PCSLog(@"MobWIN %s", __FUNCTION__);
-}
-
-- (void)bannerViewDidDismissScreen {
-    PCSLog(@"MobWIN %s", __FUNCTION__);
-}
-
-- (void)bannerViewWillLeaveApplication {
-    PCSLog(@"MobWIN %s", __FUNCTION__);
 }
 
 @end
