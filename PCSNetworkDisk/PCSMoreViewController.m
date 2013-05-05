@@ -16,8 +16,8 @@
 
 @interface PCSMoreViewController ()
 @property(nonatomic,retain) IBOutlet    UITableView *mTableView;
-@property(nonatomic,assign) long   volumeUsage;
-@property(nonatomic,assign) long   volumeTotal;
+@property(nonatomic,assign) float   volumeUsage;
+@property(nonatomic,assign) float   volumeTotal;
 @end
 
 @implementation PCSMoreViewController
@@ -77,16 +77,23 @@
         PCSQuotaResponse *response = [PCS_APP_DELEGATE.pcsClient quotaInfo];
         if(response){
             if (response.status.errorCode == 0) {
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    self.volumeUsage = response.used;
-                    self.volumeTotal = response.total;
-                    NSIndexPath *index = [NSIndexPath indexPathForRow:1 inSection:0];
-                    [self.mTableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:index]
-                                           withRowAnimation:UITableViewRowAnimationNone];
-                });
+                self.volumeUsage = response.used;
+                self.volumeTotal = response.total;
+                float    value = 10737418240.0;
+                self.volumeTotal = value;//测试用
             } else {
+                self.volumeTotal = 0;
+                self.volumeUsage = 0;
                 PCSLog(@"get quota info failed.%@",response.status.message);
             }
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                
+                NSIndexPath *index = [NSIndexPath indexPathForRow:1 inSection:0];
+                [self.mTableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:index]
+                                       withRowAnimation:UITableViewRowAnimationNone];
+            });
+
         }
     });
 }
@@ -140,8 +147,8 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         cell.textLabel.font = PCS_MAIN_FONT;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         
-        UIProgressView  *progress = [[UIProgressView alloc] initWithFrame:CGRectMake(10, 27, 250, 7.5f)];
-        progress.backgroundColor = [UIColor redColor];
+        UIProgressView  *progress = [[UIProgressView alloc] initWithFrame:CGRectMake(15, 27, 250, 7.5f)];
+        progress.backgroundColor = [UIColor clearColor];
         if ([progress respondsToSelector:@selector(progressImage)]) {
             //由于IOS5以下系统不支持自定义背景图片和进度图片，这里做了匹配处理
             progress.progressImage = [[UIImage imageNamed:@"fax_list_progress_image"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
@@ -155,7 +162,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         usageLable.textAlignment = UITextAlignmentCenter;
         usageLable.tag = PCS_TAG_MORE_USAGE_LABLE;
         usageLable.font = PCS_DETAIL_FONT;
-        usageLable.backgroundColor = [UIColor greenColor];
+        usageLable.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:usageLable];
         PCS_FUNC_SAFELY_RELEASE(usageLable);
         
@@ -192,14 +199,18 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
             cell.textLabel.text = @"容量";
             cell.detailTextLabel.text = @" ";
             progress.hidden = NO;
-            if (self.volumeTotal != 0) {
-                progress.progress = (float)(self.volumeUsage/self.volumeTotal);
-            }
-            
             usageLable.hidden = NO;
-            NSString    *usage = [[PCSDBOperater shareInstance] getFormatSizeString:self.volumeUsage];
-            NSString    *total = [[PCSDBOperater shareInstance] getFormatSizeString:self.volumeTotal];
-            usageLable.text = [NSString stringWithFormat:@"%@/%@",usage,total];
+            if (self.volumeTotal != 0) {
+                progress.progress = self.volumeUsage/self.volumeTotal;
+                
+                NSString    *usage = [[PCSDBOperater shareInstance] getFormatSizeString:self.volumeUsage];
+                NSString    *total = [[PCSDBOperater shareInstance] getFormatSizeString:self.volumeTotal];
+                usageLable.text = [NSString stringWithFormat:@"%@/%@",usage,total];
+                usageLable.textColor = [UIColor blackColor];
+            } else {
+                usageLable.text = @"获取容量数据失败";
+                usageLable.textColor = [UIColor redColor];
+            }
         }
     } else if (indexPath.section == 1) {
         cell.textLabel.text = @"磁盘清理";
