@@ -7,45 +7,6 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "PCSNetworkDisk/MWPhotoBrowser/MWPhotoBrowser.m"
-         timestampString = "388682492.786621"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "355"
-         endingLineNumber = "355"
-         landmarkName = "-documentInteractionController:willBeginSendingToApplication:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "PCSNetworkDisk/MWPhotoBrowser/MWPhotoBrowser.m"
-         timestampString = "388682493.652851"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "359"
-         endingLineNumber = "359"
-         landmarkName = "-documentInteractionController:didEndSendingToApplication:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "PCSNetworkDisk/MWPhotoBrowser/MWPhotoBrowser.m"
-         timestampString = "388682500.821944"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "350"
-         endingLineNumber = "350"
-         landmarkName = "-documentInteractionControllerViewControllerForPreview:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "PCSNetworkDisk/PCSPreviewController/PCSPreviewController.m"
          timestampString = "389195685.515416"
          startingColumnNumber = "9223372036854775807"

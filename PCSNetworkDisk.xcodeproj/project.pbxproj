@@ -58,6 +58,7 @@
 		822E56ED173610370005851E /* PauseButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 822E56EB173610370005851E /* PauseButton.png */; };
 		822E56EE173610370005851E /* PlayButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 822E56EC173610370005851E /* PlayButton.png */; };
 		822E56F01736141C0005851E /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822E56EF1736141C0005851E /* CoreMedia.framework */; };
+		822E56FA1736270F0005851E /* MWPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 822E56F91736270F0005851E /* MWPhotoBrowser.bundle */; };
 		822F7B2016E8CE5B00898CA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822F7B1F16E8CE5B00898CA4 /* UIKit.framework */; };
 		822F7B2216E8CE5B00898CA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822F7B2116E8CE5B00898CA4 /* Foundation.framework */; };
 		822F7B2416E8CE5B00898CA4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 822F7B2316E8CE5B00898CA4 /* CoreGraphics.framework */; };
@@ -231,6 +232,7 @@
 		822E56EB173610370005851E /* PauseButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PauseButton.png; sourceTree = "<group>"; };
 		822E56EC173610370005851E /* PlayButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PlayButton.png; sourceTree = "<group>"; };
 		822E56EF1736141C0005851E /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		822E56F91736270F0005851E /* MWPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = MWPhotoBrowser.bundle; path = MWPhotoBrowser/MWPhotoBrowser.bundle; sourceTree = "<group>"; };
 		822F7B1B16E8CE5B00898CA4 /* PCSNetworkDisk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PCSNetworkDisk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		822F7B1F16E8CE5B00898CA4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		822F7B2116E8CE5B00898CA4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -783,6 +785,7 @@
 		8271ADDA1709DBD6002DEFB1 /* MWPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
+				822E56F91736270F0005851E /* MWPhotoBrowser.bundle */,
 				82FD787A17258BDB00D18381 /* other */,
 				8271ADDB1709DC02002DEFB1 /* MWCaptionView.h */,
 				8271ADDC1709DC02002DEFB1 /* MWCaptionView.m */,
@@ -1076,6 +1079,7 @@
 				825E50B91732BA3100488ACE /* AudioPlayerVolumeKnob.png in Resources */,
 				822E56ED173610370005851E /* PauseButton.png in Resources */,
 				822E56EE173610370005851E /* PlayButton.png in Resources */,
+				822E56FA1736270F0005851E /* MWPhotoBrowser.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
