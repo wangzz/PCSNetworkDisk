@@ -11,6 +11,7 @@
 #import "AGImagePickerController/AGImagePickerController.h"
 #import "AGImagePickerController/AGIPCToolbarItem.h"
 #import <AVFoundation/AVFoundation.h>
+#import "PCSVideoPlayerController.h"
 
 
 @interface PCSUploadViewController ()
@@ -587,21 +588,30 @@
                                currentServerPath:fileItem.serverPath];
                 break;
             case PCSFileFormatVideo:
-                
+                [self showVideoPlayerController:fileItem];
                 break;
             default:
                 break;
         }
-        
-        
-        
-        
-        PCSLog(@"preview file:%@",fileItem);
     } else if (fileItem.property == PCSFileUploadStatusFailed) {
         //上传失败的文件，单击后重新上传
         PCSLog(@"reupload file:%@",fileItem);
         [self reuploadFileToServer:fileItem];
     }
+}
+
+- (void)showVideoPlayerController:(PCSFileInfoItem *)item
+{
+    PCSVideoPlayerController    *videoPlayer = [[PCSVideoPlayerController alloc] initWithPath:item.serverPath type:PCSFolderTypeNetDisk];
+    videoPlayer.title = item.name;
+    
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:videoPlayer];
+    nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    nc.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    nc.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentModalViewController:nc animated:YES];
+    PCS_FUNC_SAFELY_RELEASE(nc);
+    PCS_FUNC_SAFELY_RELEASE(videoPlayer);
 }
 
 - (void)showPhotoPreviewController:(NSArray *)files

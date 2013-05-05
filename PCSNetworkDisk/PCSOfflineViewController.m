@@ -10,6 +10,7 @@
 #import "PCSPreviewController.h"
 #import "MDAudioFile.h"
 #import "MDAudioPlayerController.h"
+#import "PCSVideoPlayerController.h"
 
 @interface PCSOfflineViewController ()
 @property(nonatomic,retain) IBOutlet    UITableView *mTableView;
@@ -275,26 +276,40 @@
                 [self showPhotoPreviewController:sectionArray
                                currentServerPath:fileItem.serverPath];
                 break;
+            case PCSFileFormatAudio:
+                [self showAudioPlayerController:fileItem];
+                break;
+            case PCSFileFormatVideo:
+                [self showVideoPlayerController:fileItem];
+                break;
             case PCSFileFormatPdf:
             case PCSFileFormatDoc:
             case PCSFileFormatExcel:
             case PCSFileFormatTxt:
             case PCSFileFormatPpt:
+            default:
                 [self showDocumentPreviewController:fileItem];
                 break;
-            case PCSFileFormatAudio:
-                [self showAudioPlayerController:fileItem];
-                break;
-            default:
-                break;
         }
-        
-        PCSLog(@"preview file:%@",fileItem);
     } else if (fileItem.property == PCSFilePropertyOffLineFailed) {
-        //上传失败的文件，单击后重新上传
+        //下载失败的文件，单击后重新下载
         PCSLog(@"redownload file:%@",fileItem);
         [self downloadFileFromServer:fileItem];
     }
+}
+
+- (void)showVideoPlayerController:(PCSFileInfoItem *)item
+{
+    PCSVideoPlayerController    *videoPlayer = [[PCSVideoPlayerController alloc] initWithPath:item.serverPath type:PCSFolderTypeNetDisk];
+    videoPlayer.title = item.name;
+    
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:videoPlayer];
+    nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    nc.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    nc.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentModalViewController:nc animated:YES];
+    PCS_FUNC_SAFELY_RELEASE(nc);
+    PCS_FUNC_SAFELY_RELEASE(videoPlayer);
 }
 
 - (void)showAudioPlayerController:(PCSFileInfoItem *)item

@@ -11,6 +11,7 @@
 #import "PCSPreviewController.h"
 #import "MDAudioFile.h"
 #import "MDAudioPlayerController.h"
+#import "PCSVideoPlayerController.h"
 
 
 @interface PCSNetDiskViewController ()
@@ -774,20 +775,36 @@
             case PCSFileFormatJpg:
                 [self showPhotoPreviewController:item.serverPath];
                 break;
+            case PCSFileFormatAudio:
+                [self showAudioPlayerController:item];
+                break;
+            case PCSFileFormatVideo:
+                [self showVideoPlayerController:item];
+                break;
             case PCSFileFormatPdf:
             case PCSFileFormatDoc:
             case PCSFileFormatExcel:
             case PCSFileFormatTxt:
             case PCSFileFormatPpt:
-                [self showDocumentPreviewController:item];
-                break;
-            case PCSFileFormatAudio:
-                [self showAudioPlayerController:item];
-                break;
             default:
+                [self showDocumentPreviewController:item];
                 break;
         }
     }
+}
+
+- (void)showVideoPlayerController:(PCSFileInfoItem *)item
+{
+    PCSVideoPlayerController    *videoPlayer = [[PCSVideoPlayerController alloc] initWithPath:item.serverPath type:PCSFolderTypeNetDisk];
+    videoPlayer.title = item.name;
+    
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:videoPlayer];
+    nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    nc.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    nc.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentModalViewController:nc animated:YES];
+    PCS_FUNC_SAFELY_RELEASE(nc);
+    PCS_FUNC_SAFELY_RELEASE(videoPlayer);
 }
 
 - (void)showAudioPlayerController:(PCSFileInfoItem *)item
@@ -795,7 +812,7 @@
     MDAudioPlayerController *audioPlayer = [[MDAudioPlayerController alloc] initWithServerPath:item.serverPath
                                                                                     folderType:PCSFolderTypeNetDisk];
     audioPlayer.title = item.name;
-	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:audioPlayer];;
+	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:audioPlayer];
     nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     nc.navigationBar.barStyle = UIBarStyleBlackTranslucent;
     nc.modalPresentationStyle = UIModalPresentationCurrentContext;
@@ -811,7 +828,7 @@
     previewController.folderType = PCSFolderTypeNetDisk;
     previewController.title = item.name;
 
-    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:previewController];;
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:previewController];
     nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     nc.navigationBar.barStyle = UIBarStyleBlackTranslucent;
     nc.modalPresentationStyle = UIModalPresentationCurrentContext;
