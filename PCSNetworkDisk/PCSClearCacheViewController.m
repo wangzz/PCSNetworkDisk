@@ -75,7 +75,8 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     if (nil == cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                       reuseIdentifier:cellid];
-        cell.textLabel.font = [UIFont systemFontOfSize:16.0f];
+        cell.textLabel.font = PCS_MAIN_FONT;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     if (indexPath.section == 0) {
@@ -91,9 +92,13 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         }
     } else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
-            NSString *uploadPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_NET_CACHE];
-            NSString    *unitString = [[PCSDBOperater shareInstance] getFormatSizeString:
-                                       [[PCSDBOperater shareInstance] folderSizeAtPath:uploadPath]];
+            NSString *netPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_NET_CACHE];
+            
+            NSString *uploadPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE];
+            
+            long long size = [[PCSDBOperater shareInstance] folderSizeAtPath:netPath] + [[PCSDBOperater shareInstance] folderSizeAtPath:uploadPath];
+            
+            NSString    *unitString = [[PCSDBOperater shareInstance] getFormatSizeString:size];
             cell.textLabel.text = [NSString stringWithFormat:@"其它缓存(已使用%@)",unitString];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         } else if (indexPath.row == 1) {
@@ -131,10 +136,14 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         } else if (indexPath.section == 1) {
             message = @"确定清空其它缓存文件？";
             clearAction = ^{
-                NSString *uploadPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_NET_CACHE];
-                BOOL    result = NO;
-                result = [[PCSDBOperater shareInstance] clearDataAtPath:uploadPath];
-                if (result) {
+                NSString *netPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_NET_CACHE];
+                
+                NSString *uploadPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_UPLOAD_CACHE];
+                BOOL    clearNetPathResult = NO;
+                BOOL    clearUploadPathResult = NO;
+                clearNetPathResult = [[PCSDBOperater shareInstance] clearDataAtPath:netPath];
+                clearUploadPathResult = [[PCSDBOperater shareInstance] clearDataAtPath:uploadPath];
+                if (clearNetPathResult || clearUploadPathResult) {
                     [self.mTableView reloadData];
                 }
             };
