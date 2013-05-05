@@ -70,27 +70,27 @@
     UIButton    *addPicBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, 13, 73, 44)];
     addPicBtn.tag = 1001;
     addPicBtn.titleLabel.font = PCS_MAIN_FONT;
-    [addPicBtn setTitle:@"添加图片" forState:UIControlStateNormal];
+    [addPicBtn setTitle:@"上传图片" forState:UIControlStateNormal];
     addPicBtn.backgroundColor = [UIColor redColor];
     [addPicBtn addTarget:self
                   action:@selector(onButtonAction:)
         forControlEvents:UIControlEventTouchUpInside];
     [headerView addSubview:addPicBtn];
     
-    UIButton    *addCameraPicBtn = [[UIButton alloc] initWithFrame:CGRectMake(119, 13, 73, 44)];
-    addCameraPicBtn.tag = 1002;
-    addCameraPicBtn.titleLabel.font = PCS_MAIN_FONT;
-    [addCameraPicBtn setTitle:@"拍摄图片" forState:UIControlStateNormal];
-    addCameraPicBtn.backgroundColor = [UIColor redColor];
-    [addCameraPicBtn addTarget:self
-                  action:@selector(onButtonAction:)
-        forControlEvents:UIControlEventTouchUpInside];
-    [headerView addSubview:addCameraPicBtn];
+//    UIButton    *addCameraPicBtn = [[UIButton alloc] initWithFrame:CGRectMake(119, 13, 73, 44)];
+//    addCameraPicBtn.tag = 1002;
+//    addCameraPicBtn.titleLabel.font = PCS_MAIN_FONT;
+//    [addCameraPicBtn setTitle:@"拍摄图片" forState:UIControlStateNormal];
+//    addCameraPicBtn.backgroundColor = [UIColor redColor];
+//    [addCameraPicBtn addTarget:self
+//                  action:@selector(onButtonAction:)
+//        forControlEvents:UIControlEventTouchUpInside];
+//    [headerView addSubview:addCameraPicBtn];
     
-    UIButton    *addFileBtn = [[UIButton alloc] initWithFrame:CGRectMake(215, 13, 73, 44)];
+    UIButton    *addFileBtn = [[UIButton alloc] initWithFrame:CGRectMake(119, 13, 73, 44)];
     addFileBtn.tag = 1003;
     addFileBtn.titleLabel.font = PCS_MAIN_FONT;
-    [addFileBtn setTitle:@"添加视频" forState:UIControlStateNormal];
+    [addFileBtn setTitle:@"上传视频" forState:UIControlStateNormal];
     addFileBtn.backgroundColor = [UIColor redColor];
     [addFileBtn addTarget:self
                         action:@selector(onButtonAction:)
@@ -100,7 +100,7 @@
     self.mTableView.tableHeaderView = headerView;
     PCS_FUNC_SAFELY_RELEASE(headerView);
     PCS_FUNC_SAFELY_RELEASE(addFileBtn);
-    PCS_FUNC_SAFELY_RELEASE(addCameraPicBtn);
+//    PCS_FUNC_SAFELY_RELEASE(addCameraPicBtn);
     PCS_FUNC_SAFELY_RELEASE(addPicBtn);
 }
 
