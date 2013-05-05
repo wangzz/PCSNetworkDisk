@@ -250,12 +250,12 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     _toolbar.barStyle = UIBarStyleBlackTranslucent;
     _toolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
     
-  /*
     // Toolbar Items
     _previousButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"MWPhotoBrowser.bundle/images/UIBarButtonItemArrowLeft.png"] style:UIBarButtonItemStylePlain target:self action:@selector(gotoPreviousPage)];
     _nextButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"MWPhotoBrowser.bundle/images/UIBarButtonItemArrowRight.png"] style:UIBarButtonItemStylePlain target:self action:@selector(gotoNextPage)];
     _actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonPressed:)];
-   */ 
+    
+    /*
     _shareButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""]
                                                     style:UIBarButtonItemStylePlain
                                                    target:self
@@ -289,7 +289,8 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     [items addObject:_deleteButton];
     [_toolbar setItems:items];
     [items release];
-
+*/
+    
     // Update
     [self reloadData];
     
@@ -376,7 +377,6 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
         [_toolbar removeFromSuperview];
     }
  
-    /*
     // Toolbar items & navigation
     UIBarButtonItem *fixedLeftSpace = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil] autorelease];
     fixedLeftSpace.width = 32; // To balance action button
@@ -391,7 +391,6 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     if (_displayActionButton) [items addObject:_actionButton];
     [_toolbar setItems:items];
     [items release];
-     */
     
 	[self updateNavigation];
     
