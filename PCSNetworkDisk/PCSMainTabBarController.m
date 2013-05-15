@@ -92,28 +92,50 @@
     PCSNetDiskViewController *netDiskViewController = [[PCSNetDiskViewController alloc] init];
     netDiskViewController.path = PCS_STRING_DEFAULT_PATH;
     netDiskNavController = [[UINavigationController alloc]initWithRootViewController:netDiskViewController];
-    netDiskNavController.tabBarItem.title = @"云盘";
-    netDiskViewController.tabBarItem.image = [UIImage imageNamed:@"tab_netdisk"];
+    netDiskNavController.tabBarItem.title = @"";
     PCS_FUNC_SAFELY_RELEASE(netDiskViewController);
     
     UIViewController *uploadViewController = [[PCSUploadViewController alloc] init];
     uploadNavController = [[UINavigationController alloc] initWithRootViewController:uploadViewController];
-    uploadNavController.tabBarItem.title = @"上传";
-    uploadNavController.tabBarItem.image = [UIImage imageNamed:@"tab_upload"];
+    uploadNavController.tabBarItem.title = @"";
     PCS_FUNC_SAFELY_RELEASE(uploadViewController);
     
     UIViewController *offlineViewController = [[PCSOfflineViewController alloc] init] ;
     offlineNavController = [[UINavigationController alloc] initWithRootViewController:offlineViewController];
-    offlineNavController.tabBarItem.title = @"离线";
-    offlineNavController.tabBarItem.image = [UIImage imageNamed:@"tab_offline"];
+    offlineNavController.tabBarItem.title = @"";
     PCS_FUNC_SAFELY_RELEASE(offlineViewController);
     
     UIViewController *moreViewController = [[PCSMoreViewController alloc] init];
     moreNavController = [[UINavigationController alloc] initWithRootViewController:moreViewController];
-    moreNavController.tabBarItem.title = @"更多";
-    moreNavController.tabBarItem.image = [UIImage imageNamed:@"tab_more"];
+    moreNavController.tabBarItem.title = @"";
     PCS_FUNC_SAFELY_RELEASE(moreViewController);
     
+    if ([self.tabBarItem respondsToSelector:@selector(setFinishedSelectedImage:withFinishedUnselectedImage:)])
+    {
+        self.tabBar.backgroundImage = [[UIImage imageNamed:@"tab_background"] stretchableImageWithLeftCapWidth:6 topCapHeight:24];
+        UIEdgeInsets imgSet =  UIEdgeInsetsMake(5, 0, -9, 0);
+        [netDiskNavController.tabBarItem setImageInsets:imgSet];
+        [netDiskNavController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_netdisked"]
+                             withFinishedUnselectedImage:[UIImage imageNamed:@"tab_netdisk"]];
+        
+        [uploadNavController.tabBarItem setImageInsets:imgSet];
+        [uploadNavController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_uploaded"]
+                          withFinishedUnselectedImage:[UIImage imageNamed:@"tab_upload"]];
+        
+        [offlineNavController.tabBarItem setImageInsets:imgSet];
+        [offlineNavController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_offlined"]
+                           withFinishedUnselectedImage:[UIImage imageNamed:@"tab_offline"]];
+        
+        [moreNavController.tabBarItem setImageInsets:imgSet];
+        [moreNavController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_mored"]
+                         withFinishedUnselectedImage:[UIImage imageNamed:@"tab_more"]];
+    } else {
+        netDiskViewController.tabBarItem.image = [UIImage imageNamed:@"tab_netdisk"];
+        uploadNavController.tabBarItem.image = [UIImage imageNamed:@"tab_upload"];
+        offlineNavController.tabBarItem.image = [UIImage imageNamed:@"tab_offline"];
+        moreNavController.tabBarItem.image = [UIImage imageNamed:@"tab_more"];
+    }
+
     NSArray   *controllers = [NSArray arrayWithObjects:
                               netDiskNavController,uploadNavController,offlineNavController,moreNavController, nil];
     

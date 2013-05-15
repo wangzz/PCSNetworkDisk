@@ -45,14 +45,20 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    UIButton    *logoffButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
-    logoffButton.backgroundColor = [UIColor redColor];
+    UIView  *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 43)];
+    UIImage *normalImage = [[UIImage imageNamed:@"more_unregist"] stretchableImageWithLeftCapWidth:19 topCapHeight:20];
+    UIImage *selectImage = [[UIImage imageNamed:@"more_unregisted"] stretchableImageWithLeftCapWidth:19 topCapHeight:20];
+    UIButton    *logoffButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 0, 300, 43)];
+    [logoffButton setBackgroundImage:normalImage forState:UIControlStateNormal];
+    [logoffButton setBackgroundImage:selectImage forState:UIControlStateHighlighted];
     [logoffButton setTitle:@"注销登录" forState:UIControlStateNormal];
     [logoffButton addTarget:self
                      action:@selector(onLogoffButtonAction)
            forControlEvents:UIControlEventTouchUpInside];
-    self.mTableView.tableFooterView = logoffButton;
+    [footView addSubview:logoffButton];
+    self.mTableView.tableFooterView = footView;
     PCS_FUNC_SAFELY_RELEASE(logoffButton);
+    PCS_FUNC_SAFELY_RELEASE(footView);
     
     CGRect  rect = self.mTableView.frame;
     self.mTableView.frame = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height+(iPhone5?88:0));

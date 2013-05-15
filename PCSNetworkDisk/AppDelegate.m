@@ -10,6 +10,7 @@
 #import "BaiduPCSClient.h"
 #import "PCSRootViewController.h"
 #import "KKPasscodeLock.h"
+#import "UINavigationBar+UINavigationBar_Addition.h"
 
 @implementation AppDelegate
 

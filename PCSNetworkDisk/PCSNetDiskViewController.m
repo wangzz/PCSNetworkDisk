@@ -659,36 +659,42 @@
         PCS_FUNC_SAFELY_RELEASE(expandButton);
         
         if ([CellIdentifier isEqualToString:TABLEVIEW_EXPAND_CELL]) {
-            UIView  *mainView = [[UIView alloc] initWithFrame:CGRectMake(0, PCS_TABLEVIEW_CELL_HEIGHT, 320, 50)];
-            mainView.backgroundColor = [UIColor grayColor];
+            UIImageView  *mainView = [[UIImageView alloc] initWithFrame:CGRectMake(0, PCS_TABLEVIEW_CELL_HEIGHT-13, 320, 73)];
+            mainView.image = [UIImage imageNamed:@"netdisk_expand_cell_bg"];
             [cell.contentView addSubview:mainView];
             PCS_FUNC_SAFELY_RELEASE(mainView);
 
             UIButton    *favoritButton = [[UIButton alloc] initWithFrame:CGRectMake(15, PCS_TABLEVIEW_CELL_HEIGHT+5, 90, 40)];
-            favoritButton.backgroundColor = [UIColor redColor];
+            [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_move"] forState:UIControlStateNormal];
+            [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_moved"] forState:UIControlStateHighlighted];
             [favoritButton addTarget:self
                               action:@selector(onPreviewButtonAction)
                     forControlEvents:UIControlEventTouchUpInside];
             favoritButton.tag = PCS_TAG_EXPAND_FAVORIT_BUTTON;
+            [favoritButton setImageEdgeInsets:UIEdgeInsetsMake(1, 11, 1, 11)];
             [cell.contentView addSubview:favoritButton];
             PCS_FUNC_SAFELY_RELEASE(favoritButton);
             
             UIButton    *moveButton = [[UIButton alloc] initWithFrame:CGRectMake(115, PCS_TABLEVIEW_CELL_HEIGHT+5, 90, 40)];
-            moveButton.backgroundColor = [UIColor redColor];
             [moveButton addTarget:self
                            action:@selector(onFavoritButtonAction)
                  forControlEvents:UIControlEventTouchUpInside];
             moveButton.tag = PCS_TAG_EXPAND_MOVE_BUTTON;
+            [moveButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateNormal];
+            [moveButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateHighlighted];
+            [moveButton setImageEdgeInsets:UIEdgeInsetsMake(1, 11, 1, 11)];
             [cell.contentView addSubview:moveButton];
             PCS_FUNC_SAFELY_RELEASE(moveButton);
             
             UIButton    *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(215, PCS_TABLEVIEW_CELL_HEIGHT+5, 90, 40)];
-            deleteButton.backgroundColor = [UIColor redColor];
             [deleteButton addTarget:self
                              action:@selector(onDeleteButtonAction:)
                    forControlEvents:UIControlEventTouchUpInside];
             deleteButton.tag = PCS_TAG_EXPAND_DELETE_BUTTON;
+            [deleteButton setImage:[UIImage imageNamed:@"netdisk_expand_deleted"] forState:UIControlStateNormal];
+            [deleteButton setImage:[UIImage imageNamed:@"netdisk_expand_deleted"] forState:UIControlStateHighlighted];
             [deleteButton setTitle:@"删除" forState:UIControlStateNormal];
+            [deleteButton setImageEdgeInsets:UIEdgeInsetsMake(1, 11, 1, 11)];
             [cell.contentView addSubview:deleteButton];
             PCS_FUNC_SAFELY_RELEASE(deleteButton);
         }
