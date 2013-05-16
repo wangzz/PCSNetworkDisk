@@ -573,6 +573,11 @@
         
         UIProgressView  *progress = [[UIProgressView alloc] initWithFrame:CGRectMake(10, 35, 180, 10)];
         progress.backgroundColor = [UIColor clearColor];
+        if ([progress respondsToSelector:@selector(progressImage)]) {
+            //由于IOS5以下系统不支持自定义背景图片和进度图片，这里做了匹配处理
+            progress.progressImage = [[UIImage imageNamed:@"fax_list_progress_image"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
+            progress.trackImage = [[UIImage imageNamed:@"fax_list_progress_track_image"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
+        }
         progress.tag = TAG_UPLOAD_PROGRESSVIEW;
         [cell.contentView addSubview:progress];
         PCS_FUNC_SAFELY_RELEASE(progress);
