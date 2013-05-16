@@ -94,9 +94,21 @@
 {
     [super viewDidLoad];
     
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    UIImage *image = nil;
+    if (iPhone5) {
+        image = [UIImage imageNamed:@"background_iphone5.jpg"];
+    } else {
+        image = [UIImage imageNamed:@"background_iphone.jpg"];
+    }
+    imageView.image = image;
+    [self.view addSubview:imageView];
+    PCS_FUNC_SAFELY_RELEASE(imageView);
+    
     mTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 342+(iPhone5?88:0))];
     mTableView.delegate = self;
     mTableView.dataSource = self;
+    mTableView.backgroundColor = [UIColor clearColor];
     
     UIButton  *footViewButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
     [footViewButton addTarget:self

@@ -44,6 +44,16 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    UIImage *image = nil;
+    if (iPhone5) {
+        image = [UIImage imageNamed:@"background_iphone5.jpg"];
+    } else {
+        image = [UIImage imageNamed:@"background_iphone.jpg"];
+    }
+    imageView.image = image;
+    [self.view insertSubview:imageView belowSubview:self.mTableView];
+    PCS_FUNC_SAFELY_RELEASE(imageView);
     
     UIView  *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 43)];
     UIImage *normalImage = [[UIImage imageNamed:@"more_unregist"] stretchableImageWithLeftCapWidth:19 topCapHeight:20];

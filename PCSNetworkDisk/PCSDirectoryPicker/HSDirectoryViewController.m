@@ -77,6 +77,17 @@
         [self creatNavigationBar];
     }
     
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    UIImage *image = nil;
+    if (iPhone5) {
+        image = [UIImage imageNamed:@"background_iphone5.jpg"];
+    } else {
+        image = [UIImage imageNamed:@"background_iphone.jpg"];
+    }
+    imageView.image = image;
+    [self.view insertSubview:imageView belowSubview:self.mTableView];
+    PCS_FUNC_SAFELY_RELEASE(imageView);
+    
     // Set the prompt text
     [[self navigationItem] setPrompt:@"请选择文件上传路径"];
 }

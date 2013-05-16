@@ -71,6 +71,17 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    UIImage *image = nil;
+    if (iPhone5) {
+        image = [UIImage imageNamed:@"background_iphone5.jpg"];
+    } else {
+        image = [UIImage imageNamed:@"background_iphone.jpg"];
+    }
+    imageView.image = image;
+    [self.view insertSubview:imageView belowSubview:self.mTableView];
+    PCS_FUNC_SAFELY_RELEASE(imageView);
+    
     CGRect  rect = self.mTableView.frame;
     self.mTableView.frame = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height+(iPhone5?88:0));
 
