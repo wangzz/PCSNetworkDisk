@@ -25,9 +25,11 @@
 @end
 
 
-#define UPLOAD_TABLEVIEW_HEIGHT         50.0f
+#define UPLOAD_TABLEVIEW_HEIGHT         55.0f
 #define TAG_UPLOAD_FILE_SIZE_LABLE      20001
 #define TAG_UPLOAD_PROGRESSVIEW         20002
+#define TAG_UPLOAD_MAIN_LABLE           20003
+#define TAG_UPLOAD_DETAIL_LABLE         20004
 
 @implementation PCSUploadViewController
 @synthesize mTableView;
@@ -67,11 +69,17 @@
     UIImageView *headerView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 70)];
     headerView.userInteractionEnabled = YES;
     headerView.backgroundColor = [UIColor lightGrayColor];
-    UIButton    *addPicBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, 13, 73, 44)];
+    
+    UIImage *backgroundImage = [[UIImage imageNamed:@"upload_pick_background"] stretchableImageWithLeftCapWidth:2 topCapHeight:32];
+    headerView.image = backgroundImage;
+    
+    UIButton    *addPicBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, 7.5f, 73, 55)];
     addPicBtn.tag = 1001;
+    [addPicBtn setImage:[UIImage imageNamed:@"upload_pick_picture"]
+               forState:UIControlStateNormal];
+    [addPicBtn setImage:[UIImage imageNamed:@"upload_pick_pictured"]
+               forState:UIControlStateHighlighted];
     addPicBtn.titleLabel.font = PCS_MAIN_FONT;
-    [addPicBtn setTitle:@"上传图片" forState:UIControlStateNormal];
-    addPicBtn.backgroundColor = [UIColor redColor];
     [addPicBtn addTarget:self
                   action:@selector(onButtonAction:)
         forControlEvents:UIControlEventTouchUpInside];
@@ -87,11 +95,14 @@
 //        forControlEvents:UIControlEventTouchUpInside];
 //    [headerView addSubview:addCameraPicBtn];
     
-    UIButton    *addFileBtn = [[UIButton alloc] initWithFrame:CGRectMake(119, 13, 73, 44)];
+    UIButton    *addFileBtn = [[UIButton alloc] initWithFrame:CGRectMake(119, 7.5f, 73, 55)];
     addFileBtn.tag = 1003;
+    [addFileBtn setImage:[UIImage imageNamed:@"upload_pick_video"]
+               forState:UIControlStateNormal];
+    [addFileBtn setImage:[UIImage imageNamed:@"upload_pick_videoed"]
+               forState:UIControlStateHighlighted];
     addFileBtn.titleLabel.font = PCS_MAIN_FONT;
-    [addFileBtn setTitle:@"上传视频" forState:UIControlStateNormal];
-    addFileBtn.backgroundColor = [UIColor redColor];
+    [addFileBtn setImageEdgeInsets:UIEdgeInsetsMake(0, 10, 0, 10)];
     [addFileBtn addTarget:self
                         action:@selector(onButtonAction:)
               forControlEvents:UIControlEventTouchUpInside];
@@ -477,7 +488,12 @@
     return self.sectionTitleArray.count;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 25.0f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSString    *title = nil;
     NSString    *uploading = [NSString stringWithFormat:@"%d",PCSFileUploadStatusUploading];
@@ -498,7 +514,19 @@
             title = @"上传成功";
         }
     }
-    return title;
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 25)];
+    UIImage *image = [[UIImage imageNamed:@"upload_head_background"] stretchableImageWithLeftCapWidth:3 topCapHeight:6];
+    imageView.image = image;
+    
+    UILabel *titleLable = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 310, 25)];
+    titleLable.font = [UIFont systemFontOfSize:13.0f];
+    titleLable.text = title;
+    titleLable.backgroundColor = [UIColor clearColor];
+    [imageView addSubview:titleLable];
+    PCS_FUNC_SAFELY_RELEASE(titleLable);
+    
+    return [imageView autorelease];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -516,20 +544,34 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                        reuseIdentifier:CellIdentifier] autorelease];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        cell.textLabel.lineBreakMode = UILineBreakModeMiddleTruncation;
-        cell.textLabel.backgroundColor = [UIColor clearColor];
-        cell.textLabel.font = PCS_MAIN_FONT;
-        cell.detailTextLabel.backgroundColor = [UIColor clearColor];
         
-        UILabel *sizeLable = [[UILabel alloc] initWithFrame:CGRectMake(210, UPLOAD_TABLEVIEW_HEIGHT-23.5f, 90, 20)];
+        UILabel *nameLable = [[UILabel alloc] initWithFrame:CGRectMake(10, 2, 300, 30)];
+        nameLable.backgroundColor = [UIColor clearColor];
+        nameLable.lineBreakMode = UILineBreakModeMiddleTruncation;
+        nameLable.font = PCS_MAIN_FONT;
+        nameLable.textColor = PCS_MAIN_TEXT_COLOR;
+        nameLable.tag = TAG_UPLOAD_MAIN_LABLE;
+        [cell.contentView addSubview:nameLable];
+        PCS_FUNC_SAFELY_RELEASE(nameLable);
+        
+        UILabel *detailLable = [[UILabel alloc] initWithFrame:CGRectMake(10, 27, 200, 25)];
+        detailLable.backgroundColor = [UIColor clearColor];
+        detailLable.font = PCS_DETAIL_FONT;
+        detailLable.textColor = PCS_DETAIL_TEXT_COLOR;
+        detailLable.tag = TAG_UPLOAD_DETAIL_LABLE;
+        [cell.contentView addSubview:detailLable];
+        PCS_FUNC_SAFELY_RELEASE(detailLable);
+        
+        UILabel *sizeLable = [[UILabel alloc] initWithFrame:CGRectMake(210, UPLOAD_TABLEVIEW_HEIGHT-27.0f, 90, 20)];
         sizeLable.backgroundColor = [UIColor clearColor];
         sizeLable.textColor = [UIColor grayColor];
         sizeLable.tag = TAG_UPLOAD_FILE_SIZE_LABLE;
-        sizeLable.font = [UIFont systemFontOfSize:15.0f];
+        sizeLable.textColor = PCS_DETAIL_TEXT_COLOR;
+        sizeLable.font = [UIFont systemFontOfSize:14.0f];
         [cell.contentView addSubview:sizeLable];
         PCS_FUNC_SAFELY_RELEASE(sizeLable);
         
-        UIProgressView  *progress = [[UIProgressView alloc] initWithFrame:CGRectMake(10, 33, 180, 10)];
+        UIProgressView  *progress = [[UIProgressView alloc] initWithFrame:CGRectMake(10, 35, 180, 10)];
         progress.backgroundColor = [UIColor clearColor];
         progress.tag = TAG_UPLOAD_PROGRESSVIEW;
         [cell.contentView addSubview:progress];
@@ -539,7 +581,8 @@
     NSArray *sectionArray = [self.uploadFileDictionary objectForKey:[self.sectionTitleArray
                                                                      objectAtIndex:indexPath.section]];
     PCSFileInfoItem *fileItem = [sectionArray objectAtIndex:indexPath.row];
-    cell.textLabel.text = fileItem.name;
+    UILabel *mainLable = (UILabel *)[cell.contentView viewWithTag:TAG_UPLOAD_MAIN_LABLE];
+    mainLable.text = fileItem.name;
     
     UIProgressView  *progress = (UIProgressView *)[cell.contentView viewWithTag:TAG_UPLOAD_PROGRESSVIEW];
     progress.hidden = YES;
@@ -547,6 +590,7 @@
     UILabel *sizeLable = (UILabel *)[cell.contentView viewWithTag:TAG_UPLOAD_FILE_SIZE_LABLE];
     sizeLable.hidden = YES;
     
+    UILabel *detailLable = (UILabel *)[cell.contentView viewWithTag:TAG_UPLOAD_DETAIL_LABLE];
     if (fileItem.property == PCSFileUploadStatusSuccess) {
         sizeLable.hidden = NO;
         float   fileSize = (float)fileItem.size/1024;
@@ -559,15 +603,15 @@
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"yyyy-MM-dd hh:mm";
         NSDate  *date = [NSDate dateWithTimeIntervalSince1970:fileItem.mtime];
-        cell.detailTextLabel.text = [dateFormatter stringFromDate:date];
+        detailLable.text = [dateFormatter stringFromDate:date];
         PCS_FUNC_SAFELY_RELEASE(dateFormatter);
     } else if (fileItem.property == PCSFileUploadStatusFailed) {
-        cell.detailTextLabel.text = @"上传失败，点击重新上传";
+        detailLable.text = @"上传失败，点击重新上传";
     } else if (fileItem.property == PCSFileUploadStatusWaiting) {
-        cell.detailTextLabel.text = @"等待上传...";
+        detailLable.text = @"等待上传...";
     } else if (fileItem.property == PCSFileUploadStatusUploading) {
         progress.hidden = NO;
-        cell.detailTextLabel.text = @" ";
+        detailLable.text = @" ";
         self.currentUploadFileIndexPath = indexPath;
     }
     
