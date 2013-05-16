@@ -626,18 +626,19 @@
         [cell.contentView addSubview:fileTypeImageView];
         PCS_FUNC_SAFELY_RELEASE(fileTypeImageView);
         
-        UILabel *nameLable = [[UILabel alloc] initWithFrame:CGRectMake(60, 3, 170, 30)];
+        UILabel *nameLable = [[UILabel alloc] initWithFrame:CGRectMake(60, 2, 170, 30)];
         nameLable.tag = PCS_TAG_FILE_NAME_LABLE;
         nameLable.lineBreakMode = UILineBreakModeMiddleTruncation;
         nameLable.font = PCS_MAIN_FONT;
+        nameLable.textColor = PCS_MAIN_TEXT_COLOR;
         nameLable.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:nameLable];
         PCS_FUNC_SAFELY_RELEASE(nameLable);
         
-        UILabel *detailLable = [[UILabel alloc] initWithFrame:CGRectMake(60, 28, 170, 20)];
+        UILabel *detailLable = [[UILabel alloc] initWithFrame:CGRectMake(60, 27, 170, 25)];
         detailLable.tag = PCS_TAG_FILE_DETAIL_LABLE;
         detailLable.font = PCS_DETAIL_FONT;
-        detailLable.textColor = [UIColor lightGrayColor];
+        detailLable.textColor = PCS_DETAIL_TEXT_COLOR;
         detailLable.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:detailLable];
         PCS_FUNC_SAFELY_RELEASE(detailLable);
@@ -645,8 +646,8 @@
         UILabel *sizeLable = [[UILabel alloc] initWithFrame:CGRectMake(232, 10, 75, 30)];
         sizeLable.tag = PCS_TAG_FILE_SIZE_LABLE;
         sizeLable.font = [UIFont systemFontOfSize:14.0f];
+        sizeLable.textColor = PCS_DETAIL_TEXT_COLOR;
         sizeLable.backgroundColor = [UIColor clearColor];
-        sizeLable.textColor = [UIColor grayColor];
         [cell.contentView addSubview:sizeLable];
         PCS_FUNC_SAFELY_RELEASE(sizeLable);
         

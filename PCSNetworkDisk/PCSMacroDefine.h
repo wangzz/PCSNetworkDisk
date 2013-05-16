@@ -100,6 +100,9 @@ typedef enum
 #define PCS_MAIN_FONT                   [UIFont systemFontOfSize:16.0f]
 #define PCS_DETAIL_FONT                 [UIFont systemFontOfSize:13.5f]
 
+//颜色
+#define PCS_MAIN_TEXT_COLOR        [UIColor colorWithRed:48.0f/255 green:78.0f/255 blue:98.0f/255 alpha:1.0f]
+#define PCS_DETAIL_TEXT_COLOR      [UIColor colorWithRed:151.0f/255 green:166.0f/255 blue:171.0f/255 alpha:1.0f]
 
 //省略字符串
 #define PCS_APP_DELEGATE    ((AppDelegate *)[[UIApplication sharedApplication] delegate])
