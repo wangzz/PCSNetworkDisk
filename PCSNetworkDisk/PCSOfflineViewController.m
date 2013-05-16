@@ -160,9 +160,12 @@
 
 #pragma mark - Table view data source
 
-#define OFFLINE_TABLEVIEW_HEIGHT         50.0f
-#define TAG_OFFLINE_FILE_SIZE_LABLE      20001
-#define TAG_OFFLINE_PROGRESSVIEW         20002
+#define OFFLINE_TABLEVIEW_HEIGHT         55.0f
+#define TAG_OFFLINE_FILE_SIZE_LABLE      30001
+#define TAG_OFFLINE_PROGRESSVIEW         30002
+#define TAG_OFFLINE_MAIN_LABLE           30003
+#define TAG_OFFLINE_DETAIL_LABLE         30004
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
@@ -174,7 +177,12 @@
     return self.sectionTitleArray.count;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 25.0f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSString    *title = nil;
     NSString    *offlining = [NSString stringWithFormat:@"%d",PCSFilePropertyOffLining];
@@ -184,14 +192,26 @@
         NSArray *offliningArray = [self.offlineFileDictionary objectForKey:offlining];
         if (offliningArray.count > 0) {
             title = [NSString stringWithFormat:@"下载中（%d）",offliningArray.count];
-        } 
+        }
     } else if ([typeString isEqualToString:offlineSuccess]) {
         NSArray *offlineSucessArray = [self.offlineFileDictionary objectForKey:offlineSuccess];
         if (offlineSucessArray.count > 0) {
             title = [NSString stringWithFormat:@"下载成功（%d）",offlineSucessArray.count];
-        } 
+        }
     }
-    return title;
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 25)];
+    UIImage *image = [[UIImage imageNamed:@"upload_head_background"] stretchableImageWithLeftCapWidth:3 topCapHeight:6];
+    imageView.image = image;
+    
+    UILabel *titleLable = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 310, 25)];
+    titleLable.font = [UIFont systemFontOfSize:13.0f];
+    titleLable.text = title;
+    titleLable.backgroundColor = [UIColor clearColor];
+    [imageView addSubview:titleLable];
+    PCS_FUNC_SAFELY_RELEASE(titleLable);
+    
+    return [imageView autorelease];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -209,21 +229,39 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                        reuseIdentifier:CellIdentifier] autorelease];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        cell.textLabel.lineBreakMode = UILineBreakModeMiddleTruncation;
-        cell.textLabel.backgroundColor = [UIColor clearColor];
-        cell.textLabel.font = PCS_MAIN_FONT;
-        cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+                
+        UILabel *nameLable = [[UILabel alloc] initWithFrame:CGRectMake(10, 2, 300, 30)];
+        nameLable.backgroundColor = [UIColor clearColor];
+        nameLable.lineBreakMode = UILineBreakModeMiddleTruncation;
+        nameLable.font = PCS_MAIN_FONT;
+        nameLable.textColor = PCS_MAIN_TEXT_COLOR;
+        nameLable.tag = TAG_OFFLINE_MAIN_LABLE;
+        [cell.contentView addSubview:nameLable];
+        PCS_FUNC_SAFELY_RELEASE(nameLable);
         
-        UILabel *sizeLable = [[UILabel alloc] initWithFrame:CGRectMake(210, OFFLINE_TABLEVIEW_HEIGHT-23.5f, 90, 20)];
+        UILabel *detailLable = [[UILabel alloc] initWithFrame:CGRectMake(10, 27, 200, 25)];
+        detailLable.backgroundColor = [UIColor clearColor];
+        detailLable.font = PCS_DETAIL_FONT;
+        detailLable.textColor = PCS_DETAIL_TEXT_COLOR;
+        detailLable.tag = TAG_OFFLINE_DETAIL_LABLE;
+        [cell.contentView addSubview:detailLable];
+        PCS_FUNC_SAFELY_RELEASE(detailLable);
+        
+        UILabel *sizeLable = [[UILabel alloc] initWithFrame:CGRectMake(210, OFFLINE_TABLEVIEW_HEIGHT-27.0f, 90, 20)];
         sizeLable.backgroundColor = [UIColor clearColor];
-        sizeLable.textColor = [UIColor grayColor];
+        sizeLable.textColor = PCS_DETAIL_TEXT_COLOR;
         sizeLable.tag = TAG_OFFLINE_FILE_SIZE_LABLE;
         sizeLable.font = [UIFont systemFontOfSize:14.0f];
         [cell.contentView addSubview:sizeLable];
         PCS_FUNC_SAFELY_RELEASE(sizeLable);
         
-        UIProgressView  *progress = [[UIProgressView alloc] initWithFrame:CGRectMake(10, 33, 180, 10)];
+        UIProgressView  *progress = [[UIProgressView alloc] initWithFrame:CGRectMake(10, 35, 180, 10)];
         progress.backgroundColor = [UIColor clearColor];
+        if ([progress respondsToSelector:@selector(progressImage)]) {
+            //由于IOS5以下系统不支持自定义背景图片和进度图片，这里做了匹配处理
+            progress.progressImage = [[UIImage imageNamed:@"fax_list_progress_image"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
+            progress.trackImage = [[UIImage imageNamed:@"fax_list_progress_track_image"] stretchableImageWithLeftCapWidth:6 topCapHeight:0];
+        }
         progress.tag = TAG_OFFLINE_PROGRESSVIEW;
         [cell.contentView addSubview:progress];
         PCS_FUNC_SAFELY_RELEASE(progress);
@@ -232,24 +270,26 @@
     NSArray *sectionArray = [self.offlineFileDictionary objectForKey:[self.sectionTitleArray
                                                                      objectAtIndex:indexPath.section]];
     PCSFileInfoItem *fileItem = [sectionArray objectAtIndex:indexPath.row];
-    cell.textLabel.text = fileItem.name;
+    UILabel *mainLable = (UILabel *)[cell.contentView viewWithTag:TAG_OFFLINE_MAIN_LABLE];
+    mainLable.text = fileItem.name;
     
     UIProgressView  *progress = (UIProgressView *)[cell.contentView viewWithTag:TAG_OFFLINE_PROGRESSVIEW];
     progress.hidden = YES;
     
+    UILabel *detailLable = (UILabel *)[cell.contentView viewWithTag:TAG_OFFLINE_DETAIL_LABLE];
     if (fileItem.property == PCSFilePropertyOffLineSuccess) {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"yyyy-MM-dd hh:mm";
         NSDate  *date = [NSDate dateWithTimeIntervalSince1970:fileItem.mtime];
-        cell.detailTextLabel.text = [dateFormatter stringFromDate:date];
+        detailLable.text = [dateFormatter stringFromDate:date];
         PCS_FUNC_SAFELY_RELEASE(dateFormatter);
     } else if (fileItem.property == PCSFilePropertyOffLineFailed) {
-        cell.detailTextLabel.text = @"下载失败，点击重新下载";
+        detailLable.text = @"下载失败，点击重新下载";
     } else if (fileItem.property == PCSFilePropertyOffLineWaiting) {
-        cell.detailTextLabel.text = @"等待下载...";
+        detailLable.text = @"等待下载...";
     } else if (fileItem.property == PCSFilePropertyOffLining) {
         progress.hidden = NO;
-        cell.detailTextLabel.text = @" ";
+        detailLable.text = @" ";
         self.currentOfflineFileIndexPath = indexPath;
     }
     
