@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8200B0C11745137C00A9B224 /* netdisk_file_down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8200B0C01745137C00A9B224 /* netdisk_file_down@2x.png */; };
+		8200B0C5174517B000A9B224 /* netdisk_arrow_pack_up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8200B0C3174517B000A9B224 /* netdisk_arrow_pack_up@2x.png */; };
+		8200B0C6174517B000A9B224 /* netdisk_arrow_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8200B0C4174517B000A9B224 /* netdisk_arrow_normal@2x.png */; };
 		82037CC5172AD204009DFAB8 /* PCSPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82037CC4172AD204009DFAB8 /* PCSPreviewController.m */; };
 		820A23F5172818B70081658A /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 820A23F2172818B70081658A /* NSData+Base64.m */; };
 		820A23F6172818B70081658A /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 820A23F4172818B70081658A /* NSString+Base64.m */; };
@@ -171,6 +174,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8200B0C01745137C00A9B224 /* netdisk_file_down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_file_down@2x.png"; sourceTree = "<group>"; };
+		8200B0C3174517B000A9B224 /* netdisk_arrow_pack_up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_arrow_pack_up@2x.png"; sourceTree = "<group>"; };
+		8200B0C4174517B000A9B224 /* netdisk_arrow_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_arrow_normal@2x.png"; sourceTree = "<group>"; };
 		82037CC3172AD204009DFAB8 /* PCSPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSPreviewController.h; sourceTree = "<group>"; };
 		82037CC4172AD204009DFAB8 /* PCSPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSPreviewController.m; sourceTree = "<group>"; };
 		820A23F1172818B70081658A /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "base64/NSData+Base64.h"; sourceTree = "<group>"; };
@@ -939,6 +945,9 @@
 		82DAA47816F20773003FEAF1 /* NetDisk */ = {
 			isa = PBXGroup;
 			children = (
+				8200B0C3174517B000A9B224 /* netdisk_arrow_pack_up@2x.png */,
+				8200B0C4174517B000A9B224 /* netdisk_arrow_normal@2x.png */,
+				8200B0C01745137C00A9B224 /* netdisk_file_down@2x.png */,
 				82EA01851743E6E700AEEC1E /* netdisk_expand_cell_bg@2x.png */,
 				82EA01861743E6E700AEEC1E /* netdisk_expand_deleted@2x.png */,
 				82EA01871743E6E700AEEC1E /* netdisk_expand_favorited@2x.png */,
@@ -1161,6 +1170,9 @@
 				82EA018C1743E6E700AEEC1E /* netdisk_expand_favorited@2x.png in Resources */,
 				82EA018D1743E6E700AEEC1E /* netdisk_expand_move@2x.png in Resources */,
 				82EA018E1743E6E700AEEC1E /* netdisk_expand_moved@2x.png in Resources */,
+				8200B0C11745137C00A9B224 /* netdisk_file_down@2x.png in Resources */,
+				8200B0C5174517B000A9B224 /* netdisk_arrow_pack_up@2x.png in Resources */,
+				8200B0C6174517B000A9B224 /* netdisk_arrow_normal@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
