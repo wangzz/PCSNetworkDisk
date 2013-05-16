@@ -22,7 +22,7 @@
 
 @end
 
-#define PCS_TABLEVIEW_CELL_HEIGHT       50.0f
+#define PCS_TABLEVIEW_CELL_HEIGHT       55.0f
 #define PCS_TAG_FILE_TYPE_IMAGEVIEW     10001
 #define PCS_TAG_FILE_NAME_LABLE         10002
 #define PCS_TAG_FILE_SIZE_LABLE         10003
@@ -33,6 +33,9 @@
 #define PCS_TAG_ALERTVIEW_TEXTFIELD     10007
 #define PCS_TAG_CREAT_FOLDER_ALERTVIEW  10008
 #define PCS_TAG_TABLEVIEW_EXPAND_BUTTON 10009
+#define PCS_TAG_PREVIEW_LABLE           10010
+#define PCS_TAG_FAVOURITE_LABLE         10011
+#define PCS_TAG_DELETE_LABLE            10012
 
 
 @implementation PCSNetDiskViewController
@@ -585,7 +588,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
     if ([self.selectCellIndexPath isEqual:indexPath]) {
-        return (PCS_TABLEVIEW_CELL_HEIGHT + 50.0f);
+        return (PCS_TABLEVIEW_CELL_HEIGHT + 60.0f);
         
     } else {
         return PCS_TABLEVIEW_CELL_HEIGHT;
@@ -639,7 +642,7 @@
         [cell.contentView addSubview:detailLable];
         PCS_FUNC_SAFELY_RELEASE(detailLable);
         
-        UILabel *sizeLable = [[UILabel alloc] initWithFrame:CGRectMake(235, 10, 75, 30)];
+        UILabel *sizeLable = [[UILabel alloc] initWithFrame:CGRectMake(232, 10, 75, 30)];
         sizeLable.tag = PCS_TAG_FILE_SIZE_LABLE;
         sizeLable.font = [UIFont systemFontOfSize:14.0f];
         sizeLable.backgroundColor = [UIColor clearColor];
@@ -649,12 +652,14 @@
         
         UIButton    *expandButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 0, 40, PCS_TABLEVIEW_CELL_HEIGHT)];
         expandButton.tag = PCS_TAG_TABLEVIEW_EXPAND_BUTTON;
-        expandButton.backgroundColor = [UIColor redColor];
-        [expandButton setTitle:@"展开" forState:UIControlStateNormal];
-        [expandButton setTitle:@"收缩" forState:UIControlStateSelected];
+        [expandButton setImage:[UIImage imageNamed:@"netdisk_arrow_normal"]
+                      forState:UIControlStateNormal];
+        [expandButton setImage:[UIImage imageNamed:@"netdisk_arrow_pack_up"]
+                      forState:UIControlStateSelected];
         [expandButton addTarget:self
                          action:@selector(onExpandButtonAction:event:)
                forControlEvents:UIControlEventTouchUpInside];
+        [expandButton setImageEdgeInsets:UIEdgeInsetsMake(11.5f, 14, 11.5f, 4)];
         [cell.contentView addSubview:expandButton];
         PCS_FUNC_SAFELY_RELEASE(expandButton);
         
@@ -664,9 +669,7 @@
             [cell.contentView addSubview:mainView];
             PCS_FUNC_SAFELY_RELEASE(mainView);
 
-            UIButton    *favoritButton = [[UIButton alloc] initWithFrame:CGRectMake(15, PCS_TABLEVIEW_CELL_HEIGHT+5, 90, 40)];
-            [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_move"] forState:UIControlStateNormal];
-            [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_moved"] forState:UIControlStateHighlighted];
+            UIButton    *favoritButton = [[UIButton alloc] initWithFrame:CGRectMake(15, PCS_TABLEVIEW_CELL_HEIGHT+3, 90, 40)];
             [favoritButton addTarget:self
                               action:@selector(onPreviewButtonAction)
                     forControlEvents:UIControlEventTouchUpInside];
@@ -675,28 +678,57 @@
             [cell.contentView addSubview:favoritButton];
             PCS_FUNC_SAFELY_RELEASE(favoritButton);
             
-            UIButton    *moveButton = [[UIButton alloc] initWithFrame:CGRectMake(115, PCS_TABLEVIEW_CELL_HEIGHT+5, 90, 40)];
+            UILabel *previewLable = [[UILabel alloc] initWithFrame:CGRectMake(15, PCS_TABLEVIEW_CELL_HEIGHT+40, 90, 20)];
+            previewLable.font = [UIFont systemFontOfSize:12.0f];
+            previewLable.textColor = [UIColor whiteColor];
+            previewLable.backgroundColor = [UIColor clearColor];
+            previewLable.tag = PCS_TAG_PREVIEW_LABLE;
+            previewLable.textAlignment = UITextAlignmentCenter;
+            [cell.contentView addSubview:previewLable];
+            PCS_FUNC_SAFELY_RELEASE(previewLable);
+            
+            UIButton    *moveButton = [[UIButton alloc] initWithFrame:CGRectMake(115, PCS_TABLEVIEW_CELL_HEIGHT+3, 90, 40)];
             [moveButton addTarget:self
                            action:@selector(onFavoritButtonAction)
                  forControlEvents:UIControlEventTouchUpInside];
             moveButton.tag = PCS_TAG_EXPAND_MOVE_BUTTON;
-            [moveButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateNormal];
-            [moveButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateHighlighted];
             [moveButton setImageEdgeInsets:UIEdgeInsetsMake(1, 11, 1, 11)];
             [cell.contentView addSubview:moveButton];
             PCS_FUNC_SAFELY_RELEASE(moveButton);
             
-            UIButton    *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(215, PCS_TABLEVIEW_CELL_HEIGHT+5, 90, 40)];
+            UIImageView *downImage = [[UIImageView alloc] initWithFrame:CGRectMake(170, PCS_TABLEVIEW_CELL_HEIGHT+20, 25, 25)];
+            downImage.image = [UIImage imageNamed:@"netdisk_file_down"];
+            [cell.contentView addSubview:downImage];
+            PCS_FUNC_SAFELY_RELEASE(downImage);
+            
+            UILabel *favLable = [[UILabel alloc] initWithFrame:CGRectMake(115, PCS_TABLEVIEW_CELL_HEIGHT+40, 90, 20)];
+            favLable.font = [UIFont systemFontOfSize:12.0f];
+            favLable.backgroundColor = [UIColor clearColor];
+            favLable.textColor = [UIColor whiteColor];
+            favLable.tag = PCS_TAG_FAVOURITE_LABLE;
+            favLable.textAlignment = UITextAlignmentCenter;
+            [cell.contentView addSubview:favLable];
+            PCS_FUNC_SAFELY_RELEASE(favLable);
+            
+            UIButton    *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(215, PCS_TABLEVIEW_CELL_HEIGHT+3, 90, 40)];
             [deleteButton addTarget:self
                              action:@selector(onDeleteButtonAction:)
                    forControlEvents:UIControlEventTouchUpInside];
             deleteButton.tag = PCS_TAG_EXPAND_DELETE_BUTTON;
             [deleteButton setImage:[UIImage imageNamed:@"netdisk_expand_deleted"] forState:UIControlStateNormal];
             [deleteButton setImage:[UIImage imageNamed:@"netdisk_expand_deleted"] forState:UIControlStateHighlighted];
-            [deleteButton setTitle:@"删除" forState:UIControlStateNormal];
             [deleteButton setImageEdgeInsets:UIEdgeInsetsMake(1, 11, 1, 11)];
             [cell.contentView addSubview:deleteButton];
             PCS_FUNC_SAFELY_RELEASE(deleteButton);
+            
+            UILabel *deleteLable = [[UILabel alloc] initWithFrame:CGRectMake(215, PCS_TABLEVIEW_CELL_HEIGHT+40, 90, 20)];
+            deleteLable.font = [UIFont systemFontOfSize:12.0f];
+            deleteLable.backgroundColor = [UIColor clearColor];
+            deleteLable.textColor = [UIColor whiteColor];
+            deleteLable.text = @"删除";
+            deleteLable.textAlignment = UITextAlignmentCenter;
+            [cell.contentView addSubview:deleteLable];
+            PCS_FUNC_SAFELY_RELEASE(deleteLable);
         }
     }
     
@@ -731,20 +763,30 @@
     
     if ([CellIdentifier isEqualToString:TABLEVIEW_EXPAND_CELL]) {
         UIButton    *favoritButton = (UIButton *)[cell.contentView viewWithTag:PCS_TAG_EXPAND_MOVE_BUTTON];
+        UILabel *favLable = (UILabel *)[cell.contentView viewWithTag:PCS_TAG_FAVOURITE_LABLE];
         if (item.property == PCSFilePropertyDownLoad ||
             item.property == PCSFilePropertyOffLineFailed) {
-            [favoritButton setTitle:@"收藏" forState:UIControlStateNormal];
+            favLable.text = @"收藏";
+            [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateNormal];
+            [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateHighlighted];
         } else if (item.property == PCSFilePropertyOffLineSuccess ||
                    item.property == PCSFilePropertyOffLineWaiting ||
                    item.property == PCSFilePropertyOffLining) {
-            [favoritButton setTitle:@"取消收藏" forState:UIControlStateNormal];
+            favLable.text = @"取消收藏";
+            [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateNormal];
+            [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateHighlighted];
         }
 
         UIButton    *checkButton = (UIButton *)[cell.contentView viewWithTag:PCS_TAG_EXPAND_FAVORIT_BUTTON];
+        UILabel *checkLable = (UILabel *)[cell.contentView viewWithTag:PCS_TAG_PREVIEW_LABLE];
         if (item.format == PCSFileFormatFolder) {
-            [checkButton setTitle:@"打开" forState:UIControlStateNormal];
+            [checkButton setImage:[UIImage imageNamed:@"netdisk_expand_move"] forState:UIControlStateNormal];
+            [checkButton setImage:[UIImage imageNamed:@"netdisk_expand_moved"] forState:UIControlStateHighlighted];
+            checkLable.text = @"打开";
         } else {
-            [checkButton setTitle:@"预览" forState:UIControlStateNormal];
+            [checkButton setImage:[UIImage imageNamed:@"netdisk_expand_move"] forState:UIControlStateNormal];
+            [checkButton setImage:[UIImage imageNamed:@"netdisk_expand_moved"] forState:UIControlStateHighlighted];
+            checkLable.text = @"预览";
         }
     }
     

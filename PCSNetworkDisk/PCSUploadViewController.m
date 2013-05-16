@@ -155,6 +155,7 @@
             imagePickerController.shouldShowSavedPhotosOnTop = YES;
             imagePickerController.selection = self.selectedPhotos;
     
+            imagePickerController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
             [self presentModalViewController:imagePickerController animated:YES];
             [imagePickerController release];
         } else if (sourceType == PCSImagePickerTypeCamera) {
