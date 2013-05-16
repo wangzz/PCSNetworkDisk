@@ -508,7 +508,6 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 }
 
 #pragma mark - Nav Bar Appearance
-
 - (void)setNavBarAppearance:(BOOL)animated {
     self.navigationController.navigationBar.tintColor = nil;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;

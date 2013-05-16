@@ -70,6 +70,15 @@
     }
 }
 
+- (void)setNavBarAppearance:(BOOL)animated {
+    self.navigationController.navigationBar.tintColor = nil;
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
+        [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+        [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsLandscapePhone];
+    }
+}
+
 - (void)showToolBar
 {
     self.navigationController.toolbarHidden = NO;
@@ -134,6 +143,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self setNavBarAppearance:YES];
     [self customNavgationBar];
 }
 

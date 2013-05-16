@@ -492,9 +492,19 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 	[self updateViewForPlayerState:player];
 }
 
+- (void)setNavBarAppearance:(BOOL)animated {
+    self.navigationController.navigationBar.tintColor = nil;
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
+        [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+        [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsLandscapePhone];
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+    [self setNavBarAppearance:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
