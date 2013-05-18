@@ -188,7 +188,7 @@
     [UIView commitAnimations];
     
     if (!isDeleteButtonCreated) {
-        UIButton    *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(305, 0, 15, 15)];
+        UIButton    *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(2.5f, 2.5f, 15, 15)];
         [deleteButton setImage:[UIImage imageNamed:@"ad_close"]
                       forState:UIControlStateNormal];
         [deleteButton addTarget:self
