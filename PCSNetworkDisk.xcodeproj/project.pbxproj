@@ -167,6 +167,8 @@
 		8281DC49174769CD00E9F864 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8281DC48174769CD00E9F864 /* CoreMotion.framework */; };
 		8281DC4B174769F500E9F864 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8281DC4A174769F500E9F864 /* MediaPlayer.framework */; };
 		8281DC4D17476A1000E9F864 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8281DC4C17476A1000E9F864 /* CoreTelephony.framework */; };
+		8281DC541747782400E9F864 /* ad_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8281DC521747782400E9F864 /* ad_close@2x.png */; };
+		8281DC551747782400E9F864 /* ad_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 8281DC531747782400E9F864 /* ad_close.png */; };
 		82A3C7781711BBCD007CD231 /* PCSAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82A3C7761711BBCD007CD231 /* PCSAboutViewController.m */; };
 		82A3C7791711BBCD007CD231 /* PCSAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82A3C7771711BBCD007CD231 /* PCSAboutViewController.xib */; };
 		82D1673617146BFB0071FF9F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 82D1672F17146BFB0071FF9F /* README.md */; };
@@ -468,6 +470,8 @@
 		8281DC48174769CD00E9F864 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		8281DC4A174769F500E9F864 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		8281DC4C17476A1000E9F864 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		8281DC521747782400E9F864 /* ad_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ad_close@2x.png"; sourceTree = "<group>"; };
+		8281DC531747782400E9F864 /* ad_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ad_close.png; sourceTree = "<group>"; };
 		82A3C7741711B743007CD231 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		82A3C7751711BBCD007CD231 /* PCSAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSAboutViewController.h; sourceTree = "<group>"; };
 		82A3C7761711BBCD007CD231 /* PCSAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSAboutViewController.m; sourceTree = "<group>"; };
@@ -1253,6 +1257,8 @@
 		82EA017A1743DED400AEEC1E /* common */ = {
 			isa = PBXGroup;
 			children = (
+				8281DC521747782400E9F864 /* ad_close@2x.png */,
+				8281DC531747782400E9F864 /* ad_close.png */,
 				8200B0DC1745393000A9B224 /* background_iphone@2x.jpg */,
 				8200B0DD1745393000A9B224 /* background_iphone5@2x.jpg */,
 				82EA017B1743DF3C00AEEC1E /* nav_background@2x.png */,
@@ -1478,6 +1484,8 @@
 				8281DBB11747586700E9F864 /* AudioPlayerVolumeKnob.png in Resources */,
 				8281DBB21747586700E9F864 /* AudioPlayerVolumeKnob@2x.png in Resources */,
 				8281DC2F174768A000E9F864 /* baidumobadsdk.bundle in Resources */,
+				8281DC541747782400E9F864 /* ad_close@2x.png in Resources */,
+				8281DC551747782400E9F864 /* ad_close.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -18,7 +18,7 @@
 @synthesize viewController = _viewController;
 @synthesize pcsClient;
 @synthesize gcdQueue;
-
+@synthesize isADBannerShow;
 
 - (void)dealloc
 {

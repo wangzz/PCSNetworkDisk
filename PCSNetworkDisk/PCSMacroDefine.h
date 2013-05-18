@@ -79,6 +79,9 @@ typedef enum
 #define PCS_STRING_BAIDU_API_KEY            @"L6g70tBRRIXLsY0Z3HwKqlRE"
 #define PCS_STRING_DEFAULT_PATH             @"/apps/pcstest_oauth/"
 
+#define PCS_STRING_BAIDU_AD_PUBLISHER_ID    @"debug"
+#define PCS_STRING_BAIDU_AD_APPSPEC         @"debug"
+
 //hi网盘
 //#define PCS_STRING_BAIDU_API_KEY            @"GLz7bjSGqrxaOpj6Mj7ZOvFv"
 
@@ -100,11 +103,22 @@ typedef enum
 #define PCS_NOTIFICATION_RELOAD_OFFLINE_DATA    @"reloadOfflineData"
 #define PCS_NOTIFICATION_UPDATE_OFFLINE_FILE    @"updateOfflineData"
 #define PCS_NOTIFICATION_SHOW_PREVIEW_BUTTON    @"showQLPreviewNavButton"
+#define PCS_NOTIFICATION_SHOW_WITH_AD_BANNER    @"showWithADBanner"
+#define PCS_NOTIFICATION_SHOW_WITHOUT_AD_BANNER @"showWithoutADBanner"
 
 
 //字体
 #define PCS_MAIN_FONT                   [UIFont systemFontOfSize:16.0f]
 #define PCS_DETAIL_FONT                 [UIFont systemFontOfSize:13.5f]
+
+//百度广告条frame
+#define kAdViewPortraitRect CGRectMake(0, 383+(iPhone5?88:0), kBaiduAdViewSizeDefaultWidth, kBaiduAdViewSizeDefaultHeight)
+
+//包含广告条的界面frame
+#define frameWithADBanner       CGRectMake(0, 0, 320, 319+(iPhone5?88:0))
+//不包含广告条的界面frame
+#define frameWithoutADBanner    CGRectMake(0, 0, 320, 367+(iPhone5?88:0));
+
 
 //颜色
 #define PCS_MAIN_TEXT_COLOR        [UIColor colorWithRed:48.0f/255 green:78.0f/255 blue:98.0f/255 alpha:1.0f]
@@ -114,6 +128,9 @@ typedef enum
 #define PCS_APP_DELEGATE    ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
 //方法
+
+#define PCS_AppDelegate (AppDelegate *)[UIApplication sharedApplication].delegate
+
 
 //判断是否是iPhone5
 #define iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)

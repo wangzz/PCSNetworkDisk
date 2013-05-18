@@ -12,6 +12,7 @@
 #import "MDAudioFile.h"
 #import "MDAudioPlayerController.h"
 #import "PCSVideoPlayerController.h"
+#import "AppDelegate.h"
 
 
 @interface PCSNetDiskViewController ()
@@ -66,6 +67,14 @@
                                              selector:@selector(reloadTableViewDataSource)
                                                  name:PCS_NOTIFICATION_RELOAD_NETDISK_DATA
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(alterViewFrameWithoutADBanner)
+                                                 name:PCS_NOTIFICATION_SHOW_WITHOUT_AD_BANNER
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(alterViewFrameWithADBanner)
+                                                 name:PCS_NOTIFICATION_SHOW_WITH_AD_BANNER
+                                               object:nil];
 }
 
 - (void)removeNetDiskLocalNotification
@@ -76,15 +85,16 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                               name:PCS_NOTIFICATION_RELOAD_NETDISK_DATA
                                                   object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:PCS_NOTIFICATION_SHOW_WITHOUT_AD_BANNER
+                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:PCS_NOTIFICATION_SHOW_WITH_AD_BANNER
+                                                  object:nil];
 }
 
 - (void)dealloc
 {
-    //
-	// 腾讯MobWIN提示：开发者必须调用
-	// 可在viewDidUnload调用或者在应用页面返回时调用或者在dealloc中调用
-	// 目前已在viewWillDisappear中调用
-	//
     [path release];
     [self removeNetDiskLocalNotification];
     [super dealloc];
@@ -105,7 +115,12 @@
     [self.view addSubview:imageView];
     PCS_FUNC_SAFELY_RELEASE(imageView);
     
-    mTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 342+(iPhone5?88:0))];
+    mTableView = [[UITableView alloc] init];
+    if (PCS_APP_DELEGATE.isADBannerShow) {
+        mTableView.frame = frameWithADBanner;
+    } else {
+        mTableView.frame = frameWithoutADBanner;
+    }
     mTableView.delegate = self;
     mTableView.dataSource = self;
     mTableView.backgroundColor = [UIColor clearColor];
@@ -127,6 +142,22 @@
 //    [self loadFileListFromServer];
 //    [self creatNavigationBar];
     
+}
+
+- (void)alterViewFrameWithADBanner
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.5f];
+    self.mTableView.frame = frameWithADBanner;
+    [UIView commitAnimations];
+}
+
+- (void)alterViewFrameWithoutADBanner
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.5f];
+    self.mTableView.frame = frameWithoutADBanner;
+    [UIView commitAnimations];
 }
 
 - (void)viewWillAppear:(BOOL)animated

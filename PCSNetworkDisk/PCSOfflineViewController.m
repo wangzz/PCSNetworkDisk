@@ -11,9 +11,11 @@
 #import "MDAudioFile.h"
 #import "MDAudioPlayerController.h"
 #import "PCSVideoPlayerController.h"
+#import "AppDelegate.h"
+
 
 @interface PCSOfflineViewController ()
-@property(nonatomic,retain) IBOutlet    UITableView *mTableView;
+@property(nonatomic,retain) UITableView *mTableView;
 @property(nonatomic,retain) NSDictionary  *offlineFileDictionary;
 @property(nonatomic,retain) NSArray *sectionTitleArray;
 @property(nonatomic,retain) NSIndexPath *currentOfflineFileIndexPath;
@@ -41,6 +43,7 @@
 
 - (void)dealloc
 {
+    [mTableView release];
     [self removeLocalNotification];
     [super dealloc];
 }
@@ -55,6 +58,14 @@
                                              selector:@selector(updateOfflineFile:)
                                                  name:PCS_NOTIFICATION_UPDATE_OFFLINE_FILE
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(alterViewFrameWithoutADBanner)
+                                                 name:PCS_NOTIFICATION_SHOW_WITHOUT_AD_BANNER
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(alterViewFrameWithADBanner)
+                                                 name:PCS_NOTIFICATION_SHOW_WITH_AD_BANNER
+                                               object:nil];
 }
 
 - (void)removeLocalNotification
@@ -65,12 +76,32 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:PCS_NOTIFICATION_UPDATE_OFFLINE_FILE
                                                   object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:PCS_NOTIFICATION_SHOW_WITHOUT_AD_BANNER
+                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:PCS_NOTIFICATION_SHOW_WITH_AD_BANNER
+                                                  object:nil];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    mTableView = [[UITableView alloc] init];
+    if (PCS_APP_DELEGATE.isADBannerShow) {
+        mTableView.frame = frameWithADBanner;
+    } else {
+        mTableView.frame = frameWithoutADBanner;
+    }
+    
+    mTableView.delegate = self;
+    mTableView.dataSource = self;
+    mTableView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:mTableView];
+
+    [self reloadOfflineTableViewData];
+    
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
     UIImage *image = nil;
     if (iPhone5) {
@@ -81,11 +112,22 @@
     imageView.image = image;
     [self.view insertSubview:imageView belowSubview:self.mTableView];
     PCS_FUNC_SAFELY_RELEASE(imageView);
-    
-    CGRect  rect = self.mTableView.frame;
-    self.mTableView.frame = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height+(iPhone5?88:0));
+}
 
-    [self reloadOfflineTableViewData];
+- (void)alterViewFrameWithADBanner
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.75f];
+    self.mTableView.frame = frameWithADBanner;
+    [UIView commitAnimations];
+}
+
+- (void)alterViewFrameWithoutADBanner
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.75f];
+    self.mTableView.frame = frameWithoutADBanner;
+    [UIView commitAnimations];
 }
 
 - (void)didReceiveMemoryWarning

@@ -15,7 +15,7 @@
 
 
 @interface PCSUploadViewController ()
-@property (nonatomic,retain) IBOutlet   UITableView *mTableView;
+@property (nonatomic,retain) UITableView *mTableView;
 @property (nonatomic,retain) NSDictionary   *uploadFileDictionary;
 @property (nonatomic,retain) NSArray   *sectionTitleArray;
 @property (nonatomic,retain) NSIndexPath *currentUploadFileIndexPath;//当前正在上传的文件index
@@ -45,12 +45,36 @@
     if (self) {
         // Custom initialization
         self.title = @"上传记录";
+        [self registerUploadLocalNotification];
     }
     return self;
 }
 
+- (void)registerUploadLocalNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(alterViewFrameWithoutADBanner)
+                                                 name:PCS_NOTIFICATION_SHOW_WITHOUT_AD_BANNER
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(alterViewFrameWithADBanner)
+                                                 name:PCS_NOTIFICATION_SHOW_WITH_AD_BANNER
+                                               object:nil];
+}
+
+- (void)removeUploadLocalNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:PCS_NOTIFICATION_SHOW_WITHOUT_AD_BANNER
+                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:PCS_NOTIFICATION_SHOW_WITH_AD_BANNER
+                                                  object:nil];
+}
+
 - (void)dealloc
 {
+    [self removeUploadLocalNotification];
     [super dealloc];
 }
 
@@ -58,6 +82,20 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    mTableView = [[UITableView alloc] init];
+    if (PCS_APP_DELEGATE.isADBannerShow) {
+        mTableView.frame = frameWithADBanner;
+    } else {
+        mTableView.frame = frameWithoutADBanner;
+    }
+    
+    mTableView.delegate = self;
+    mTableView.dataSource = self;
+    mTableView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:mTableView];
+    
+    [self createTableViewHeaderView];
+    [self reloadTableDataSource];
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
     UIImage *image = nil;
@@ -69,11 +107,22 @@
     imageView.image = image;
     [self.view insertSubview:imageView belowSubview:self.mTableView];
     PCS_FUNC_SAFELY_RELEASE(imageView);
-    
-    [self createTableViewHeaderView];
-    [self reloadTableDataSource];
-    CGRect  rect = self.mTableView.frame;
-    self.mTableView.frame = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height+(iPhone5?88:0));
+}
+
+- (void)alterViewFrameWithADBanner
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.5f];
+    self.mTableView.frame = frameWithADBanner;
+    [UIView commitAnimations];
+}
+
+- (void)alterViewFrameWithoutADBanner
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.5f];
+    self.mTableView.frame = frameWithoutADBanner;
+    [UIView commitAnimations];
 }
 
 - (void)createTableViewHeaderView
@@ -795,5 +844,6 @@
 {
     return YES;
 }
+
 
 @end

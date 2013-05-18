@@ -12,7 +12,7 @@
 #import "PCSUploadViewController.h"
 #import "PCSMoreViewController.h"
 #import "PCSFileInfoItem.h"
-#import "BaiduMobAdView.h"
+#import "AppDelegate.h"
 
 @interface PCSMainTabBarController ()
 
@@ -23,6 +23,7 @@
 @synthesize uploadNavController;
 @synthesize offlineNavController;
 @synthesize moreNavController;
+@synthesize isDeleteButtonCreated;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -39,22 +40,9 @@
     PCS_FUNC_SAFELY_RELEASE(uploadNavController);
     PCS_FUNC_SAFELY_RELEASE(offlineNavController);
     PCS_FUNC_SAFELY_RELEASE(moreNavController);
-
-    [sharedAdView release];
-
     [super dealloc];
 }
 
-- (void)showAdViewInController:(UIViewController<BaiduMobAdViewDelegate> *)controller withRect:(CGRect) rect
-{
-    BaiduMobAdView *adView = [[[BaiduMobAdView alloc] init] autorelease];
-    adView.AdUnitTag = @"myAdPlaceId1";
-    adView.AdType = BaiduMobAdViewTypeBanner;
-    adView.frame = rect;
-    adView.delegate = controller;
-    [controller.view addSubview:adView];
-    [adView start];
-}
 
 - (void)viewDidLoad
 {
@@ -63,27 +51,6 @@
     
     [self createTabBarControllers];
     [self addADBanner];
-}
-
-#define kAdViewPortraitRect CGRectMake(0, 383+(iPhone5?88:0), kBaiduAdViewSizeDefaultWidth, kBaiduAdViewSizeDefaultHeight)
-
-- (void)addADBanner
-{
-    //CGRectMake(0, 406+(iPhone5?88:0), 320, 10)
-    //使用嵌入广告的方法实例。
-    sharedAdView = [[BaiduMobAdView alloc] init];
-    //sharedAdView.AdUnitTag = @"myAdPlaceId1";
-    //此处为广告位id，可以不进行设置，如需设置，在百度移动联盟上设置广告位id，然后将得到的id填写到此处。
-    sharedAdView.AdType = BaiduMobAdViewTypeBanner;
-    sharedAdView.frame = kAdViewPortraitRect;
-    sharedAdView.delegate = self;
-    [self.view addSubview:sharedAdView];
-    [sharedAdView start];
-    
-    
-    //使用悬浮广告的方法实例。
-    //    [self showAdViewInController:self withRect:kAdViewPortraitRect];
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -147,17 +114,59 @@
     self.viewControllers = controllers;
 }
 
-#pragma mark - MobBanner View Delegate
 
+#pragma mark - 百度广告条
+- (void)showAdViewInController:(UIViewController<BaiduMobAdViewDelegate> *)controller withRect:(CGRect) rect
+{
+    //悬浮广告
+    BaiduMobAdView *adView = [[[BaiduMobAdView alloc] init] autorelease];
+    adView.AdUnitTag = @"myAdPlaceId1";
+    adView.AdType = BaiduMobAdViewTypeBanner;
+    adView.frame = rect;
+    adView.delegate = controller;
+    [controller.view addSubview:adView];
+    [adView start];
+}
+
+- (void)addADBanner
+{
+    //CGRectMake(0, 406+(iPhone5?88:0), 320, 10)
+    //使用嵌入广告的方法实例。
+    sharedAdView = [[BaiduMobAdView alloc] init];
+    //sharedAdView.AdUnitTag = @"myAdPlaceId1";
+    //此处为广告位id，可以不进行设置，如需设置，在百度移动联盟上设置广告位id，然后将得到的id填写到此处。
+    sharedAdView.AdType = BaiduMobAdViewTypeBanner;
+    sharedAdView.frame = kAdViewPortraitRect;
+    sharedAdView.delegate = self;
+    [self.view addSubview:sharedAdView];
+    [sharedAdView start];
+    
+    //使用悬浮广告的方法实例。
+    //    [self showAdViewInController:self withRect:kAdViewPortraitRect];
+    
+}
+
+#pragma mark - 按钮响应事件
+- (void)onDeleteButtonAction
+{
+    [sharedAdView close];
+    [sharedAdView removeFromSuperview];
+    sharedAdView = nil;
+    PCS_APP_DELEGATE.isADBannerShow = NO;
+    [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_SHOW_WITHOUT_AD_BANNER
+                                                        object:nil];
+}
+
+#pragma mark - MobBanner View Delegate
 - (NSString *)publisherId
 {
-    return  @"debug"; //@"your_own_app_id";
+    return  PCS_STRING_BAIDU_AD_PUBLISHER_ID; //@"your_own_app_id";
 }
 
 - (NSString*) appSpec
 {
     //注意：该计费名为测试用途，不会产生计费，请测试广告展示无误以后，替换为您的应用计费名，然后提交AppStore.
-    return @"debug";
+    return PCS_STRING_BAIDU_AD_APPSPEC;
 }
 
 -(BOOL) enableLocation
@@ -165,7 +174,6 @@
     //启用location会有一次alert提示
     return NO;
 }
-
 
 -(void) willDisplayAd:(BaiduMobAdView*) adview
 {
@@ -178,14 +186,30 @@
     f.origin.x = 0;
     sharedAdView.frame = f;
     [UIView commitAnimations];
-    NSLog(@"delegate: will display ad");
     
+    if (!isDeleteButtonCreated) {
+        UIButton    *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(305, 0, 15, 15)];
+        [deleteButton setImage:[UIImage imageNamed:@"ad_close"]
+                      forState:UIControlStateNormal];
+        [deleteButton addTarget:self
+                         action:@selector(onDeleteButtonAction)
+               forControlEvents:UIControlEventTouchUpInside];
+        [sharedAdView addSubview:deleteButton];
+        PCS_FUNC_SAFELY_RELEASE(deleteButton);
+        isDeleteButtonCreated = YES;
+        PCS_APP_DELEGATE.isADBannerShow = YES;
+        [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_SHOW_WITH_AD_BANNER
+                                                            object:nil];
+    }
+    
+    PCSLog(@"delegate: will display ad");
 }
 
 -(void) failedDisplayAd:(BaiduMobFailReason) reason;
 {
-    NSLog(@"delegate: failedDisplayAd %d", reason);
+    PCSLog(@"delegate: failedDisplayAd %d", reason);
 }
+
 
 ////人群属性接口
 ///**

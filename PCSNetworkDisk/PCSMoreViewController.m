@@ -12,6 +12,7 @@
 #import <MessageUI/MessageUI.h>
 #import "KKPasscodeLock.h"
 #import "PCSClearCacheViewController.h"
+#import "AppDelegate.h"
 
 
 @interface PCSMoreViewController ()
@@ -31,31 +32,57 @@
     if (self) {
         // Custom initialization
         self.title = @"更多";
+        [self registerLoaclNotification];
     }
     return self;
 }
 
 - (void)dealloc
 {
+    [self removeLocalNotification];
     [super dealloc];
+}
+
+- (void)registerLoaclNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(alterViewFrameWithoutADBanner)
+                                                 name:PCS_NOTIFICATION_SHOW_WITHOUT_AD_BANNER
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(alterViewFrameWithADBanner)
+                                                 name:PCS_NOTIFICATION_SHOW_WITH_AD_BANNER
+                                               object:nil];
+}
+
+- (void)removeLocalNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:PCS_NOTIFICATION_SHOW_WITHOUT_AD_BANNER
+                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:PCS_NOTIFICATION_SHOW_WITH_AD_BANNER
+                                                  object:nil];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
-    UIImage *image = nil;
-    if (iPhone5) {
-        image = [UIImage imageNamed:@"background_iphone5.jpg"];
+    CGRect  rect;
+    if (PCS_APP_DELEGATE.isADBannerShow) {
+        rect = frameWithADBanner;
     } else {
-        image = [UIImage imageNamed:@"background_iphone.jpg"];
+        rect = frameWithoutADBanner;
     }
-    imageView.image = image;
-    [self.view insertSubview:imageView belowSubview:self.mTableView];
-    PCS_FUNC_SAFELY_RELEASE(imageView);
+    mTableView = [[UITableView alloc] initWithFrame:rect
+                                              style:UITableViewStyleGrouped];
+    mTableView.delegate = self;
+    mTableView.dataSource = self;
+    mTableView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:mTableView];
     
-    UIView  *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 43)];
+    UIView  *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 55)];
     UIImage *normalImage = [[UIImage imageNamed:@"more_unregist"] stretchableImageWithLeftCapWidth:19 topCapHeight:20];
     UIImage *selectImage = [[UIImage imageNamed:@"more_unregisted"] stretchableImageWithLeftCapWidth:19 topCapHeight:20];
     UIButton    *logoffButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 0, 300, 43)];
@@ -70,8 +97,32 @@
     PCS_FUNC_SAFELY_RELEASE(logoffButton);
     PCS_FUNC_SAFELY_RELEASE(footView);
     
-    CGRect  rect = self.mTableView.frame;
-    self.mTableView.frame = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height+(iPhone5?88:0));
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    UIImage *image = nil;
+    if (iPhone5) {
+        image = [UIImage imageNamed:@"background_iphone5.jpg"];
+    } else {
+        image = [UIImage imageNamed:@"background_iphone.jpg"];
+    }
+    imageView.image = image;
+    [self.view insertSubview:imageView belowSubview:self.mTableView];
+    PCS_FUNC_SAFELY_RELEASE(imageView);
+}
+
+- (void)alterViewFrameWithADBanner
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.5f];
+    self.mTableView.frame = frameWithADBanner;
+    [UIView commitAnimations];
+}
+
+- (void)alterViewFrameWithoutADBanner
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.5f];
+    self.mTableView.frame = frameWithoutADBanner;
+    [UIView commitAnimations];
 }
 
 - (void)didReceiveMemoryWarning

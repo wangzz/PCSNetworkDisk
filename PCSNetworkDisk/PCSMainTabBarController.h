@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BaiduMobAdDelegateProtocol.h"
 
 @interface PCSMainTabBarController : UITabBarController<BaiduMobAdViewDelegate>
 {
     BaiduMobAdView* sharedAdView;
 }
 
+@property (nonatomic,assign) BOOL   isDeleteButtonCreated;
 @property (nonatomic,retain) UINavigationController     *netDiskNavController;
 @property (nonatomic,retain) UINavigationController     *uploadNavController;
 @property (nonatomic,retain) UINavigationController     *offlineNavController;
