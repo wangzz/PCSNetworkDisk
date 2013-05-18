@@ -38,6 +38,12 @@
     PCS_FUNC_SAFELY_RELEASE(uploadNavController);
     PCS_FUNC_SAFELY_RELEASE(offlineNavController);
     PCS_FUNC_SAFELY_RELEASE(moreNavController);
+    //
+	// 腾讯MobWIN提示：开发者必须调用
+	//
+	[adBanner stopRequest];
+	[adBanner removeFromSuperview];
+
     [super dealloc];
 }
 
