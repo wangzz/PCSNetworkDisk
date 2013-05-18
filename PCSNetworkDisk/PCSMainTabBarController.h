@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaiduMobAdDelegateProtocol.h"
 
-@interface PCSMainTabBarController : UITabBarController<MobWinBannerViewDelegate>
+@interface PCSMainTabBarController : UITabBarController<BaiduMobAdViewDelegate>
 {
-    MobWinBannerView *adBanner;
+    BaiduMobAdView* sharedAdView;
 }
 
 @property (nonatomic,retain) UINavigationController     *netDiskNavController;

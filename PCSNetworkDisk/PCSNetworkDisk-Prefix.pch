@@ -11,8 +11,6 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
-    #import "MobWinBannerView.h"
-    #import "MobWinBannerViewDelegate.h"
     #import "BaiduPCSErrorCode.h"
     #import "BaiduPCSActionInfo.h"
     #import "BaiduPCSClient.h"

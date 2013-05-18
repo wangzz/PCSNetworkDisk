@@ -12,6 +12,7 @@
 #import "PCSUploadViewController.h"
 #import "PCSMoreViewController.h"
 #import "PCSFileInfoItem.h"
+#import "BaiduMobAdView.h"
 
 @interface PCSMainTabBarController ()
 
@@ -38,13 +39,21 @@
     PCS_FUNC_SAFELY_RELEASE(uploadNavController);
     PCS_FUNC_SAFELY_RELEASE(offlineNavController);
     PCS_FUNC_SAFELY_RELEASE(moreNavController);
-    //
-	// 腾讯MobWIN提示：开发者必须调用
-	//
-	[adBanner stopRequest];
-	[adBanner removeFromSuperview];
+
+    [sharedAdView release];
 
     [super dealloc];
+}
+
+- (void)showAdViewInController:(UIViewController<BaiduMobAdViewDelegate> *)controller withRect:(CGRect) rect
+{
+    BaiduMobAdView *adView = [[[BaiduMobAdView alloc] init] autorelease];
+    adView.AdUnitTag = @"myAdPlaceId1";
+    adView.AdType = BaiduMobAdViewTypeBanner;
+    adView.frame = rect;
+    adView.delegate = controller;
+    [controller.view addSubview:adView];
+    [adView start];
 }
 
 - (void)viewDidLoad
@@ -56,35 +65,25 @@
     [self addADBanner];
 }
 
+#define kAdViewPortraitRect CGRectMake(0, 383+(iPhone5?88:0), kBaiduAdViewSizeDefaultWidth, kBaiduAdViewSizeDefaultHeight)
+
 - (void)addADBanner
 {
-    adBanner = [[MobWinBannerView alloc] initMobWinBannerSizeIdentifier:MobWINBannerSizeIdentifier320x25];
-	adBanner.rootViewController = self;
-    adBanner.frame = CGRectMake(0, 406+(iPhone5?88:0), 320, 10);
-	[adBanner setAdUnitID:PCS_STRING_MOBWIN_UNIT_ID];
-	[self.view addSubview:adBanner];
+    //CGRectMake(0, 406+(iPhone5?88:0), 320, 10)
+    //使用嵌入广告的方法实例。
+    sharedAdView = [[BaiduMobAdView alloc] init];
+    //sharedAdView.AdUnitTag = @"myAdPlaceId1";
+    //此处为广告位id，可以不进行设置，如需设置，在百度移动联盟上设置广告位id，然后将得到的id填写到此处。
+    sharedAdView.AdType = BaiduMobAdViewTypeBanner;
+    sharedAdView.frame = kAdViewPortraitRect;
+    sharedAdView.delegate = self;
+    [self.view addSubview:sharedAdView];
+    [sharedAdView start];
     
-    //
-	// 腾讯MobWIN提示：开发者可选调用
-	// 获取MobWinBannerViewDelegate回调消息
-	//
-    adBanner.delegate = self;
-    //
-	// 腾讯MobWIN提示：开发者可选调用
-	//
-	adBanner.adGpsMode = NO;
-	// adBanner.adTextColor = [UIColor whiteColor];
-	// adBanner.adSubtextColor = [UIColor colorWithRed:255.0/255.0 green:162.0/255.0 blue:0.0/255.0 alpha:1];
-	// adBanner.adBackgroundColor = [UIColor colorWithRed:2.0/255.0 green:12.0/255.0 blue:15.0/255.0 alpha:1];
-	//
-	
-	//
-	// 腾讯MobWIN提示：开发者必须调用
-	//
-	// 发起广告请求方法
-	//
-	[adBanner startRequest];
-	[adBanner release];
+    
+    //使用悬浮广告的方法实例。
+    //    [self showAdViewInController:self withRect:kAdViewPortraitRect];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -149,25 +148,126 @@
 }
 
 #pragma mark - MobBanner View Delegate
-- (void)bannerViewDidReceived {
-    PCSLog(@"MobWIN %s", __FUNCTION__);
+
+- (NSString *)publisherId
+{
+    return  @"debug"; //@"your_own_app_id";
 }
 
-- (void)bannerViewFailToReceived {
-    PCSLog(@"MobWIN %s", __FUNCTION__);
+- (NSString*) appSpec
+{
+    //注意：该计费名为测试用途，不会产生计费，请测试广告展示无误以后，替换为您的应用计费名，然后提交AppStore.
+    return @"debug";
 }
 
-- (void)bannerViewDidPresentScreen {
-    PCSLog(@"MobWIN %s", __FUNCTION__);
+-(BOOL) enableLocation
+{
+    //启用location会有一次alert提示
+    return NO;
 }
 
-- (void)bannerViewDidDismissScreen {
-    PCSLog(@"MobWIN %s", __FUNCTION__);
+
+-(void) willDisplayAd:(BaiduMobAdView*) adview
+{
+    //在广告即将展示时，产生一个动画，把广告条加载到视图中
+    sharedAdView.hidden = NO;
+    CGRect f = sharedAdView.frame;
+    f.origin.x = -320;
+    sharedAdView.frame = f;
+    [UIView beginAnimations:nil context:nil];
+    f.origin.x = 0;
+    sharedAdView.frame = f;
+    [UIView commitAnimations];
+    NSLog(@"delegate: will display ad");
+    
 }
 
-- (void)bannerViewWillLeaveApplication {
-    PCSLog(@"MobWIN %s", __FUNCTION__);
+-(void) failedDisplayAd:(BaiduMobFailReason) reason;
+{
+    NSLog(@"delegate: failedDisplayAd %d", reason);
 }
+
+////人群属性接口
+///**
+// *  - 关键词数组
+// */
+//-(NSArray*) keywords{
+//    NSArray* keywords = [NSArray arrayWithObjects:@"测试",@"关键词", nil];
+//    return keywords;
+//}
+//
+///**
+// *  - 用户性别
+// */
+//-(BaiduMobAdUserGender) userGender{
+//    return BaiduMobAdMale;
+//}
+//
+///**
+// *  - 用户生日
+// */
+//-(NSDate*) userBirthday{
+//    NSDate* birthday = [NSDate dateWithTimeIntervalSince1970:0];
+//    return birthday;
+//}
+//
+///**
+// *  - 用户城市
+// */
+//-(NSString*) userCity{
+//    return @"上海";
+//}
+//
+//
+///**
+// *  - 用户邮编
+// */
+//-(NSString*) userPostalCode{
+//    return @"435200";
+//}
+//
+//
+///**
+// *  - 用户职业
+// */
+//-(NSString*) userWork{
+//    return @"程序员";
+//}
+//
+///**
+// *  - 用户最高教育学历
+// *  - 学历输入数字，范围为0-6
+// *  - 0表示小学，1表示初中，2表示中专/高中，3表示专科
+// *  - 4表示本科，5表示硕士，6表示博士
+// */
+//-(NSInteger) userEducation{
+//    return  5;
+//}
+//
+///**
+// *  - 用户收入
+// *  - 收入输入数字,以元为单位
+// */
+//-(NSInteger) userSalary{
+//    return 10000;
+//}
+//
+///**
+// *  - 用户爱好
+// */
+//-(NSArray*) userHobbies{
+//    NSArray* hobbies = [NSArray arrayWithObjects:@"测试",@"爱好", nil];
+//    return hobbies;
+//}
+//
+///**
+// *  - 其他自定义字段
+// */
+//-(NSDictionary*) userOtherAttributes{
+//    NSMutableDictionary* other = [[[NSMutableDictionary alloc] init] autorelease];
+//    [other setValue:@"测试" forKey:@"测试"];
+//    return other;
+//}
 
 
 @end
