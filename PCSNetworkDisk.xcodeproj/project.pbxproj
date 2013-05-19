@@ -221,6 +221,7 @@
 		82EBA0091713153E00CCE19D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82EBA0081713153D00CCE19D /* AudioToolbox.framework */; };
 		82EBA00D17131FD900CCE19D /* PCSClearCacheViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82EBA00B17131FD900CCE19D /* PCSClearCacheViewController.m */; };
 		82EBA00E17131FD900CCE19D /* PCSClearCacheViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82EBA00C17131FD900CCE19D /* PCSClearCacheViewController.xib */; };
+		82F1B0D01748ADE3005FF9AF /* UIViewController+NavAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 82F1B0CF1748ADE3005FF9AF /* UIViewController+NavAddition.m */; };
 		82F92E0917352243009636A6 /* PCSVideoPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82F92E0817352243009636A6 /* PCSVideoPlayerController.m */; };
 		82FD788217258BEF00D18381 /* MWTapDetectingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FD787D17258BEF00D18381 /* MWTapDetectingImageView.m */; };
 		82FD788317258BEF00D18381 /* MWTapDetectingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FD787F17258BEF00D18381 /* MWTapDetectingView.m */; };
@@ -535,6 +536,8 @@
 		82EBA00A17131FD900CCE19D /* PCSClearCacheViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSClearCacheViewController.h; sourceTree = "<group>"; };
 		82EBA00B17131FD900CCE19D /* PCSClearCacheViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSClearCacheViewController.m; sourceTree = "<group>"; };
 		82EBA00C17131FD900CCE19D /* PCSClearCacheViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSClearCacheViewController.xib; sourceTree = "<group>"; };
+		82F1B0CE1748ADE3005FF9AF /* UIViewController+NavAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+NavAddition.h"; sourceTree = "<group>"; };
+		82F1B0CF1748ADE3005FF9AF /* UIViewController+NavAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+NavAddition.m"; sourceTree = "<group>"; };
 		82F92E0717352243009636A6 /* PCSVideoPlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSVideoPlayerController.h; sourceTree = "<group>"; };
 		82F92E0817352243009636A6 /* PCSVideoPlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSVideoPlayerController.m; sourceTree = "<group>"; };
 		82FD787C17258BEF00D18381 /* MWTapDetectingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWTapDetectingImageView.h; path = MWPhotoBrowser/MWTapDetectingImageView.h; sourceTree = "<group>"; };
@@ -884,6 +887,7 @@
 		822F7B8316E8D7C600898CA4 /* CustomView */ = {
 			isa = PBXGroup;
 			children = (
+				82F1B0CD1748ADE3005FF9AF /* PCSViewController-Addition */,
 				82F92E05173521E7009636A6 /* PCSVideo */,
 				825E508C1732BA1B00488ACE /* MDAudio */,
 				82037CC1172AD19F009DFAB8 /* PCSPreviewController */,
@@ -1295,6 +1299,15 @@
 			path = /Users/wangzz/Desktop/PCSNetworkDisk/PCSNetworkDisk/KKPasscodeLock;
 			sourceTree = "<absolute>";
 		};
+		82F1B0CD1748ADE3005FF9AF /* PCSViewController-Addition */ = {
+			isa = PBXGroup;
+			children = (
+				82F1B0CE1748ADE3005FF9AF /* UIViewController+NavAddition.h */,
+				82F1B0CF1748ADE3005FF9AF /* UIViewController+NavAddition.m */,
+			);
+			path = "PCSViewController-Addition";
+			sourceTree = "<group>";
+		};
 		82F92E05173521E7009636A6 /* PCSVideo */ = {
 			isa = PBXGroup;
 			children = (
@@ -1574,6 +1587,7 @@
 				8281DC3F174768A000E9F864 /* unzip.c in Sources */,
 				8281DC40174768A000E9F864 /* zip.c in Sources */,
 				8281DC41174768A000E9F864 /* ZipArchive.mm in Sources */,
+				82F1B0D01748ADE3005FF9AF /* UIViewController+NavAddition.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

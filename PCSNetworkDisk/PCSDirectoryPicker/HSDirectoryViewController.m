@@ -7,6 +7,7 @@
 //
 
 #import "HSDirectoryViewController.h"
+#import "UIViewController+NavAddition.h"
 
 @interface HSDirectoryViewController ()
 @property (nonatomic, retain) NSArray *files;
@@ -74,7 +75,7 @@
     [mTableView release];
     
     if (showBackNavigationButton) {
-        [self creatNavigationBar];
+        [self createNavBackButtonWithTitle:@"返回"];
     }
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
@@ -89,7 +90,7 @@
     PCS_FUNC_SAFELY_RELEASE(imageView);
     
     // Set the prompt text
-    [[self navigationItem] setPrompt:@"请选择文件上传路径"];
+//    [[self navigationItem] setPrompt:@"请选择文件上传路径"];
 }
 
 - (BOOL)isFileVaild:(NSString *)fileName

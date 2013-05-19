@@ -13,6 +13,7 @@
 @interface PCSNetDiskViewController : UIViewController<MWPhotoBrowserDelegate,BaiduPCSStatusListener,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, copy) NSString    *path;
+@property (nonatomic, assign) BOOL  showNavBackButton;
 
 - (void)downloadFileFromServer:(NSString *)serverPath Block:(void (^)())action;
 

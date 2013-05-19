@@ -180,18 +180,22 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 - (void)hideFileDownloadingView
 {
     PCSLog(@"dissmiss downloading notice view.");
-    self.navigationItem.leftBarButtonItem.enabled = YES;
+//    self.navigationItem.leftBarButtonItem.enabled = YES;
     self.playButton.enabled = YES;
-    [HUD hide:YES];
-    [HUD release];
+    if (HUD != nil) {
+        [HUD hide:YES];
+        PCS_FUNC_SAFELY_RELEASE(HUD);
+    }
 }
 
 - (void)showFileDownloadFailedView
 {
     PCSLog(@"file download failed.");
-    self.navigationItem.leftBarButtonItem.enabled = YES;
-    [HUD hide:YES];
-    [HUD release];
+//    self.navigationItem.leftBarButtonItem.enabled = YES;
+    if (HUD != nil) {
+        [HUD hide:YES];
+        PCS_FUNC_SAFELY_RELEASE(HUD);
+    }
 }
 
 - (void)showFileBeginDownloadView
@@ -203,7 +207,7 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 	HUD.dimBackground = YES;
 	HUD.labelText = @"下载中...";
     [HUD show:YES];
-    self.navigationItem.leftBarButtonItem.enabled = NO;
+//    self.navigationItem.leftBarButtonItem.enabled = NO;
     self.playButton.enabled = NO;
 }
 

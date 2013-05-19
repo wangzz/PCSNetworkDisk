@@ -19,7 +19,7 @@
 #import "KKKeychain.h"
 #import "KKPasscodeViewController.h"
 #import "KKPasscodeLock.h"
-
+#import "UIViewController+NavAddition.h"
 
 @implementation KKPasscodeSettingsViewController
 
@@ -36,6 +36,7 @@
     
 	_eraseDataSwitch = [[UISwitch alloc] init];
 	[_eraseDataSwitch addTarget:self action:@selector(eraseDataSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+    [self createNavBackButtonWithTitle:@"返回"];
 }
 
 - (void)viewDidUnload

@@ -8,6 +8,8 @@
 
 #import "PCSClearCacheViewController.h"
 #import "UIAlertView-Blocks/UIAlertView+Blocks.h"
+#import "UIViewController+NavAddition.h"
+
 
 @interface PCSClearCacheViewController ()
 @property(nonatomic,retain) IBOutlet    UITableView *mTableView;
@@ -41,6 +43,7 @@
     imageView.image = image;
     [self.view insertSubview:imageView belowSubview:self.mTableView];
     PCS_FUNC_SAFELY_RELEASE(imageView);
+    [self createNavBackButtonWithTitle:@"返回"];
 }
 
 - (void)didReceiveMemoryWarning

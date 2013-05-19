@@ -13,6 +13,7 @@
 #import "MDAudioPlayerController.h"
 #import "PCSVideoPlayerController.h"
 #import "AppDelegate.h"
+#import "UIViewController+NavAddition.h"
 
 
 @interface PCSNetDiskViewController ()
@@ -45,6 +46,7 @@
 @synthesize photos = _photos;
 @synthesize mTableView;
 @synthesize selectCellIndexPath;
+@synthesize showNavBackButton;
 
 - (id)init
 {
@@ -138,6 +140,9 @@
     [mTableView release];
     
     self.files = [[PCSDBOperater shareInstance] getSubFolderFileListFromDB:self.path];
+    if (showNavBackButton) {
+        [self createNavBackButtonWithTitle:@"返回"];
+    }
     
 //    [self loadFileListFromServer];
 //    [self creatNavigationBar];
@@ -540,6 +545,7 @@
     PCSFileInfoItem *item = [self.files objectAtIndex:self.selectCellIndexPath.row];
     if (item.format == PCSFileFormatFolder) {
         PCSNetDiskViewController *detailViewController = [[PCSNetDiskViewController alloc] init];
+        detailViewController.showNavBackButton = YES;
         detailViewController.path = [item.serverPath stringByAppendingString:@"/"];
         [[self navigationController] pushViewController:detailViewController animated:YES];
         [detailViewController release];
@@ -857,6 +863,7 @@
     if (item.format == PCSFileFormatFolder) {
         PCSNetDiskViewController *detailViewController = [[PCSNetDiskViewController alloc] init];
         detailViewController.path = [item.serverPath stringByAppendingString:@"/"];
+        detailViewController.showNavBackButton = YES;
         [[self navigationController] pushViewController:detailViewController animated:YES];
         [detailViewController release];
     } else {

@@ -7,6 +7,7 @@
 //
 
 #import "PCSAboutViewController.h"
+#import "UIViewController+NavAddition.h"
 
 @interface PCSAboutViewController ()
 @property(nonatomic,retain) IBOutlet    UILabel *versionLable;
@@ -32,17 +33,7 @@
     // Do any additional setup after loading the view from its nib.
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
     self.versionLable.text = [NSString stringWithFormat:@"版本V%@",[infoDictionary objectForKey:@"CFBundleShortVersionString"]];
-    [self createAboutNavigationBar];
-}
-
-- (void)createAboutNavigationBar
-{
-    UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc] initWithTitle:@"返回"
-                                                                       style:UIBarButtonItemStyleDone
-                                                                      target:self
-                                                                      action:@selector(onLeftBarButtonAction)];
-    self.navigationItem.leftBarButtonItem = leftBarButton;
-    PCS_FUNC_SAFELY_RELEASE(leftBarButton);
+    [self createNavBackButtonWithTitle:@"返回"];
 }
 
 - (void)didReceiveMemoryWarning
@@ -52,10 +43,6 @@
 }
 
 #pragma mark - On UIButton Action
-- (void)onLeftBarButtonAction
-{
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
 
 
 @end
