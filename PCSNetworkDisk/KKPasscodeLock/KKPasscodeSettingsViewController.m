@@ -37,6 +37,17 @@
 	_eraseDataSwitch = [[UISwitch alloc] init];
 	[_eraseDataSwitch addTarget:self action:@selector(eraseDataSwitchChanged:) forControlEvents:UIControlEventValueChanged];
     [self createNavBackButtonWithTitle:@"返回"];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    UIImage *image = nil;
+    if (iPhone5) {
+        image = [UIImage imageNamed:@"background_iphone5.jpg"];
+    } else {
+        image = [UIImage imageNamed:@"background_iphone.jpg"];
+    }
+    imageView.image = image;
+    self.tableView.backgroundView = imageView;
+    PCS_FUNC_SAFELY_RELEASE(imageView);
 }
 
 - (void)viewDidUnload
@@ -125,6 +136,8 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell.textLabel.font = PCS_MAIN_FONT;
+        cell.backgroundColor = [UIColor clearColor];
 	}
     
     cell.accessoryView = nil;
@@ -136,7 +149,8 @@
     cell.textLabel.textAlignment = NSTextAlignmentLeft;
 #endif
     
-    cell.textLabel.textColor = [UIColor blackColor];
+//    cell.textLabel.textColor = [UIColor blackColor];
+    cell.textLabel.textColor = PCS_MAIN_TEXT_COLOR;
     
 	
 	if (indexPath.section == 0) {
@@ -174,7 +188,8 @@
 		cell.accessoryView = _eraseDataSwitch;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		if (_passcodeLockOn) {
-			cell.textLabel.textColor = [UIColor blackColor];
+//			cell.textLabel.textColor = [UIColor blackColor];
+            cell.textLabel.textColor = PCS_MAIN_TEXT_COLOR;
 			_eraseDataSwitch.enabled = YES;
 		} else {
 			cell.textLabel.textColor = [UIColor grayColor];
@@ -213,7 +228,7 @@
 			nav.navigationBar.opaque = self.navigationController.navigationBar.opaque;
 			nav.navigationBar.barStyle = self.navigationController.navigationBar.barStyle;
 		}
-		
+		nav.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < 60000
         [self.navigationController presentModalViewController:nav animated:YES];
 #else
@@ -239,7 +254,7 @@
 			nav.navigationBar.opaque = self.navigationController.navigationBar.opaque;
 			nav.navigationBar.barStyle = self.navigationController.navigationBar.barStyle;
 		}
-		
+		nav.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < 60000
         [self.navigationController presentModalViewController:nav animated:YES];
 #else

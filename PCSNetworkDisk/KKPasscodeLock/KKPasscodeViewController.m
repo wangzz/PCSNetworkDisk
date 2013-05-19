@@ -23,6 +23,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import <AudioToolbox/AudioToolbox.h>
 
+#import "UIViewController+NavAddition.h"
+
 @interface KKPasscodeViewController ()
 
 @property(nonatomic,assign) BOOL isSmallLandscape;
@@ -94,7 +96,6 @@
     
 }
 
-
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
@@ -126,21 +127,22 @@
     
     if (_mode == KKPasscodeModeSet) {
         self.navigationItem.title = KKPasscodeLockLocalizedString(@"Set Passcode", @"");
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                              target:self
-                                                                                              action:@selector(cancelButtonPressed:)];
+//        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+//                                                                                              target:self
+//                                                                                              action:@selector(cancelButtonPressed:)];
+        [self createNavBackButtonWithTitle:@"返回"];
     } else if (_mode == KKPasscodeModeChange) {
         self.navigationItem.title = KKPasscodeLockLocalizedString(@"Change Passcode", @"");
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                              target:self
-                                                                                              action:@selector(cancelButtonPressed:)];
-        
+//        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+//                                                                                              target:self
+//                                                                                              action:@selector(cancelButtonPressed:)];
+        [self createNavBackButtonWithTitle:@"返回"];
     } else if (_mode == KKPasscodeModeDisabled) {
         self.navigationItem.title = KKPasscodeLockLocalizedString(@"Turn off Passcode", @"");
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                              target:self
-                                                                                              action:@selector(cancelButtonPressed:)];
-        
+//        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+//                                                                                              target:self
+//                                                                                              action:@selector(cancelButtonPressed:)];
+        [self createNavBackButtonWithTitle:@"返回"];
     } else {
         self.navigationItem.title = KKPasscodeLockLocalizedString(@"Enter Passcode", @"");
     }
@@ -238,7 +240,14 @@
 
 #pragma mark -
 #pragma mark Private methods
-
+- (void)onNavBackButtonAction
+{
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < 60000
+    [self dismissModalViewControllerAnimated:YES];
+#else
+    [self dismissViewControllerAnimated:YES completion:nil];
+#endif
+}
 
 - (void)cancelButtonPressed:(id)sender
 {
