@@ -394,7 +394,7 @@
 
 - (void)showVideoPlayerController:(PCSFileInfoItem *)item
 {
-    PCSVideoPlayerController    *videoPlayer = [[PCSVideoPlayerController alloc] initWithPath:item.serverPath type:PCSFolderTypeNetDisk];
+    PCSVideoPlayerController    *videoPlayer = [[PCSVideoPlayerController alloc] initWithPath:item.serverPath type:PCSFolderTypeOffline];
     videoPlayer.title = item.name;
     
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:videoPlayer];
