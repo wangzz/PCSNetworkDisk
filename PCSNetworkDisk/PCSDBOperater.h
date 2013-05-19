@@ -325,4 +325,8 @@
  @return    BOOL类型，表示删除结果
  */
 - (BOOL)deleteAllFileInfoFromLocal:(PCSFileInfoItem *)item;
+
+- (BOOL)updateUploadFailFileStatus;
+- (BOOL)updateOfflineFailFileStatus;
+
 @end

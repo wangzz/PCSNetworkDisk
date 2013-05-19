@@ -373,6 +373,34 @@
     return result;
 }
 
+- (BOOL)updateUploadFailFileStatus
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSString    *sql = [NSString stringWithFormat:@"update uploadfilelist set status=%d, mtime=%d where status in(%d,%d) and accountid=%d",PCSFileUploadStatusFailed,(NSInteger)[[NSDate date] timeIntervalSince1970],PCSFileUploadStatusUploading,PCSFileUploadStatusWaiting,accountID];
+    PCSLog(@"sql:%@",sql);
+    BOOL result = NO;
+    result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
+    if (!result) {
+        PCSLog(@"update upload file status failed.%@",[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
+    }
+    
+    return result;
+}
+
+- (BOOL)updateOfflineFailFileStatus
+{
+    NSInteger accountID = [[NSUserDefaults standardUserDefaults] integerForKey:PCS_INTEGER_ACCOUNT_ID];
+    NSString    *sql = [NSString stringWithFormat:@"update filelist set property=%d, mtime=%d where property in(%d,%d) and accountid=%d",PCSFilePropertyOffLineFailed,(NSInteger)[[NSDate date] timeIntervalSince1970],PCSFilePropertyOffLineWaiting,PCSFilePropertyOffLining,accountID];
+    PCSLog(@"sql:%@",sql);
+    BOOL result = NO;
+    result = [[PCSDBOperater shareInstance].PCSDB executeUpdate:sql];
+    if (!result) {
+        PCSLog(@"update offline file property failed.%@",[[PCSDBOperater shareInstance].PCSDB lastErrorMessage]);
+    }
+    return result;
+}
+
+
 #pragma mark - uploadfilelist表数据库操作方法
 - (BOOL)deleteFromUploadFileList:(NSInteger)fid
 {

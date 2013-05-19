@@ -302,6 +302,7 @@
         
         UILabel *sizeLable = [[UILabel alloc] initWithFrame:CGRectMake(210, OFFLINE_TABLEVIEW_HEIGHT-27.0f, 90, 20)];
         sizeLable.backgroundColor = [UIColor clearColor];
+        sizeLable.textAlignment = UITextAlignmentRight;
         sizeLable.textColor = PCS_DETAIL_TEXT_COLOR;
         sizeLable.tag = TAG_OFFLINE_FILE_SIZE_LABLE;
         sizeLable.font = [UIFont systemFontOfSize:14.0f];
@@ -388,7 +389,27 @@
     } else if (fileItem.property == PCSFilePropertyOffLineFailed) {
         //下载失败的文件，单击后重新下载
         PCSLog(@"redownload file:%@",fileItem);
-        [self downloadFileFromServer:fileItem];
+        
+        //如果有处于等待下载中的离线文件，则将其下载
+        PCSFileProperty property = PCSFilePropertyNull;
+        PCSFileInfoItem    *nextOfflineFileItem = nil;
+        nextOfflineFileItem = [[PCSDBOperater shareInstance] getNextOfflineFileItem];
+        if (nextOfflineFileItem == nil &&
+            self.currentOfflineFileIndexPath == nil) {
+            //没有处于wating状态的，且没有正在下载中的
+            //才置为开始下载状态
+            property = PCSFilePropertyOffLining;
+        } else {
+            property = PCSFilePropertyOffLineWaiting;
+        }
+        BOOL    result = NO;
+        result = [[PCSDBOperater shareInstance] updateFile:fileItem.fid property:property];
+        if (result && property == PCSFilePropertyOffLining) {
+            [self downloadFileFromServer:fileItem];
+        }
+        if (result) {
+            [self reloadOfflineTableViewData];
+        }
     }
 }
 

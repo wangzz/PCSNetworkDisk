@@ -59,6 +59,8 @@
             controllerState = PCSControllerStatePasscode;
         } else {
             controllerState = PCSControllerStateMain;
+            [[PCSDBOperater shareInstance] updateOfflineFailFileStatus];
+            [[PCSDBOperater shareInstance] updateUploadFailFileStatus];
         }
     
         NSString    *mpToken = [[NSUserDefaults standardUserDefaults]

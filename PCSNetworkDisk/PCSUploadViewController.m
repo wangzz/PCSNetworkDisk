@@ -625,7 +625,8 @@
         
         UILabel *sizeLable = [[UILabel alloc] initWithFrame:CGRectMake(210, UPLOAD_TABLEVIEW_HEIGHT-27.0f, 90, 20)];
         sizeLable.backgroundColor = [UIColor clearColor];
-        sizeLable.textColor = [UIColor grayColor];
+        sizeLable.textColor = PCS_DETAIL_TEXT_COLOR;
+        sizeLable.textAlignment = UITextAlignmentRight;
         sizeLable.tag = TAG_UPLOAD_FILE_SIZE_LABLE;
         sizeLable.textColor = PCS_DETAIL_TEXT_COLOR;
         sizeLable.font = [UIFont systemFontOfSize:14.0f];
@@ -706,7 +707,24 @@
     } else if (fileItem.property == PCSFileUploadStatusFailed) {
         //上传失败的文件，单击后重新上传
         PCSLog(@"reupload file:%@",fileItem);
-        [self reuploadFileToServer:fileItem];
+        
+        PCSFileUploadStatus status = PCSFileUploadStatusNull;
+        PCSFileInfoItem *item = nil;
+        item = [[PCSDBOperater shareInstance] getNextUploadFileInfo];
+        if (item == nil && self.currentUploadFileIndexPath == nil) {
+            //没有处于wating状态的，且没有正在上传中的
+            //才置为开始上传状态
+            status = PCSFileUploadStatusUploading;
+        } else {
+            status = PCSFileUploadStatusWaiting;
+        }
+        BOOL    result = NO;
+        result = [[PCSDBOperater shareInstance] updateUploadFile:fileItem.serverPath
+                                                          status:status];
+        if (status == PCSFileUploadStatusUploading) {
+            [self reuploadFileToServer:fileItem];
+        } 
+        [self reloadTableDataSource];
     }
 }
 
