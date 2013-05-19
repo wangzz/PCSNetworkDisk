@@ -147,7 +147,7 @@
 - (void)alterViewFrameWithADBanner
 {
     [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.5f];
+    [UIView setAnimationDuration:0.75f];
     self.mTableView.frame = frameWithADBanner;
     [UIView commitAnimations];
 }
@@ -155,7 +155,7 @@
 - (void)alterViewFrameWithoutADBanner
 {
     [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.5f];
+    [UIView setAnimationDuration:0.75f];
     self.mTableView.frame = frameWithoutADBanner;
     [UIView commitAnimations];
 }
