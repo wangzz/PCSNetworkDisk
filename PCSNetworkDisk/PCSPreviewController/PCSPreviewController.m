@@ -39,10 +39,6 @@
 
 - (void)dealloc
 {
-    if (fileUrl != nil) {
-        [fileUrl release];
-        fileUrl = nil;
-    }
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:PCS_NOTIFICATION_SHOW_PREVIEW_BUTTON
                                                   object:nil];

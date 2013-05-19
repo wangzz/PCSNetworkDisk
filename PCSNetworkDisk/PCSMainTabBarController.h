@@ -8,9 +8,25 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum
+{
+    HSBarImageTypeNormal,
+    HSBarImageTypeSelect,
+}HSBarImageType;//用于IOS5以下系统中
+
+typedef enum
+{
+    HSNavgationTypeContact,
+    HSNavgationTypeRecord,
+    HSNavgationTypeConf,
+    HSNavgationTypeMore,
+    HSNavgationTypeError
+}HSNavgationType;//用于IOS5以下系统中
+
 @interface PCSMainTabBarController : UITabBarController<BaiduMobAdViewDelegate>
 {
     BaiduMobAdView* sharedAdView;
+    UIViewController    *oldController;//用于IOS5以下系统中
 }
 
 @property (nonatomic,assign) BOOL   isDeleteButtonCreated;

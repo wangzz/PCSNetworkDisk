@@ -15,7 +15,7 @@
 #import "AppDelegate.h"
 
 @interface PCSMainTabBarController ()
-
+@property(nonatomic,retain) UIView  *customTabBar;//用于IOS5以下系统中
 @end
 
 @implementation PCSMainTabBarController
@@ -102,16 +102,173 @@
         [moreNavController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_mored"]
                          withFinishedUnselectedImage:[UIImage imageNamed:@"tab_more"]];
     } else {
-        netDiskViewController.tabBarItem.image = [UIImage imageNamed:@"tab_netdisk"];
-        uploadNavController.tabBarItem.image = [UIImage imageNamed:@"tab_upload"];
-        offlineNavController.tabBarItem.image = [UIImage imageNamed:@"tab_offline"];
-        moreNavController.tabBarItem.image = [UIImage imageNamed:@"tab_more"];
+#define TAG_TABBAR_BACKGROUND_VIEW          11101
+#define TAG_FAX_TABLEBAR_ITEM_CONTACT       11102
+#define TAG_FAX_TABLEBAR_ITEM_CALL_RECORD   11103
+#define TAG_FAX_TABLEBAR_ITEM_CONFERENCE    11104
+#define TAG_FAX_TABLEBAR_ITEM_MORE          11105
+        
+        self.customTabBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 49)];
+        self.customTabBar.tag = TAG_TABBAR_BACKGROUND_VIEW;
+        UIImageView *contactImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 80, 49)];
+        [contactImage setContentMode:UIViewContentModeCenter];
+        contactImage.image = [UIImage imageNamed:@"tab_netdisked"];
+        contactImage.tag = TAG_FAX_TABLEBAR_ITEM_CONTACT;
+        [self.customTabBar addSubview:contactImage];
+        PCS_FUNC_SAFELY_RELEASE(contactImage);
+        
+        UIImageView *callImage = [[UIImageView alloc] initWithFrame:CGRectMake(80, 0, 80, 49)];
+        callImage.image = [UIImage imageNamed:@"tab_upload"];
+        [callImage setContentMode:UIViewContentModeCenter];
+        callImage.tag = TAG_FAX_TABLEBAR_ITEM_CALL_RECORD;
+        [self.customTabBar addSubview:callImage];
+        PCS_FUNC_SAFELY_RELEASE(callImage);
+        
+        UIImageView *confImage = [[UIImageView alloc] initWithFrame:CGRectMake(160, 0, 80, 49)];
+        confImage.image = [UIImage imageNamed:@"tab_offline"];
+        [confImage setContentMode:UIViewContentModeCenter];
+        confImage.tag = TAG_FAX_TABLEBAR_ITEM_CONFERENCE;
+        [self.customTabBar addSubview:confImage];
+        PCS_FUNC_SAFELY_RELEASE(confImage);
+        
+        UIImageView *moreImage = [[UIImageView alloc] initWithFrame:CGRectMake(240, 0, 80, 49)];
+        moreImage.image = [UIImage imageNamed:@"tab_more"];
+        [moreImage setContentMode:UIViewContentModeCenter];
+        moreImage.tag = TAG_FAX_TABLEBAR_ITEM_MORE;
+        [self.customTabBar addSubview:moreImage];
+        PCS_FUNC_SAFELY_RELEASE(moreImage);
+        
+        [self.tabBar addSubview:self.customTabBar];
     }
 
     NSArray   *controllers = [NSArray arrayWithObjects:
                               netDiskNavController,uploadNavController,offlineNavController,moreNavController, nil];
     
     self.viewControllers = controllers;
+}
+
+#pragma mark Custom TabBar Method For IOS4
+//用于IOS4及以下系统
+- (void)setSelectedViewController:(UIViewController *)selectedViewController
+{
+    [super setSelectedViewController:selectedViewController];
+    if (![self.tabBarItem respondsToSelector:@selector(setFinishedSelectedImage:withFinishedUnselectedImage:)]) {
+//        [self setNoHighlightTabBar];
+        [self changeBarItemImage:selectedViewController];
+        oldController = selectedViewController;
+    }
+}
+
+//移除系统tabBar上的白色选中框
+- (void)setNoHighlightTabBar
+{
+    int tabCount = [self.viewControllers count] > 5 ? 5 : [self.viewControllers count];
+    NSArray * tabBarSubviews = [self.tabBar subviews];
+    for(int i = [tabBarSubviews count] - 1; i > [tabBarSubviews count] - tabCount - 1; i--)
+    {
+        for(UIView * v in [[tabBarSubviews objectAtIndex:i] subviews])
+        {
+            if(v && [NSStringFromClass([v class]) isEqualToString:@"UITabBarSelectionIndicatorView"])
+            {
+                [v removeFromSuperview];
+                break;
+            }
+        }
+    }
+}
+
+- (void)changeBarItemImage:(UIViewController *)newController
+{
+    HSNavgationType viewType = [self controllerType:newController];
+    UIImageView *newImageView = [self imageViewOnBar:viewType];
+    if (nil == newController) {
+        return;
+    }
+    HSNavgationType oldType = [self controllerType:oldController];
+    UIImageView *oldImageView = [self imageViewOnBar:oldType];
+    
+    if (oldController != nil) {
+        oldImageView.image = [self imageWithImageType:HSBarImageTypeNormal ControllerType:oldType];
+    }
+    newImageView.image = [self imageWithImageType:HSBarImageTypeSelect ControllerType:viewType];
+}
+
+- (UIImageView *)imageViewOnBar:(HSNavgationType)type
+{
+    UIImageView *imageView = nil;
+    switch (type) {
+        case HSNavgationTypeContact:
+            imageView = (UIImageView *)[self.customTabBar viewWithTag:
+                                        TAG_FAX_TABLEBAR_ITEM_CONTACT];
+            break;
+        case HSNavgationTypeRecord:
+            imageView = (UIImageView *)[self.customTabBar viewWithTag:
+                                        TAG_FAX_TABLEBAR_ITEM_CALL_RECORD];
+            break;
+        case HSNavgationTypeConf:
+            imageView = (UIImageView *)[self.customTabBar viewWithTag:
+                                        TAG_FAX_TABLEBAR_ITEM_CONFERENCE];
+            break;
+        case HSNavgationTypeMore:
+            imageView = (UIImageView *)[self.customTabBar viewWithTag:
+                                        TAG_FAX_TABLEBAR_ITEM_MORE];
+            break;
+        default:
+            break;
+    }
+    return imageView;
+}
+
+- (HSNavgationType)controllerType:(UIViewController *)controller
+{
+    if ([controller isEqual:netDiskNavController]) {
+        return HSNavgationTypeContact;
+    }else if ([controller isEqual:uploadNavController]) {
+        return HSNavgationTypeRecord;
+    }else if ([controller isEqual:offlineNavController]) {
+        return HSNavgationTypeConf;
+    }else if ([controller isEqual:moreNavController]) {
+        return HSNavgationTypeMore;
+    }
+    return HSNavgationTypeError;
+}
+
+- (UIImage  *)imageWithImageType:(HSBarImageType)imageType ControllerType:(HSNavgationType)controllerType
+{
+    UIImage *image = nil;
+    switch (controllerType) {
+        case HSNavgationTypeContact:
+            if (imageType == HSBarImageTypeNormal) {
+                image = [UIImage imageNamed:@"tab_netdisk"];
+            }else if (imageType == HSBarImageTypeSelect) {
+                image = [UIImage imageNamed:@"tab_netdisked"];
+            }
+            break;
+        case HSNavgationTypeRecord:
+            if (imageType == HSBarImageTypeNormal) {
+                image = [UIImage imageNamed:@"tab_upload"];
+            }else if (imageType == HSBarImageTypeSelect) {
+                image = [UIImage imageNamed:@"tab_uploaded"];
+            }
+            break;
+        case HSNavgationTypeConf:
+            if (imageType == HSBarImageTypeNormal) {
+                image = [UIImage imageNamed:@"tab_offline"];
+            }else if (imageType == HSBarImageTypeSelect) {
+                image = [UIImage imageNamed:@"tab_offlined"];
+            }
+            break;
+        case HSNavgationTypeMore:
+            if (imageType == HSBarImageTypeNormal) {
+                image = [UIImage imageNamed:@"tab_more"];
+            }else if (imageType == HSBarImageTypeSelect) {
+                image = [UIImage imageNamed:@"tab_mored"];
+            }
+            break;
+        default:
+            break;
+    }
+    return image;
 }
 
 
