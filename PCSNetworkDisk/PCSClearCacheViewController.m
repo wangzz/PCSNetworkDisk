@@ -177,6 +177,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         [alert show];
         PCS_FUNC_SAFELY_RELEASE(alert);
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

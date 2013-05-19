@@ -816,13 +816,13 @@
         UILabel *favLable = (UILabel *)[cell.contentView viewWithTag:PCS_TAG_FAVOURITE_LABLE];
         if (item.property == PCSFilePropertyDownLoad ||
             item.property == PCSFilePropertyOffLineFailed) {
-            favLable.text = @"收藏";
+            favLable.text = @"下载";
             [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateNormal];
             [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateHighlighted];
         } else if (item.property == PCSFilePropertyOffLineSuccess ||
                    item.property == PCSFilePropertyOffLineWaiting ||
                    item.property == PCSFilePropertyOffLining) {
-            favLable.text = @"取消收藏";
+            favLable.text = @"取消下载";
             [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateNormal];
             [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateHighlighted];
         }

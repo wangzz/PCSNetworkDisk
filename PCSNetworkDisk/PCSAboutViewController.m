@@ -32,8 +32,18 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-    self.versionLable.text = [NSString stringWithFormat:@"版本V%@",[infoDictionary objectForKey:@"CFBundleShortVersionString"]];
+    self.versionLable.text = [NSString stringWithFormat:@"版本号：v%@",[infoDictionary objectForKey:@"CFBundleShortVersionString"]];
+    self.versionLable.textColor = PCS_DETAIL_TEXT_COLOR;
+    self.versionLable.font = PCS_MAIN_FONT;
     [self createNavBackButtonWithTitle:@"返回"];
+    
+    UIImage *image = nil;
+    if (iPhone5) {
+        image = [UIImage imageNamed:@"background_iphone5.jpg"];
+    } else {
+        image = [UIImage imageNamed:@"background_iphone.jpg"];
+    }
+    self.view.backgroundColor = [UIColor colorWithPatternImage:image];
 }
 
 - (void)didReceiveMemoryWarning

@@ -331,11 +331,36 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
                 [picker setToRecipients:[NSArray arrayWithObject:@"wzzvictory_tjsd@163.com"]];
                 [picker setSubject:@"意见反馈"];
                 [picker setMessageBody:@"it is a test." isHTML:NO];
+                
+                //自定义做导航按钮
+                UIButton *navButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 47, 32)];
+                navButton.backgroundColor  = [UIColor clearColor];
+                UIColor *color = [UIColor colorWithRed:0.896f
+                                                 green:0.948f
+                                                  blue:1.0f
+                                                 alpha:1.0f];
+                [navButton setTitleColor:color forState:UIControlStateNormal];
+                navButton.titleLabel.font = [UIFont systemFontOfSize:13.5f];
+                [navButton setTitle:@"返回" forState:UIControlStateNormal];
+                [navButton setBackgroundImage:[UIImage imageNamed:@"nav_button"]
+                                     forState:UIControlStateNormal];
+                [navButton setBackgroundImage:[UIImage imageNamed:@"nav_buttoned"]
+                                     forState:UIControlStateHighlighted];
+                [navButton addTarget:self
+                              action:@selector(onNavBackButtonAction)
+                    forControlEvents:UIControlEventTouchUpInside];
+                UIBarButtonItem *navMenuBtn = [[UIBarButtonItem alloc] initWithCustomView:navButton];
+                
+                [[[[picker viewControllers] lastObject] navigationItem] setLeftBarButtonItem:navMenuBtn];
+                PCS_FUNC_SAFELY_RELEASE(navMenuBtn);
+                PCS_FUNC_SAFELY_RELEASE(navButton);
+                
+                picker.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
                 [self presentModalViewController:picker animated:YES];
                 PCS_FUNC_SAFELY_RELEASE(picker);
             } else {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                message:@"您的手机不支持邮件发送，请到设置中添加邮箱账号！"
+                                                                message:@"您的手机不支持邮件发送，请到邮件设置中添加邮箱账号"
                                                                delegate:nil
                                                       cancelButtonTitle:@"取消"
                                                       otherButtonTitles:@"确定", nil];
@@ -368,6 +393,11 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         [alert release];
     }
     [controller dismissModalViewControllerAnimated:YES];
+}
+
+- (void)onNavBackButtonAction
+{
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 -(void)goToAppStoreGiveAMark
