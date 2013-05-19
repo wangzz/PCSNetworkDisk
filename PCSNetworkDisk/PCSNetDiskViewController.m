@@ -442,21 +442,32 @@
     UITouch *touch = [touches anyObject];
     CGPoint currentTouchPosition = [touch locationInView:self.mTableView];
     NSIndexPath *indexPath = [self.mTableView indexPathForRowAtPoint: currentTouchPosition];
-    NSArray *indexArray = nil;
-    if([self.selectCellIndexPath isEqual:indexPath])
-    {
-        //两次点的是相同的Cell，因此只需要重新加载当前Cell
-        indexArray = [[NSArray alloc] initWithObjects:indexPath,nil];
-        self.selectCellIndexPath =nil;
+    PCSFileInfoItem *item = [self.files objectAtIndex:[indexPath row]];
+    if (item.format == PCSFileFormatFolder) {
+        //文件夹
+        PCSNetDiskViewController *detailViewController = [[PCSNetDiskViewController alloc] init];
+        detailViewController.path = [item.serverPath stringByAppendingString:@"/"];
+        detailViewController.showNavBackButton = YES;
+        [[self navigationController] pushViewController:detailViewController animated:YES];
+        [detailViewController release];
     } else {
-        //两次点的是不同的Cell，因此需要重新加载上次，和本次点击的两个Cell
-        indexArray = [[NSArray alloc] initWithObjects:indexPath,self.selectCellIndexPath,nil];
-        self.selectCellIndexPath = indexPath;
+        //普通文件
+        NSArray *indexArray = nil;
+        if([self.selectCellIndexPath isEqual:indexPath])
+        {
+            //两次点的是相同的Cell，因此只需要重新加载当前Cell
+            indexArray = [[NSArray alloc] initWithObjects:indexPath,nil];
+            self.selectCellIndexPath =nil;
+        } else {
+            //两次点的是不同的Cell，因此需要重新加载上次，和本次点击的两个Cell
+            indexArray = [[NSArray alloc] initWithObjects:indexPath,self.selectCellIndexPath,nil];
+            self.selectCellIndexPath = indexPath;
+        }
+        //实现动态加载
+        [self.mTableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationFade];
+        PCS_FUNC_SAFELY_RELEASE(indexArray);
+        [mTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
     }
-    //实现动态加载
-    [self.mTableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationFade];
-    PCS_FUNC_SAFELY_RELEASE(indexArray);
-    [mTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
 - (void)onCreatFolderButtonAction
@@ -703,10 +714,6 @@
         
         UIButton    *expandButton = [[UIButton alloc] initWithFrame:CGRectMake(275, 0, 45, PCS_TABLEVIEW_CELL_HEIGHT)];
         expandButton.tag = PCS_TAG_TABLEVIEW_EXPAND_BUTTON;
-        [expandButton setImage:[UIImage imageNamed:@"netdisk_arrow_normal"]
-                      forState:UIControlStateNormal];
-        [expandButton setImage:[UIImage imageNamed:@"netdisk_arrow_pack_up"]
-                      forState:UIControlStateSelected];
         [expandButton addTarget:self
                          action:@selector(onExpandButtonAction:event:)
                forControlEvents:UIControlEventTouchUpInside];
@@ -720,6 +727,9 @@
             PCS_FUNC_SAFELY_RELEASE(mainView);
 
             UIButton    *favoritButton = [[UIButton alloc] initWithFrame:CGRectMake(15, PCS_TABLEVIEW_CELL_HEIGHT+3, 90, 40)];
+            [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_move"] forState:UIControlStateNormal];
+            [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_moved"] forState:UIControlStateHighlighted];
+
             [favoritButton addTarget:self
                               action:@selector(onPreviewButtonAction)
                     forControlEvents:UIControlEventTouchUpInside];
@@ -733,6 +743,7 @@
             previewLable.textColor = [UIColor whiteColor];
             previewLable.backgroundColor = [UIColor clearColor];
             previewLable.tag = PCS_TAG_PREVIEW_LABLE;
+            previewLable.text = @"预览";
             previewLable.textAlignment = UITextAlignmentCenter;
             [cell.contentView addSubview:previewLable];
             PCS_FUNC_SAFELY_RELEASE(previewLable);
@@ -826,28 +837,23 @@
             [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateNormal];
             [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateHighlighted];
         }
-
-        UIButton    *checkButton = (UIButton *)[cell.contentView viewWithTag:PCS_TAG_EXPAND_FAVORIT_BUTTON];
-        UILabel *checkLable = (UILabel *)[cell.contentView viewWithTag:PCS_TAG_PREVIEW_LABLE];
-        if (item.format == PCSFileFormatFolder) {
-            [checkButton setImage:[UIImage imageNamed:@"netdisk_expand_move"] forState:UIControlStateNormal];
-            [checkButton setImage:[UIImage imageNamed:@"netdisk_expand_moved"] forState:UIControlStateHighlighted];
-            checkLable.text = @"打开";
-        } else {
-            [checkButton setImage:[UIImage imageNamed:@"netdisk_expand_move"] forState:UIControlStateNormal];
-            [checkButton setImage:[UIImage imageNamed:@"netdisk_expand_moved"] forState:UIControlStateHighlighted];
-            checkLable.text = @"预览";
-        }
     }
     
     //展开按钮的处理逻辑
     UIButton    *expandButton = (UIButton *)[cell.contentView viewWithTag:PCS_TAG_TABLEVIEW_EXPAND_BUTTON];
-    if ([self.selectCellIndexPath isEqual:indexPath]) {
-        expandButton.selected = YES;
+    if (item.format == PCSFileFormatFolder) {
+        [expandButton setImage:[UIImage imageNamed:@"netdisk_arrow_right"]
+                      forState:UIControlStateNormal];
     } else {
-        expandButton.selected = NO;
+        if ([self.selectCellIndexPath isEqual:indexPath]) {
+            [expandButton setImage:[UIImage imageNamed:@"netdisk_arrow_pack_up"]
+                          forState:UIControlStateNormal];
+        } else {
+            [expandButton setImage:[UIImage imageNamed:@"netdisk_arrow_normal"]
+                          forState:UIControlStateNormal];
+        }
     }
-    
+        
     return cell;
 }
 

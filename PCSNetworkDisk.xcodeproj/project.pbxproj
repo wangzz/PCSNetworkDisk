@@ -223,6 +223,7 @@
 		82EBA00E17131FD900CCE19D /* PCSClearCacheViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82EBA00C17131FD900CCE19D /* PCSClearCacheViewController.xib */; };
 		82F1B0D01748ADE3005FF9AF /* UIViewController+NavAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 82F1B0CF1748ADE3005FF9AF /* UIViewController+NavAddition.m */; };
 		82F1B0D61748D07A005FF9AF /* about_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82F1B0D51748D07A005FF9AF /* about_logo@2x.png */; };
+		82F1B0D81748E718005FF9AF /* netdisk_arrow_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82F1B0D71748E718005FF9AF /* netdisk_arrow_right@2x.png */; };
 		82F92E0917352243009636A6 /* PCSVideoPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82F92E0817352243009636A6 /* PCSVideoPlayerController.m */; };
 		82FD788217258BEF00D18381 /* MWTapDetectingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FD787D17258BEF00D18381 /* MWTapDetectingImageView.m */; };
 		82FD788317258BEF00D18381 /* MWTapDetectingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 82FD787F17258BEF00D18381 /* MWTapDetectingView.m */; };
@@ -540,6 +541,7 @@
 		82F1B0CE1748ADE3005FF9AF /* UIViewController+NavAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+NavAddition.h"; sourceTree = "<group>"; };
 		82F1B0CF1748ADE3005FF9AF /* UIViewController+NavAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+NavAddition.m"; sourceTree = "<group>"; };
 		82F1B0D51748D07A005FF9AF /* about_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "about_logo@2x.png"; sourceTree = "<group>"; };
+		82F1B0D71748E718005FF9AF /* netdisk_arrow_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_arrow_right@2x.png"; sourceTree = "<group>"; };
 		82F92E0717352243009636A6 /* PCSVideoPlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSVideoPlayerController.h; sourceTree = "<group>"; };
 		82F92E0817352243009636A6 /* PCSVideoPlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSVideoPlayerController.m; sourceTree = "<group>"; };
 		82FD787C17258BEF00D18381 /* MWTapDetectingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWTapDetectingImageView.h; path = MWPhotoBrowser/MWTapDetectingImageView.h; sourceTree = "<group>"; };
@@ -1228,6 +1230,7 @@
 		82DAA47816F20773003FEAF1 /* NetDisk */ = {
 			isa = PBXGroup;
 			children = (
+				82F1B0D71748E718005FF9AF /* netdisk_arrow_right@2x.png */,
 				8200B0C3174517B000A9B224 /* netdisk_arrow_pack_up@2x.png */,
 				8200B0C4174517B000A9B224 /* netdisk_arrow_normal@2x.png */,
 				8200B0C01745137C00A9B224 /* netdisk_file_down@2x.png */,
@@ -1503,6 +1506,7 @@
 				8281DC541747782400E9F864 /* ad_close@2x.png in Resources */,
 				8281DC551747782400E9F864 /* ad_close.png in Resources */,
 				82F1B0D61748D07A005FF9AF /* about_logo@2x.png in Resources */,
+				82F1B0D81748E718005FF9AF /* netdisk_arrow_right@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
