@@ -686,15 +686,16 @@
         [cell.contentView addSubview:detailLable];
         PCS_FUNC_SAFELY_RELEASE(detailLable);
         
-        UILabel *sizeLable = [[UILabel alloc] initWithFrame:CGRectMake(232, 10, 75, 30)];
+        UILabel *sizeLable = [[UILabel alloc] initWithFrame:CGRectMake(200, 24, 75, 30)];
         sizeLable.tag = PCS_TAG_FILE_SIZE_LABLE;
+        sizeLable.textAlignment = UITextAlignmentRight;
         sizeLable.font = [UIFont systemFontOfSize:14.0f];
         sizeLable.textColor = PCS_DETAIL_TEXT_COLOR;
         sizeLable.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:sizeLable];
         PCS_FUNC_SAFELY_RELEASE(sizeLable);
         
-        UIButton    *expandButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 0, 40, PCS_TABLEVIEW_CELL_HEIGHT)];
+        UIButton    *expandButton = [[UIButton alloc] initWithFrame:CGRectMake(275, 0, 45, PCS_TABLEVIEW_CELL_HEIGHT)];
         expandButton.tag = PCS_TAG_TABLEVIEW_EXPAND_BUTTON;
         [expandButton setImage:[UIImage imageNamed:@"netdisk_arrow_normal"]
                       forState:UIControlStateNormal];
@@ -703,7 +704,6 @@
         [expandButton addTarget:self
                          action:@selector(onExpandButtonAction:event:)
                forControlEvents:UIControlEventTouchUpInside];
-        [expandButton setImageEdgeInsets:UIEdgeInsetsMake(11.5f, 14, 11.5f, 4)];
         [cell.contentView addSubview:expandButton];
         PCS_FUNC_SAFELY_RELEASE(expandButton);
         

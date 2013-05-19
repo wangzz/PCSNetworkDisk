@@ -212,6 +212,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
                                       reuseIdentifier:cellid];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.textLabel.font = PCS_MAIN_FONT;
+        cell.textLabel.textColor = PCS_MAIN_TEXT_COLOR;
         
         UIProgressView  *progress = [[UIProgressView alloc] initWithFrame:CGRectMake(15, 27, 250, 7.5f)];
         progress.backgroundColor = [UIColor clearColor];
@@ -254,6 +255,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     rightLable.hidden = YES;
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.detailTextLabel.text = nil;
     if (indexPath.section == 0) {
         cell.accessoryType = UITableViewCellAccessoryNone;
         if (indexPath.row == 0) {
@@ -272,7 +274,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
                 NSString    *usage = [[PCSDBOperater shareInstance] getFormatSizeString:self.volumeUsage];
                 NSString    *total = [[PCSDBOperater shareInstance] getFormatSizeString:self.volumeTotal];
                 usageLable.text = [NSString stringWithFormat:@"%@/%@",usage,total];
-                usageLable.textColor = [UIColor blackColor];
+                usageLable.textColor = [UIColor lightGrayColor];
             } else {
                 usageLable.text = @"获取容量数据失败";
                 usageLable.textColor = [UIColor redColor];
