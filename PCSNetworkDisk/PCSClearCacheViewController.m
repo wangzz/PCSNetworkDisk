@@ -90,7 +90,9 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                       reuseIdentifier:cellid];
         cell.textLabel.font = PCS_MAIN_FONT;
+        cell.textLabel.textColor = PCS_MAIN_TEXT_COLOR;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.backgroundColor = [UIColor clearColor];
     }
     
     if (indexPath.section == 0) {
@@ -98,10 +100,10 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
             NSString *offlinePath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:PCS_FOLDER_OFFLINE_CACHE];
             NSString    *unitString = [[PCSDBOperater shareInstance] getFormatSizeString:
                                        [[PCSDBOperater shareInstance] folderSizeAtPath:offlinePath]];
-            cell.textLabel.text = [NSString stringWithFormat:@"离线可用(已使用%@)",unitString];
+            cell.textLabel.text = [NSString stringWithFormat:@"已下载文件(已使用%@)",unitString];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         } else if (indexPath.row == 1) {
-            cell.textLabel.text = @"                 清空离线可用文件";
+            cell.textLabel.text = @"                 清空已下载文件";
             cell.selectionStyle = UITableViewCellSelectionStyleBlue;
         }
     } else if (indexPath.section == 1) {
