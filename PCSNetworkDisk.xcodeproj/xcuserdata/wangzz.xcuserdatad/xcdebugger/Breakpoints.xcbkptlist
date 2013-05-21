@@ -8,12 +8,25 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "PCSNetworkDisk/PCSPreviewController/PCSPreviewController.m"
-         timestampString = "390654910.710801"
+         timestampString = "390832139.387971"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "135"
          endingLineNumber = "135"
          landmarkName = "-onOpenButtonAction"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "PCSNetworkDisk/MDAudio/class/MDAudioPlayerController.m"
+         timestampString = "390832261.08243"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "590"
+         endingLineNumber = "590"
+         landmarkName = "-showSongFiles"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

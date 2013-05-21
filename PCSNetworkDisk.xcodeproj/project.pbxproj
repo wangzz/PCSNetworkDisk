@@ -75,8 +75,6 @@
 		822F7B2C16E8CE5B00898CA4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7B2B16E8CE5B00898CA4 /* main.m */; };
 		822F7B3016E8CE5B00898CA4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7B2F16E8CE5B00898CA4 /* AppDelegate.m */; };
 		822F7B3216E8CE5B00898CA4 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 822F7B3116E8CE5B00898CA4 /* Default.png */; };
-		822F7B3416E8CE5B00898CA4 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 822F7B3316E8CE5B00898CA4 /* Default@2x.png */; };
-		822F7B3616E8CE5B00898CA4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 822F7B3516E8CE5B00898CA4 /* Default-568h@2x.png */; };
 		822F7B8716E8D8A700898CA4 /* PCSRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7B8616E8D8A700898CA4 /* PCSRootViewController.m */; };
 		822F7B8E16E8DD7000898CA4 /* PCSMainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7B8D16E8DD7000898CA4 /* PCSMainTabBarController.m */; };
 		822F7B9716E8E45F00898CA4 /* PCSLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 822F7B9516E8E45F00898CA4 /* PCSLoginViewController.m */; };
@@ -182,6 +180,11 @@
 		82D5629A171AC02B0073E052 /* back_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82D56298171AC02B0073E052 /* back_selected@2x.png */; };
 		82D5649D171C4112001B8B68 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82D5649C171C4112001B8B68 /* AVFoundation.framework */; };
 		82E56C1C174B8F7C00095CFC /* AudioPlayerNoArtwork5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E56C1B174B8F7B00095CFC /* AudioPlayerNoArtwork5@2x.png */; };
+		82E56C23174B949C00095CFC /* about_line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E56C22174B949C00095CFC /* about_line@2x.png */; };
+		82E56C2A174B9A6D00095CFC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E56C28174B9A6D00095CFC /* Default-568h@2x.png */; };
+		82E56C2B174B9A6D00095CFC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E56C29174B9A6D00095CFC /* Default@2x.png */; };
+		82E56C2E174B9A8900095CFC /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E56C2C174B9A8900095CFC /* Icon.png */; };
+		82E56C2F174B9A8900095CFC /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E56C2D174B9A8900095CFC /* Icon@2x.png */; };
 		82EA01561743D2AF00AEEC1E /* netdisk_type_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EA014C1743D2AF00AEEC1E /* netdisk_type_default@2x.png */; };
 		82EA01571743D2AF00AEEC1E /* netdisk_type_folder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EA014D1743D2AF00AEEC1E /* netdisk_type_folder@2x.png */; };
 		82EA01581743D2AF00AEEC1E /* netdisk_type_music@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EA014E1743D2AF00AEEC1E /* netdisk_type_music@2x.png */; };
@@ -330,8 +333,6 @@
 		822F7B2E16E8CE5B00898CA4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		822F7B2F16E8CE5B00898CA4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		822F7B3116E8CE5B00898CA4 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		822F7B3316E8CE5B00898CA4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		822F7B3516E8CE5B00898CA4 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		822F7B8516E8D8A700898CA4 /* PCSRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSRootViewController.h; sourceTree = "<group>"; };
 		822F7B8616E8D8A700898CA4 /* PCSRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSRootViewController.m; sourceTree = "<group>"; };
 		822F7B8C16E8DD7000898CA4 /* PCSMainTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSMainTabBarController.h; sourceTree = "<group>"; };
@@ -494,6 +495,11 @@
 		82D56298171AC02B0073E052 /* back_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_selected@2x.png"; sourceTree = "<group>"; };
 		82D5649C171C4112001B8B68 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		82E56C1B174B8F7B00095CFC /* AudioPlayerNoArtwork5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AudioPlayerNoArtwork5@2x.png"; sourceTree = "<group>"; };
+		82E56C22174B949C00095CFC /* about_line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "about_line@2x.png"; sourceTree = "<group>"; };
+		82E56C28174B9A6D00095CFC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		82E56C29174B9A6D00095CFC /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		82E56C2C174B9A8900095CFC /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		82E56C2D174B9A8900095CFC /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		82EA014C1743D2AF00AEEC1E /* netdisk_type_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_default@2x.png"; sourceTree = "<group>"; };
 		82EA014D1743D2AF00AEEC1E /* netdisk_type_folder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_folder@2x.png"; sourceTree = "<group>"; };
 		82EA014E1743D2AF00AEEC1E /* netdisk_type_music@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_music@2x.png"; sourceTree = "<group>"; };
@@ -791,14 +797,16 @@
 		822F7B2616E8CE5B00898CA4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				82E56C2C174B9A8900095CFC /* Icon.png */,
+				82E56C2D174B9A8900095CFC /* Icon@2x.png */,
+				82E56C28174B9A6D00095CFC /* Default-568h@2x.png */,
+				82E56C29174B9A6D00095CFC /* Default@2x.png */,
 				825E417E16F20F16003604A2 /* PcsNetDisk.db */,
 				822F7B2716E8CE5B00898CA4 /* PCSNetworkDisk-Info.plist */,
 				822F7B2816E8CE5B00898CA4 /* InfoPlist.strings */,
 				822F7B2B16E8CE5B00898CA4 /* main.m */,
 				822F7B2D16E8CE5B00898CA4 /* PCSNetworkDisk-Prefix.pch */,
 				822F7B3116E8CE5B00898CA4 /* Default.png */,
-				822F7B3316E8CE5B00898CA4 /* Default@2x.png */,
-				822F7B3516E8CE5B00898CA4 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -935,6 +943,7 @@
 		824CFF27170B224D0036AC2D /* More */ = {
 			isa = PBXGroup;
 			children = (
+				82E56C22174B949C00095CFC /* about_line@2x.png */,
 				82EA01811743E13D00AEEC1E /* more_unregist@2x.png */,
 				82EA01821743E13D00AEEC1E /* more_unregisted@2x.png */,
 				824CFF29170B22740036AC2D /* fax_list_progress_image@2x.png */,
@@ -1395,8 +1404,6 @@
 			files = (
 				822F7B2A16E8CE5B00898CA4 /* InfoPlist.strings in Resources */,
 				822F7B3216E8CE5B00898CA4 /* Default.png in Resources */,
-				822F7B3416E8CE5B00898CA4 /* Default@2x.png in Resources */,
-				822F7B3616E8CE5B00898CA4 /* Default-568h@2x.png in Resources */,
 				822F7B9816E8E45F00898CA4 /* PCSLoginViewController.xib in Resources */,
 				822F7BA716E8E74F00898CA4 /* PCSNetDiskViewController.xib in Resources */,
 				822F7BAC16E8E77000898CA4 /* PCSUploadViewController.xib in Resources */,
@@ -1511,6 +1518,11 @@
 				82F1B0D61748D07A005FF9AF /* about_logo@2x.png in Resources */,
 				82F1B0D81748E718005FF9AF /* netdisk_arrow_right@2x.png in Resources */,
 				82E56C1C174B8F7C00095CFC /* AudioPlayerNoArtwork5@2x.png in Resources */,
+				82E56C23174B949C00095CFC /* about_line@2x.png in Resources */,
+				82E56C2A174B9A6D00095CFC /* Default-568h@2x.png in Resources */,
+				82E56C2B174B9A6D00095CFC /* Default@2x.png in Resources */,
+				82E56C2E174B9A8900095CFC /* Icon.png in Resources */,
+				82E56C2F174B9A8900095CFC /* Icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
