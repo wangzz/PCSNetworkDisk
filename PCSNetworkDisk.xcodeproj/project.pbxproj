@@ -181,6 +181,7 @@
 		82D56299171AC02B0073E052 /* back_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82D56297171AC02B0073E052 /* back_normal@2x.png */; };
 		82D5629A171AC02B0073E052 /* back_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82D56298171AC02B0073E052 /* back_selected@2x.png */; };
 		82D5649D171C4112001B8B68 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82D5649C171C4112001B8B68 /* AVFoundation.framework */; };
+		82E56C1C174B8F7C00095CFC /* AudioPlayerNoArtwork5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E56C1B174B8F7B00095CFC /* AudioPlayerNoArtwork5@2x.png */; };
 		82EA01561743D2AF00AEEC1E /* netdisk_type_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EA014C1743D2AF00AEEC1E /* netdisk_type_default@2x.png */; };
 		82EA01571743D2AF00AEEC1E /* netdisk_type_folder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EA014D1743D2AF00AEEC1E /* netdisk_type_folder@2x.png */; };
 		82EA01581743D2AF00AEEC1E /* netdisk_type_music@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EA014E1743D2AF00AEEC1E /* netdisk_type_music@2x.png */; };
@@ -492,6 +493,7 @@
 		82D56297171AC02B0073E052 /* back_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_normal@2x.png"; sourceTree = "<group>"; };
 		82D56298171AC02B0073E052 /* back_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_selected@2x.png"; sourceTree = "<group>"; };
 		82D5649C171C4112001B8B68 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		82E56C1B174B8F7B00095CFC /* AudioPlayerNoArtwork5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AudioPlayerNoArtwork5@2x.png"; sourceTree = "<group>"; };
 		82EA014C1743D2AF00AEEC1E /* netdisk_type_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_default@2x.png"; sourceTree = "<group>"; };
 		82EA014D1743D2AF00AEEC1E /* netdisk_type_folder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_folder@2x.png"; sourceTree = "<group>"; };
 		82EA014E1743D2AF00AEEC1E /* netdisk_type_music@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_music@2x.png"; sourceTree = "<group>"; };
@@ -967,6 +969,7 @@
 		825E50941732BA3100488ACE /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				82E56C1B174B8F7B00095CFC /* AudioPlayerNoArtwork5@2x.png */,
 				8281DB6B1747586700E9F864 /* AudioPlayerAlbumInfo.png */,
 				8281DB6C1747586700E9F864 /* AudioPlayerAlbumInfo@2x.png */,
 				8281DB6D1747586700E9F864 /* AudioPlayerBarBackground.png */,
@@ -1507,6 +1510,7 @@
 				8281DC551747782400E9F864 /* ad_close.png in Resources */,
 				82F1B0D61748D07A005FF9AF /* about_logo@2x.png in Resources */,
 				82F1B0D81748E718005FF9AF /* netdisk_arrow_right@2x.png in Resources */,
+				82E56C1C174B8F7C00095CFC /* AudioPlayerNoArtwork5@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
