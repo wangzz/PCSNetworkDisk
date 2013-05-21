@@ -126,16 +126,6 @@
     mTableView.delegate = self;
     mTableView.dataSource = self;
     mTableView.backgroundColor = [UIColor clearColor];
-    
-    UIButton  *footViewButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-    [footViewButton addTarget:self
-                       action:@selector(onCreatFolderButtonAction)
-             forControlEvents:UIControlEventTouchUpInside];
-    [footViewButton setTitle:@"新建文件夹" forState:UIControlStateNormal];
-    footViewButton.backgroundColor = [UIColor grayColor];
-    mTableView.tableFooterView = footViewButton;
-    PCS_FUNC_SAFELY_RELEASE(footViewButton);
-    
     [self.view addSubview:mTableView];
     [mTableView release];
     
@@ -143,6 +133,25 @@
     if (showNavBackButton) {
         [self createNavBackButtonWithTitle:@"返回"];
     }
+    
+    UIButton  *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 47, 32)];
+    UIColor *color = [UIColor colorWithRed:0.896f
+                                     green:0.948f
+                                      blue:1.0f
+                                     alpha:1.0f];
+    [rightButton setTitleColor:color forState:UIControlStateNormal];
+    rightButton.titleLabel.font = [UIFont systemFontOfSize:13.5f];
+    [rightButton addTarget:self
+                       action:@selector(onCreatFolderButtonAction)
+             forControlEvents:UIControlEventTouchUpInside];
+    [rightButton setBackgroundImage:[UIImage imageNamed:@"nav_button"]
+                         forState:UIControlStateNormal];
+    [rightButton setBackgroundImage:[UIImage imageNamed:@"nav_buttoned"]
+                         forState:UIControlStateHighlighted];
+    [rightButton setTitle:@"新建" forState:UIControlStateNormal];
+    UIBarButtonItem *navMenuBtn = [[UIBarButtonItem alloc] initWithCustomView:rightButton];
+    self.navigationItem.rightBarButtonItem = navMenuBtn;
+    PCS_FUNC_SAFELY_RELEASE(rightButton);
     
 //    [self loadFileListFromServer];
 //    [self creatNavigationBar];
@@ -432,6 +441,35 @@
     });
 }
 
+- (void)deleteFileFromServer:(PCSFileInfoItem *)item button:(UIButton *)button
+{
+    dispatch_queue_t    queue = PCS_APP_DELEGATE.gcdQueue;
+    dispatch_async(queue, ^{
+        PCSSimplefiedResponse   *response = [PCS_APP_DELEGATE.pcsClient deleteFile:item.serverPath];
+        if (response.errorCode == 0) {
+            //从服务端删除成功，开始从本地数据库删除，并置位，更新界面数据
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                BOOL result = NO;
+                //删除每条文件记录在本地的全部信息
+                result = [[PCSDBOperater shareInstance] deleteAllFileInfoFromLocal:item];
+                if (result) {
+                    [self reloadTableViewDataSource];
+                    //通知离线列表界面数据更新
+                    [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_RELOAD_OFFLINE_DATA
+                                                                        object:nil];
+                }
+            });
+        } else {
+            if (button != nil) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    //删除失败，允许重新删除
+                    button.userInteractionEnabled = YES;
+                });
+            }
+        }
+    });
+}
+
 #pragma mark - 按钮响应事件
 - (void)onExpandButtonAction:(id)sender event:(id)event
 {
@@ -482,7 +520,6 @@
     
     UITextField *inputField = [[UITextField alloc] initWithFrame:CGRectMake(30, alert.center.y+45, 225, 30)];
     inputField.delegate = self;
-    inputField.backgroundColor = [UIColor clearColor];
     inputField.tag = PCS_TAG_ALERTVIEW_TEXTFIELD;
     inputField.borderStyle = UITextBorderStyleRoundedRect;
     inputField.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
@@ -588,30 +625,8 @@
 {
     UIButton    *button = (UIButton *)sender;
     button.userInteractionEnabled = NO;
-    dispatch_queue_t    queue = PCS_APP_DELEGATE.gcdQueue;
-    dispatch_async(queue, ^{
-        PCSFileInfoItem *item = [self.files objectAtIndex:self.selectCellIndexPath.row];
-        PCSSimplefiedResponse   *response = [PCS_APP_DELEGATE.pcsClient deleteFile:item.serverPath];
-        if (response.errorCode == 0) {
-            //从服务端删除成功，开始从本地数据库删除，并置位，更新界面数据
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                BOOL result = NO;
-                //删除每条文件记录在本地的全部信息
-                result = [[PCSDBOperater shareInstance] deleteAllFileInfoFromLocal:item];
-                if (result) {
-                    [self reloadTableViewDataSource];
-                    //通知离线列表界面数据更新
-                    [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_RELOAD_OFFLINE_DATA
-                                                                        object:nil];
-                }
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-            //删除失败，允许重新删除
-                button.userInteractionEnabled = YES;
-            });
-        }
-    });
+    PCSFileInfoItem *item = [self.files objectAtIndex:self.selectCellIndexPath.row];
+    [self deleteFileFromServer:item button:button];
 }
 
 #pragma mark - UIAlertView 委托方法
@@ -894,6 +909,37 @@
                 break;
         }
     }
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    UIButton    *expandButton = (UIButton *)[cell.contentView viewWithTag:PCS_TAG_TABLEVIEW_EXPAND_BUTTON];
+    UILabel *sizeLable = (UILabel *)[cell.contentView viewWithTag:PCS_TAG_FILE_SIZE_LABLE];
+    if (expandButton != nil) {
+        expandButton.hidden = tableView.editing;
+        sizeLable.hidden = tableView.editing;
+    }
+    
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        PCSFileInfoItem *fileItem = [self.files objectAtIndex:[indexPath row]];
+        [self deleteFileFromServer:fileItem button:nil];
+    }
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"删除";
 }
 
 - (void)showVideoPlayerController:(PCSFileInfoItem *)item
