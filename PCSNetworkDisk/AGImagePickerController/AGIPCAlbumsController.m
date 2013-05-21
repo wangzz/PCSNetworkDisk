@@ -14,6 +14,8 @@
 #import "AGIPCAssetsController.h"
 #import "AGImagePickerController.h"
 
+#import "UIViewController+NavAddition.h"
+
 @interface AGIPCAlbumsController ()
 
 @property (nonatomic, readonly) NSMutableArray *assetsGroups;
@@ -96,7 +98,21 @@
     if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
         [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
         [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsLandscapePhone];
+        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]
+                                         initWithTitle:@"取消"
+                                         style:UIBarButtonItemStylePlain
+                                         target:self
+                                         action:@selector(cancelAction:)];
+        self.navigationItem.leftBarButtonItem = cancelButton;
+        [cancelButton release];
+    }else {
+        [self createNavBackButtonWithTitle:@"取消"];
     }
+}
+
+- (void)onNavBackButtonAction
+{
+    [self cancelAction:nil];
 }
 
 - (void)viewDidLoad
@@ -112,13 +128,6 @@
     [self createNotifications];
     
     // Navigation Bar Items
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]
-                                     initWithTitle:@"取消"
-                                     style:UIBarButtonItemStylePlain
-                                     target:self
-                                     action:@selector(cancelAction:)];
-	self.navigationItem.leftBarButtonItem = cancelButton;
-	[cancelButton release];
 }
 
 - (void)viewDidUnload

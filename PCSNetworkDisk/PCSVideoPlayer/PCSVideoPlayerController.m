@@ -11,6 +11,7 @@
 #import <AVFoundation/AVPlayerItem.h>
 #import <AVFoundation/AVAnimation.h>
 #import "MBProgressHUD.h"
+#import "UIViewController+NavAddition.h"
 
 @interface PCSVideoPlayerController ()
 @property (nonatomic,retain) MBProgressHUD  *HUD;
@@ -60,7 +61,15 @@
     if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
         [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
         [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsLandscapePhone];
+        [self customNavgationBar];
+    } else {
+        [self createNavBackButtonWithTitle:@"返回"];
     }
+}
+
+- (void)onNavBackButtonAction
+{
+    [self dismissVideoPlayer];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -80,7 +89,6 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    [self customNavgationBar];
 
     NSString    *absolutePath = [[PCSDBOperater shareInstance] absolutePathBy:_path
                                                                    folderType:_folderType];

@@ -10,7 +10,7 @@
 #import "MDAudioFile.h"
 #import "MDAudioPlayerTableViewCell.h"
 #import "MBProgressHUD.h"
-
+#import "UIViewController+NavAddition.h"
 
 @interface MDAudioPlayerController ()
 @property (nonatomic,retain) MBProgressHUD  *HUD;
@@ -322,12 +322,7 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 //	[navigationBar pushNavigationItem:navItem animated:NO];
 //	
 //	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissAudioPlayer)];
-    UIBarButtonItem *returnButton = [[UIBarButtonItem alloc] initWithTitle:@"返回"
-                                                                     style:UIBarButtonItemStylePlain
-                                                                    target:self
-                                                                    action:@selector(dismissAudioPlayer)];
-    self.navigationItem.leftBarButtonItem = returnButton;
-	
+    
 	self.toggleButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
 	[toggleButton setImage:[UIImage imageNamed:@"AudioPlayerAlbumInfo.png"] forState:UIControlStateNormal];
 	[toggleButton addTarget:self action:@selector(showSongFiles) forControlEvents:UIControlEventTouchUpInside];
@@ -528,7 +523,20 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
     if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
         [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
         [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsLandscapePhone];
+        UIBarButtonItem *returnButton = [[UIBarButtonItem alloc] initWithTitle:@"返回"
+                                                                         style:UIBarButtonItemStylePlain
+                                                                        target:self
+                                                                        action:@selector(dismissAudioPlayer)];
+        self.navigationItem.leftBarButtonItem = returnButton;
+        [returnButton release];
+    }else {
+        [self createNavBackButtonWithTitle:@"取消"];
     }
+}
+
+- (void)onNavBackButtonAction
+{
+    [self dismissAudioPlayer];
 }
 
 - (void)viewWillAppear:(BOOL)animated

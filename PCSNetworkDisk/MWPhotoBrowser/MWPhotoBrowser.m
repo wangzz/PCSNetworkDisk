@@ -12,6 +12,7 @@
 #import "MBProgressHUD.h"
 #import "SDImageCache.h"
 #import <MobileCoreServices/MobileCoreServices.h> // For UTI
+#import "UIViewController+NavAddition.h"
 
 #define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
 #define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
@@ -397,17 +398,20 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     // Navigation buttons
     if ([self.navigationController.viewControllers objectAtIndex:0] == self) {
         // We're first on stack so show done button
-        UIBarButtonItem *doneButton = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"返回", nil) style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonPressed:)] autorelease];
         // Set appearance
         if ([UIBarButtonItem respondsToSelector:@selector(appearance)]) {
+            UIBarButtonItem *doneButton = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"返回", nil) style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonPressed:)] autorelease];
             [doneButton setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
             [doneButton setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
             [doneButton setBackgroundImage:nil forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
             [doneButton setBackgroundImage:nil forState:UIControlStateHighlighted barMetrics:UIBarMetricsLandscapePhone];
             [doneButton setTitleTextAttributes:[NSDictionary dictionary] forState:UIControlStateNormal];
             [doneButton setTitleTextAttributes:[NSDictionary dictionary] forState:UIControlStateHighlighted];
+            self.navigationItem.leftBarButtonItem = doneButton;
+        } else {
+            [self createNavBackButtonWithTitle:@"返回"];
         }
-        self.navigationItem.leftBarButtonItem = doneButton;
+        
     } else {
         // We're not first so show back button
         UIViewController *previousViewController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count-2];
@@ -431,6 +435,11 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
     [self tilePages];
     _performingLayout = NO;
     
+}
+
+- (void)onNavBackButtonAction
+{
+    [self doneButtonPressed:nil];
 }
 
 // Release any retained subviews of the main view.
