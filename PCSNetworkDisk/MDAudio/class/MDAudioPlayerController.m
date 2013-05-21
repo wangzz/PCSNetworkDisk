@@ -117,7 +117,12 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 	{
         UIImage *artImage = [[soundFiles objectAtIndex:selectedIndex] coverImage];
         if (artImage == nil) {
-            artImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerNoArtwork" ofType:@"png"]];
+            if (iPhone5) {
+                artImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerNoArtwork5" ofType:@"png"]];
+                self.artworkView.backgroundColor = [UIColor lightGrayColor];
+            } else {
+                artImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerNoArtwork" ofType:@"png"]];
+            }
         }
 
 		[artworkView setImage:artImage forState:UIControlStateNormal];
@@ -387,28 +392,49 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 	currentTime.adjustsFontSizeToFitWidth = YES;
 	progressSlider.minimumValue = 0.0;	
 	
-	self.containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height - 44)];
+    
+    CGRect  containerFrame;
+    if (iPhone5) {
+        containerFrame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
+    } else {
+        containerFrame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height - 44);
+    }
+	self.containerView = [[UIView alloc] initWithFrame:containerFrame];
 	[self.view addSubview:containerView];
 	
-	self.artworkView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
+    CGRect  artworkViewFrame;
+    if (iPhone5) {
+        artworkViewFrame = CGRectMake(0, 44, 320, 320+88);
+    } else {
+        artworkViewFrame = CGRectMake(0, 0, 320, 320);
+    }
+	self.artworkView = [[UIButton alloc] initWithFrame:artworkViewFrame];
     UIImage *artImage = [selectedSong coverImage];
     if (artImage == nil) {
-        artImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerNoArtwork" ofType:@"png"]];
+        if (iPhone5) {
+            artImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerNoArtwork5" ofType:@"png"]];
+            if (artImage == nil) {
+                self.artworkView.backgroundColor = [UIColor lightGrayColor];
+            }
+        } else {
+            artImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerNoArtwork" ofType:@"png"]];
+        }
     }
         
 	[artworkView setImage:artImage forState:UIControlStateNormal];
 	[artworkView addTarget:self action:@selector(showOverlayView) forControlEvents:UIControlEventTouchUpInside];
 	artworkView.showsTouchWhenHighlighted = NO;
 	artworkView.adjustsImageWhenHighlighted = NO;
-	artworkView.backgroundColor = [UIColor clearColor];
 	[containerView addSubview:artworkView];
 	
-	self.reflectionView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 320, 320, 96)];
+    CGRect  reflectionRect = CGRectMake(0, iPhone5?472:320, 320, 96);
+	self.reflectionView = [[UIImageView alloc] initWithFrame:reflectionRect];
 	reflectionView.image = [self reflectedImage:artworkView withHeight:artworkView.bounds.size.height * kDefaultReflectionFraction];
 	reflectionView.alpha = kDefaultReflectionFraction;
 	[self.containerView addSubview:reflectionView];
 	
-	self.songTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 368+iPhone5?88:0)];
+    CGRect  rect = CGRectMake(0, 0, self.view.bounds.size.width, 368+(iPhone5?88:0));
+	self.songTableView = [[UITableView alloc] initWithFrame:rect];
 	self.songTableView.delegate = self;
 	self.songTableView.dataSource = self;
 	self.songTableView.separatorColor = [UIColor colorWithRed:0.986 green:0.933 blue:0.994 alpha:0.10];
@@ -429,24 +455,24 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 	[v release];
 	v = nil;
 
-	UIImageView *buttonBackground = [[UIImageView alloc] initWithFrame:CGRectMake(0, 44 + 320, self.view.bounds.size.width, 96)];
+	UIImageView *buttonBackground = [[UIImageView alloc] initWithFrame:CGRectMake(0, 44 + 320 + (iPhone5?88:0), self.view.bounds.size.width, 96)];
 	buttonBackground.image = [[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerBarBackground" ofType:@"png"]] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
 	[self.view addSubview:buttonBackground];
 	[buttonBackground release];
 	buttonBackground  = nil;
 		
-	self.playButton = [[UIButton alloc] initWithFrame:CGRectMake(144, 370, 40, 40)];
+	self.playButton = [[UIButton alloc] initWithFrame:CGRectMake(144, 370 + (iPhone5?88:0), 40, 40)];
 	[playButton setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerPlay" ofType:@"png"]] forState:UIControlStateNormal];
 	[playButton addTarget:self action:@selector(play) forControlEvents:UIControlEventTouchUpInside];
 	playButton.showsTouchWhenHighlighted = YES;
 	[self.view addSubview:playButton];
 							  
-	self.pauseButton = [[UIButton alloc] initWithFrame:CGRectMake(140, 370, 40, 40)];
+	self.pauseButton = [[UIButton alloc] initWithFrame:CGRectMake(140, 370 + (iPhone5?88:0), 40, 40)];
 	[pauseButton setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerPause" ofType:@"png"]] forState:UIControlStateNormal];
 	[pauseButton addTarget:self action:@selector(play) forControlEvents:UIControlEventTouchUpInside];
 	pauseButton.showsTouchWhenHighlighted = YES;
 	
-	self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(220, 370, 40, 40)];
+	self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(220, 370 + (iPhone5?88:0), 40, 40)];
 	[nextButton setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerNextTrack" ofType:@"png"]] 
 				forState:UIControlStateNormal];
 	[nextButton addTarget:self action:@selector(next) forControlEvents:UIControlEventTouchUpInside];
@@ -454,7 +480,7 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 	nextButton.enabled = [self canGoToNextTrack];
 	[self.view addSubview:nextButton];
 	
-	self.previousButton = [[UIButton alloc] initWithFrame:CGRectMake(60, 370, 40, 40)];
+	self.previousButton = [[UIButton alloc] initWithFrame:CGRectMake(60, 370 + (iPhone5?88:0), 40, 40)];
 	[previousButton setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerPrevTrack" ofType:@"png"]] 
 				forState:UIControlStateNormal];
 	[previousButton addTarget:self action:@selector(previous) forControlEvents:UIControlEventTouchUpInside];
@@ -462,7 +488,7 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 	previousButton.enabled = [self canGoToPreviousTrack];
 	[self.view addSubview:previousButton];
 	
-	self.volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(25, 420, 270, 9)];
+	self.volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(25, 420 + (iPhone5?88:0), 270, 9)];
 	[volumeSlider setThumbImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerVolumeKnob" ofType:@"png"]]
 														forState:UIControlStateNormal];
 	[volumeSlider setMinimumTrackImage:[[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerScrubberLeft" ofType:@"png"]] stretchableImageWithLeftCapWidth:5 topCapHeight:3]
@@ -552,7 +578,12 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 		[self.songTableView removeFromSuperview];
         UIImage *artImage = [[soundFiles objectAtIndex:selectedIndex] coverImage];
         if (artImage == nil) {
-            artImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerNoArtwork" ofType:@"png"]];
+            if (iPhone5) {
+                artImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerNoArtwork5" ofType:@"png"]];
+                self.artworkView.backgroundColor = [UIColor lightGrayColor];
+            } else {
+                artImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AudioPlayerNoArtwork" ofType:@"png"]];
+            }
         }
 		[self.artworkView setImage:artImage forState:UIControlStateNormal];
 		[self.containerView addSubview:reflectionView];
@@ -576,7 +607,7 @@ void interruptionListenerCallback (void *userData, UInt32 interruptionState)
 {	
 	if (overlayView == nil) 
 	{		
-		self.overlayView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 76)];
+		self.overlayView = [[UIView alloc] initWithFrame:CGRectMake(0, iPhone5?44:0, self.view.bounds.size.width, 76)];
 		overlayView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.6];
 		overlayView.opaque = NO;
 		
