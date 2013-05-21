@@ -97,13 +97,16 @@
     PCS_FUNC_SAFELY_RELEASE(logoffButton);
     PCS_FUNC_SAFELY_RELEASE(footView);
 
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
     UIImage *image = nil;
     if (iPhone5) {
         image = [UIImage imageNamed:@"background_iphone5.jpg"];
     } else {
         image = [UIImage imageNamed:@"background_iphone.jpg"];
     }
-    self.mTableView.backgroundColor = [UIColor colorWithPatternImage:image];
+    imageView.image = image;
+    self.mTableView.backgroundView = imageView;
+    PCS_FUNC_SAFELY_RELEASE(imageView);
 }
 
 - (void)alterViewFrameWithADBanner
@@ -259,7 +262,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         if (indexPath.row == 0) {
             cell.textLabel.text = @"登陆账号";
             rightLable.hidden = NO;
-            rightLable.textColor = [UIColor greenColor];
+            rightLable.textColor = [UIColor blackColor];
             rightLable.text = [[NSUserDefaults standardUserDefaults] stringForKey:PCS_STRING_USER_NAME];
         } else if (indexPath.row == 1) {
             cell.textLabel.text = @"容量";
@@ -326,7 +329,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
             if ([MFMailComposeViewController canSendMail]) {
                 MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
                 picker.mailComposeDelegate = self;
-                [picker setToRecipients:[NSArray arrayWithObject:@"wzzvictory_tjsd@163.com"]];
+                [picker setToRecipients:[NSArray arrayWithObject:@"pcs_wangzz@163.com"]];
                 [picker setSubject:@"意见反馈"];
                 [picker setMessageBody:@"it is a test." isHTML:NO];
                 
