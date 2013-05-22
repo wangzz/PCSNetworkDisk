@@ -176,6 +176,7 @@
 		82A7F387174CD70000935922 /* upload_path@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82A7F384174CD70000935922 /* upload_path@2x.png */; };
 		82A7F388174CD70000935922 /* upload_buttoned@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82A7F385174CD70000935922 /* upload_buttoned@2x.png */; };
 		82A7F389174CD70000935922 /* upload_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82A7F386174CD70000935922 /* upload_button@2x.png */; };
+		82A7F38B174CDCB100935922 /* AudioPlayerNoArtwork_iphone5.png in Resources */ = {isa = PBXBuildFile; fileRef = 82A7F38A174CDCB100935922 /* AudioPlayerNoArtwork_iphone5.png */; };
 		82D1673617146BFB0071FF9F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 82D1672F17146BFB0071FF9F /* README.md */; };
 		82D1673717146BFB0071FF9F /* RIButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 82D1673117146BFB0071FF9F /* RIButtonItem.m */; };
 		82D1673817146BFB0071FF9F /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 82D1673317146BFB0071FF9F /* UIActionSheet+Blocks.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -186,7 +187,6 @@
 		82D56299171AC02B0073E052 /* back_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82D56297171AC02B0073E052 /* back_normal@2x.png */; };
 		82D5629A171AC02B0073E052 /* back_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82D56298171AC02B0073E052 /* back_selected@2x.png */; };
 		82D5649D171C4112001B8B68 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82D5649C171C4112001B8B68 /* AVFoundation.framework */; };
-		82E56C1C174B8F7C00095CFC /* AudioPlayerNoArtwork5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E56C1B174B8F7B00095CFC /* AudioPlayerNoArtwork5@2x.png */; };
 		82E56C23174B949C00095CFC /* about_line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E56C22174B949C00095CFC /* about_line@2x.png */; };
 		82EA01561743D2AF00AEEC1E /* netdisk_type_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EA014C1743D2AF00AEEC1E /* netdisk_type_default@2x.png */; };
 		82EA01571743D2AF00AEEC1E /* netdisk_type_folder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82EA014D1743D2AF00AEEC1E /* netdisk_type_folder@2x.png */; };
@@ -491,6 +491,7 @@
 		82A7F384174CD70000935922 /* upload_path@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upload_path@2x.png"; sourceTree = "<group>"; };
 		82A7F385174CD70000935922 /* upload_buttoned@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upload_buttoned@2x.png"; sourceTree = "<group>"; };
 		82A7F386174CD70000935922 /* upload_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upload_button@2x.png"; sourceTree = "<group>"; };
+		82A7F38A174CDCB100935922 /* AudioPlayerNoArtwork_iphone5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioPlayerNoArtwork_iphone5.png; sourceTree = "<group>"; };
 		82D1672F17146BFB0071FF9F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = "UIAlertView-Blocks/README.md"; sourceTree = "<group>"; };
 		82D1673017146BFB0071FF9F /* RIButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RIButtonItem.h; path = "UIAlertView-Blocks/RIButtonItem.h"; sourceTree = "<group>"; };
 		82D1673117146BFB0071FF9F /* RIButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RIButtonItem.m; path = "UIAlertView-Blocks/RIButtonItem.m"; sourceTree = "<group>"; };
@@ -504,7 +505,6 @@
 		82D56297171AC02B0073E052 /* back_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_normal@2x.png"; sourceTree = "<group>"; };
 		82D56298171AC02B0073E052 /* back_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_selected@2x.png"; sourceTree = "<group>"; };
 		82D5649C171C4112001B8B68 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		82E56C1B174B8F7B00095CFC /* AudioPlayerNoArtwork5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AudioPlayerNoArtwork5@2x.png"; sourceTree = "<group>"; };
 		82E56C22174B949C00095CFC /* about_line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "about_line@2x.png"; sourceTree = "<group>"; };
 		82EA014C1743D2AF00AEEC1E /* netdisk_type_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_default@2x.png"; sourceTree = "<group>"; };
 		82EA014D1743D2AF00AEEC1E /* netdisk_type_folder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "netdisk_type_folder@2x.png"; sourceTree = "<group>"; };
@@ -987,7 +987,7 @@
 		825E50941732BA3100488ACE /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				82E56C1B174B8F7B00095CFC /* AudioPlayerNoArtwork5@2x.png */,
+				82A7F38A174CDCB100935922 /* AudioPlayerNoArtwork_iphone5.png */,
 				8281DB6B1747586700E9F864 /* AudioPlayerAlbumInfo.png */,
 				8281DB6C1747586700E9F864 /* AudioPlayerAlbumInfo@2x.png */,
 				8281DB6D1747586700E9F864 /* AudioPlayerBarBackground.png */,
@@ -1525,7 +1525,6 @@
 				8281DC551747782400E9F864 /* ad_close.png in Resources */,
 				82F1B0D61748D07A005FF9AF /* about_logo@2x.png in Resources */,
 				82F1B0D81748E718005FF9AF /* netdisk_arrow_right@2x.png in Resources */,
-				82E56C1C174B8F7C00095CFC /* AudioPlayerNoArtwork5@2x.png in Resources */,
 				82E56C23174B949C00095CFC /* about_line@2x.png in Resources */,
 				821B438D174CCEC90039197A /* Default-568h@2x.png in Resources */,
 				821B438E174CCEC90039197A /* Default@2x.png in Resources */,
@@ -1535,6 +1534,7 @@
 				82A7F387174CD70000935922 /* upload_path@2x.png in Resources */,
 				82A7F388174CD70000935922 /* upload_buttoned@2x.png in Resources */,
 				82A7F389174CD70000935922 /* upload_button@2x.png in Resources */,
+				82A7F38B174CDCB100935922 /* AudioPlayerNoArtwork_iphone5.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
