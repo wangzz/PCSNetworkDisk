@@ -772,11 +772,6 @@
             [cell.contentView addSubview:moveButton];
             PCS_FUNC_SAFELY_RELEASE(moveButton);
             
-            UIImageView *downImage = [[UIImageView alloc] initWithFrame:CGRectMake(170, PCS_TABLEVIEW_CELL_HEIGHT+20, 25, 25)];
-            downImage.image = [UIImage imageNamed:@"netdisk_file_down"];
-            [cell.contentView addSubview:downImage];
-            PCS_FUNC_SAFELY_RELEASE(downImage);
-            
             UILabel *favLable = [[UILabel alloc] initWithFrame:CGRectMake(115, PCS_TABLEVIEW_CELL_HEIGHT+40, 90, 20)];
             favLable.font = [UIFont systemFontOfSize:12.0f];
             favLable.backgroundColor = [UIColor clearColor];
@@ -843,14 +838,12 @@
         if (item.property == PCSFilePropertyDownLoad ||
             item.property == PCSFilePropertyOffLineFailed) {
             favLable.text = @"下载";
-            [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateNormal];
-            [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateHighlighted];
+            [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorite"] forState:UIControlStateNormal];
         } else if (item.property == PCSFilePropertyOffLineSuccess ||
                    item.property == PCSFilePropertyOffLineWaiting ||
                    item.property == PCSFilePropertyOffLining) {
             favLable.text = @"取消下载";
             [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateNormal];
-            [favoritButton setImage:[UIImage imageNamed:@"netdisk_expand_favorited"] forState:UIControlStateHighlighted];
         }
     }
     

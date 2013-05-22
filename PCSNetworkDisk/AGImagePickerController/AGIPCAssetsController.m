@@ -274,12 +274,15 @@
     [self.navigationController.toolbar addSubview:noticeLable];
     [noticeLable release];
     
-    UIButton    *pathButton = [[UIButton alloc] initWithFrame:CGRectMake(60, 2, 170, 40)];
+    UIImage *uploadImage = [[UIImage imageNamed:@"upload_button"] stretchableImageWithLeftCapWidth:5 topCapHeight:18];
+    UIImage *uploadImaged = [[UIImage imageNamed:@"upload_buttoned"] stretchableImageWithLeftCapWidth:5 topCapHeight:18];
+    UIButton    *pathButton = [[UIButton alloc] initWithFrame:CGRectMake(60, 2, 150, 40)];
     [pathButton addTarget:self
                    action:@selector(onPathButtonAction)
          forControlEvents:UIControlEventTouchUpInside];
     [pathButton setTitle:@"Hi网盘" forState:UIControlStateNormal];
-    pathButton.backgroundColor = [UIColor redColor];
+    [pathButton setBackgroundImage:uploadImage forState:UIControlStateNormal];
+    [pathButton setBackgroundImage:uploadImaged forState:UIControlStateHighlighted];
     pathButton.tag = PCS_TAG_FILE_PATH_BUTTON;
     [self.navigationController.toolbar addSubview:pathButton];
     [pathButton release];
@@ -289,7 +292,8 @@
                      action:@selector(onUploadButtonAction)
            forControlEvents:UIControlEventTouchUpInside];
     [uploadButton setTitle:@"上传" forState:UIControlStateNormal];
-    uploadButton.backgroundColor = [UIColor greenColor];
+    [uploadButton setBackgroundImage:uploadImage forState:UIControlStateNormal];
+    [uploadButton setBackgroundImage:uploadImaged forState:UIControlStateHighlighted];
     [self.navigationController.toolbar addSubview:uploadButton];
     [uploadButton release];
 }
@@ -336,6 +340,7 @@
     if (array.count > 2) {
         NSString    *string = [array objectAtIndex:(array.count - 2)];
         if (string != nil) {
+            [pathButton setTitle:nil forState:UIControlStateNormal];
             [pathButton setTitle:string forState:UIControlStateNormal];
         }
     }

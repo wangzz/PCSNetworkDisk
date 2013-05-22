@@ -33,7 +33,8 @@
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     
-    gcdQueue  = dispatch_queue_create("com.wangzz.pcsnetdisk", NULL);
+//    gcdQueue  = dispatch_queue_create("com.wangzz.pcsnetdisk", NULL);
+    gcdQueue  = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:PCS_STRING_EVER_LAUNCHED]) {
         [[NSUserDefaults standardUserDefaults] setBool:YES
