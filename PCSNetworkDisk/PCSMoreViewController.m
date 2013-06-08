@@ -404,7 +404,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 -(void)goToAppStoreGiveAMark
 {
     NSString *str = [NSString stringWithFormat:
-                     @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%d",547203890];
+                     @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%d",652100584];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
 }
 
