@@ -75,7 +75,7 @@ typedef enum
 //字符串
 #define PCS_STRING_MOBWIN_UNIT_ID           @"A495798C12C030F28E7711F3613DFC1B"
 
-#ifndef  DEBUG
+#ifdef  DEBUG
 //PCS_test
 #define PCS_STRING_BAIDU_API_KEY            @"L6g70tBRRIXLsY0Z3HwKqlRE"
 #define PCS_STRING_DEFAULT_PATH             @"/apps/pcstest_oauth/"
@@ -84,7 +84,7 @@ typedef enum
 #else
 //hi网盘
 #define PCS_STRING_BAIDU_API_KEY            @"GLz7bjSGqrxaOpj6Mj7ZOvFv"
-#define PCS_STRING_DEFAULT_PATH             @"/apps/pcstest_oauth/"
+#define PCS_STRING_DEFAULT_PATH             @"/apps/wangzz/"
 #define PCS_STRING_BAIDU_AD_PUBLISHER_ID    @"fe833639"
 #define PCS_STRING_BAIDU_AD_APPSPEC         @"fe833639"
 #endif

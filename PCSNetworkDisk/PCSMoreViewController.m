@@ -144,10 +144,13 @@
         PCSQuotaResponse *response = [PCS_APP_DELEGATE.pcsClient quotaInfo];
         if(response){
             if (response.status.errorCode == 0) {
-                self.volumeUsage = response.used;
-                self.volumeTotal = response.total;
-                float    value = 10737418240.0;
-                self.volumeTotal = value;//测试用
+                self.volumeUsage = (float)response.used;
+                self.volumeTotal = (float)response.total;
+                if (self.volumeTotal <= 0) {
+                    //服务器返回结果有误
+                    float    value = 10737418240.0;
+                    self.volumeTotal = value;//测试用
+                }
             } else {
                 self.volumeTotal = 0;
                 self.volumeUsage = 0;

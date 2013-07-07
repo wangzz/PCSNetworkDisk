@@ -379,6 +379,7 @@
 		822F7BBF16E8F7A300898CA4 /* BaiduPCSErrorCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaiduPCSErrorCode.h; sourceTree = "<group>"; };
 		822F7BC016E8F7A300898CA4 /* BaiduPCSStatusListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaiduPCSStatusListener.h; sourceTree = "<group>"; };
 		822F7BC116E8F7B300898CA4 /* baidu_pcs_ios-1.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "baidu_pcs_ios-1.0.a"; sourceTree = "<group>"; };
+		823C20C61789112600E36760 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		824CFF29170B22740036AC2D /* fax_list_progress_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fax_list_progress_image@2x.png"; sourceTree = "<group>"; };
 		824CFF2A170B22740036AC2D /* fax_list_progress_track_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fax_list_progress_track_image@2x.png"; sourceTree = "<group>"; };
 		82503349172979E500B4C6C6 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
@@ -497,7 +498,6 @@
 		8281DC4C17476A1000E9F864 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		8281DC521747782400E9F864 /* ad_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ad_close@2x.png"; sourceTree = "<group>"; };
 		8281DC531747782400E9F864 /* ad_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ad_close.png; sourceTree = "<group>"; };
-		82A3C7741711B743007CD231 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		82A3C7751711BBCD007CD231 /* PCSAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSAboutViewController.h; sourceTree = "<group>"; };
 		82A3C7761711BBCD007CD231 /* PCSAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSAboutViewController.m; sourceTree = "<group>"; };
 		82A3C7771711BBCD007CD231 /* PCSAboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCSAboutViewController.xib; sourceTree = "<group>"; };
@@ -1634,7 +1634,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				822F7B2916E8CE5B00898CA4 /* en */,
-				82A3C7741711B743007CD231 /* zh-Hant */,
+				823C20C61789112600E36760 /* zh-Hans */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1702,6 +1702,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LIBRARY = "libstdc++";
+				CODE_SIGN_IDENTITY = "iPhone Developer: wang chuan (329FMX2FWC)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: wang chuan (329FMX2FWC)";
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1723,6 +1725,8 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "B5ED6448-B59E-4F89-B65C-3A271E13EEA7";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B5ED6448-B59E-4F89-B65C-3A271E13EEA7";
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1732,6 +1736,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LIBRARY = "libstdc++";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: wang chuan";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: wang chuan";
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1751,6 +1757,8 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "809B8E1C-8677-447C-A7E4-24FF9462281A";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "809B8E1C-8677-447C-A7E4-24FF9462281A";
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1766,7 +1774,7 @@
 				822F7B3E16E8CE5B00898CA4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 		822F7B3F16E8CE5B00898CA4 /* Build configuration list for PBXNativeTarget "PCSNetworkDisk" */ = {
 			isa = XCConfigurationList;
@@ -1775,7 +1783,7 @@
 				822F7B4116E8CE5B00898CA4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -40,6 +40,11 @@
     PCS_FUNC_SAFELY_RELEASE(uploadNavController);
     PCS_FUNC_SAFELY_RELEASE(offlineNavController);
     PCS_FUNC_SAFELY_RELEASE(moreNavController);
+    if (PCS_APP_DELEGATE.isADBannerShow) {
+        [sharedAdView close];
+        [sharedAdView removeFromSuperview];
+        sharedAdView = nil;
+    }
     [super dealloc];
 }
 
@@ -309,6 +314,7 @@
     [sharedAdView close];
     [sharedAdView removeFromSuperview];
     sharedAdView = nil;
+    sharedAdView.delegate = nil;
     PCS_APP_DELEGATE.isADBannerShow = NO;
     [[NSNotificationCenter defaultCenter] postNotificationName:PCS_NOTIFICATION_SHOW_WITHOUT_AD_BANNER
                                                         object:nil];

@@ -46,6 +46,24 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - 屏幕旋转控制
+///iOS6.0之前
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    return (toInterfaceOrientation != UIInterfaceOrientationMaskPortrait);
+}
+
+///iOS6.0
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 +(PCSRootViewController *)shareInstance
 {
     static dispatch_once_t once;

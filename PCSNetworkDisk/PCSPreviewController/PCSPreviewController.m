@@ -253,9 +253,13 @@
 // returns the item that the preview controller should preview
 - (id <QLPreviewItem>)previewController:(QLPreviewController *)controller previewItemAtIndex:(NSInteger)index
 {
-    // Do any additional setup after loading the view.
-    PCSPreviewItem  *item = [PCSPreviewItem previewItemWithURL:self.fileUrl title:self.title];
-    return item;
+    if (self.fileUrl == nil) {
+        return nil;
+    } else {
+        // Do any additional setup after loading the view.
+        PCSPreviewItem  *item = [PCSPreviewItem previewItemWithURL:self.fileUrl title:self.title];
+        return item;
+    }
 }
 
 #pragma mark -- Baidu Listener Delegate
